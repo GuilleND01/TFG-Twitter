@@ -1,2 +1,6 @@
 # Análisis y visualización de la actividad de usuario en Twitter 
-Twitter es una red social de las más utilizadas actualmente. Nuestro objetivo es proporcionar al usuario una herramienta a través de la cuál pueda visualizar la actividad que ha generado en la red social.
+## 1. Introducción
+Twitter es una red social de las más utilizadas actualmente y cada vez más desconocida por los nuevos usuarios. Una de las prinicipales funcionalidades que ofrece es la posibilidad de descargar un fichero de datos que recoge tu actividad en la red social hasta el momento. Este fichero consta de varios ficheros en formato JSON, difíciles de comprender para la amplia mayoría de los usuarios de la aplicación. Por este motivo, te ofrecen una visualización en forma de documento HTML, con unas características mínimas, como el número de impresiones que tienes o el número de publicaciones que has realizado, dejando sin abordar algunas características que, a nuestro modo de ver sí que resultan importantes.
+De esta necesidad surge la idea de nuestra herramienta. Queremos ofrecer a los usuarios un modo de visualizar estos datos correctamente y que sean plenamente conscientes de los datos que esta red social tiene de ellos. Nuestra herramienta sería un dashboard interactivo, en el que mostremos de forma visual estas propiedades que queremos llevar a cabo a partir de los datos de los usuarios.
+
+## 2. Funcionalidades
