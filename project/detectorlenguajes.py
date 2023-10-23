@@ -2,7 +2,6 @@ from langdetect import detect
 import pandas as pd
 import json
 from pandas import json_normalize
-import matplotlib.pyplot as plt
 def convertir_codigo_lenguaje(cod):
     codigo_lenguaje = {'af':'Africano', 'ar': 'Árabe', 'bg':'Búlgaro', 'bn':'Bengalí', 'ca':'Catalán', 'cs':'Checo', 'cy':'Galés',
                        'da':'Danés', 'de':'Alemán', 'el':'Griego', 'en':'Inglés', 'es':'Español', 'et':'Estonio', 'fa':'Persa',
