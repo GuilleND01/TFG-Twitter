@@ -22,13 +22,13 @@ def detect_text_language(text):
     return language_from_code(detect(text))
 
 
-def return_language_df():
+def return_language_df(file_content):
     # Open the js file
-    with open("tweets.js", "r", encoding="UTF-8") as js_file:
-        js_code = js_file.read()
+    # with open("filename", "r", encoding="UTF-8") as js_file:
+    #    js_code = js_file.read()
 
     # Remove \n
-    js_code = js_code.replace('\n', '')
+    js_code = file_content.replace('\n', '')
     js_code = js_code.replace('window.YTD.tweets.part0 = ', '')
 
     # Read the json and obtain a df
