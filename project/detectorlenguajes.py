@@ -2,6 +2,7 @@ from langdetect import detect
 import pandas as pd
 import json
 from pandas import json_normalize
+<<<<<<< Updated upstream
 def convertir_codigo_lenguaje(cod):
     codigo_lenguaje = {'af':'Africano', 'ar': 'Árabe', 'bg':'Búlgaro', 'bn':'Bengalí', 'ca':'Catalán', 'cs':'Checo', 'cy':'Galés',
                        'da':'Danés', 'de':'Alemán', 'el':'Griego', 'en':'Inglés', 'es':'Español', 'et':'Estonio', 'fa':'Persa',
@@ -10,47 +11,45 @@ def convertir_codigo_lenguaje(cod):
                        'ml':'Malasio', 'mr':'Marathi', 'ne':'Nepalí', 'no':'Noruego', 'pl':'Polaco', 'pt':'Portugués', 'ro':'Rumano',
                        'sk':'Eslovaco', 'sl':'Esloveno', 'so':'Somalí', 'sq':'Albanés', 'sv':'Sueco', 'sw':'Suajili', 'ta':'Tamil',
                        'te':'Telugu', 'th':'Tailandés', 'tl':'Tagalo', 'tr':'Turco', 'vi':'Vietnamita'}
+=======
+>>>>>>> Stashed changes
 
-    return codigo_lenguaje[cod]
 
-def retornar_df():
-    # Contenido del archivo JSON con un nombre asignado
+def language_from_code(cod):
+    language_codes = {'af': 'Africano', 'ar': 'Árabe', 'bg': 'Búlgaro', 'bn': 'Bengalí', 'ca': 'Catalán', 'cs': 'Checo',
+                      'cy': 'Galés', 'da': 'Danés', 'de': 'Alemán', 'el': 'Griego', 'en': 'Inglés', 'es': 'Español',
+                      'et': 'Estonio', 'fa': 'Persa', 'fi': 'Finés', 'fr': 'Francés', 'gu': 'Gujarati', 'he': 'Hebreo',
+                      'hr': 'Croata', 'hu': 'Húngaro', 'id': 'Indonedsio', 'it': 'Italiano', 'ja': 'Japonés',
+                      'kn': 'Kannada', 'ko': 'Coreano', 'lt': 'Lituano', 'lv': 'Letón', 'mk': 'Macedonio',
+                      'ml': 'Malasio', 'mr': 'Marathi', 'ne': 'Nepalí', 'no': 'Noruego', 'pl': 'Polaco',
+                      'pt': 'Portugués', 'ro': 'Rumano', 'sk': 'Eslovaco', 'sl': 'Esloveno', 'so': 'Somalí',
+                      'sq': 'Albanés', 'sv': 'Sueco', 'sw': 'Suajili', 'ta': 'Tamil', 'te': 'Telugu', 'th': 'Tailandés',
+                      'tl': 'Tagalo', 'tr': 'Turco', 'vi': 'Vietnamita'}
+
+    return language_codes[cod]
+
+
+def detect_text_language(text):
+    return language_from_code(detect(text))
+
+
+def return_language_df():
+    # Open the js file
     with open("tweets.js", "r", encoding="UTF-8") as js_file:
         js_code = js_file.read()
 
-    # Quita los saltos de línea
+    # Remove \n
     js_code = js_code.replace('\n', '')
     js_code = js_code.replace('window.YTD.tweets.part0 = ', '')
 
+    # Read the json and obtain a df
     json_dat = json.loads(js_code)
     data = json_normalize(json_dat)
 
-    lang_aux = {}
-    lang = {'Idioma': [], 'Cantidad': []}
-    for i in range(len(data)):
-        leng = convertir_codigo_lenguaje(detect(data.iloc[i]['tweet.full_text']))
-        if leng in lang_aux:
-            lang_aux[leng] += 1
-        else:
-            lang_aux[leng] = 1
+    # Add a new column with the language column (no quantities)
+    data['language'] = data.apply(lambda row: detect_text_language(row['tweet.full_text']), axis=1)
+    df = pd.DataFrame(data['language'])
 
-    res = [(key,value) for key, value in lang_aux.items()]
-    for i in range(0, len(res)):
-        lang['Idioma'].append(res[i][0])
-        lang['Cantidad'].append(res[i][1])
+    nuevo_df = df.groupby('language').size().reset_index(name='quantity')
 
-    return pd.DataFrame(lang).sort_values(by=['Cantidad'], ascending=False)
-
-'''
-labels = []
-for i in range(0, len(df)):
-    labels.append(df.iloc[i]['idioma'] + ' (' + str(round((df.iloc[i]['cantidad']/sum(df['cantidad']))*100, 2)) + '%)')
-
-fig, ax = plt.subplots()
-plt.pie(df['cantidad'])
-plt.axis('equal')
-plt.title('Idiomas utilizados en los Tweets')
-plt.legend(labels, loc="best")
-
-plt.show()
-'''
+    return nuevo_df.sort_values(by=['quantity'], ascending=False)
