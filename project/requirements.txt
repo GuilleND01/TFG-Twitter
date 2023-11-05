@@ -4,3 +4,4 @@ plotly==5.17.0
 plotly_express==0.4.1
 langdetect==1.0.9
 textblob=0.17.1
+vaderSentiment~=3.3.2
