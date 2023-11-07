@@ -26,12 +26,12 @@ def analisis_sentimientos(file_content):
 
     # Get polarity with Vader
     df_contiene_rts['tweet.polarity'] = df_contiene_rts['tweet.full_text'].apply(get_polarity)
-    #df_sin_rts['tweet.polarity'] = df_sin_rts['tweet.full_text'].apply(get_polarity)
+    df_sin_rts['tweet.polarity'] = df_sin_rts['tweet.full_text'].apply(get_polarity)
 
-    #df_sin_rts = df_sin_rts.groupby('tweet.polarity').size().reset_index(name='quantity')
+    df_sin_rts = df_sin_rts.groupby('tweet.polarity').size().reset_index(name='quantity')
     df_contiene_rts = df_contiene_rts.groupby('tweet.polarity').size().reset_index(name='quantity')
 
-    return df_contiene_rts.sort_values(by=['quantity'], ascending=False)
+    return df_contiene_rts.sort_values(by=['quantity'], ascending=False), df_sin_rts.sort_values(by=['quantity'], ascending=False)
 
 
 def get_polarity(text):

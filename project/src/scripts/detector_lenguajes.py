@@ -35,6 +35,8 @@ def return_language_df(file_content):
     json_dat = json.loads(js_code)
     data = json_normalize(json_dat)
 
+    data = pd.DataFrame(data['tweet.full_text'])
+
     # Add a new column with the language column (no quantities)
     data['language'] = data.apply(lambda row: detect_text_language(row['tweet.full_text']), axis=1)
     df = pd.DataFrame(data['language'])
