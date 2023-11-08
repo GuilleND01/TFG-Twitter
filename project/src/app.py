@@ -66,7 +66,7 @@ def func_sentiments(info_decoded):
     fig_escritos.update_traces(textposition='inside')
     fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 
-    fig_rts = px.pie(df_sin_rts, values='quantity', names='tweet.polarity')
+    fig_rts = px.pie(df_contiene_rts, values='quantity', names='tweet.polarity')
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 

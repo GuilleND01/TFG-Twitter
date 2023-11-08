@@ -1,4 +1,4 @@
-from langdetect import detect
+from langdetect import detect, LangDetectException
 import pandas as pd
 import json
 from src.utils.common_functions import clean_text
