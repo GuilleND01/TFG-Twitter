@@ -1,6 +1,7 @@
 from langdetect import detect
 import pandas as pd
 import json
+from src.utils.common_functions import clean_text
 from pandas import json_normalize
 
 
@@ -19,23 +20,25 @@ def language_from_code(cod):
 
 
 def detect_text_language(text):
-    return language_from_code(detect(text))
+    try:
+        language = language_from_code(detect(text))
+    except:
+        language = "No detectado"
+
+    return language
 
 
 def return_language_df(file_content):
-    # Open the js file
-    # with open("filename", "r", encoding="UTF-8") as js_file:
-    #    js_code = js_file.read()
-
-    # Remove \n
-    js_code = file_content.replace('\n', '')
-    js_code = js_code.replace('window.YTD.tweets.part0 = ', '')
+    js_code = file_content.replace('window.YTD.tweets.part0 = ', '')
 
     # Read the json and obtain a df
     json_dat = json.loads(js_code)
     data = json_normalize(json_dat)
 
     data = pd.DataFrame(data['tweet.full_text'])
+    data['tweet.full_text'] = data.apply(lambda row: detect_text_language(row['tweet.full_text']), axis=1)
+
+    data = data[data['tweet.full_text'] != '']
 
     # Add a new column with the language column (no quantities)
     data['language'] = data.apply(lambda row: detect_text_language(row['tweet.full_text']), axis=1)
