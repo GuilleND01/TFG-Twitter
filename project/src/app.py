@@ -40,7 +40,8 @@ def update_output(list_of_contents, list_of_names):
             if content is not None:
                 if filename == 'tweets.js':
                     tweets_decoded = content_decoded(content)
-                    output_languages = func_languages(tweets_decoded)
+                    #output_languages = func_languages(tweets_decoded)
+                    output_languages = None
                     output_sentiments = func_sentiments(tweets_decoded)
                     return output_languages, output_sentiments
 
