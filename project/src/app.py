@@ -6,6 +6,7 @@ from dash import Dash, dcc, html, Input, Output, State
 import plotly.express as px
 from scripts.detector_lenguajes import return_language_df
 from scripts.analisis_sentimientos import analisis_sentimientos
+from scripts.usuarios_mas_mencionados import return_user_mentions_df
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -26,12 +27,14 @@ app.layout = html.Div([
         'textAlign': 'center'
     }, multiple=True, id='upload-data'),
     html.Div(id='output_languages'),
-    html.Div(id='output_sentiments')
+    html.Div(id='output_sentiments'),
+    html.Div(id='output_menciones')
 ])
 
 
 @app.callback(Output('output_languages', 'children'),
               Output('output_sentiments', 'children'),
+              Output('output_menciones', 'children'),
               Input('upload-data', 'contents'),
               State('upload-data', 'filename'))
 def update_output(list_of_contents, list_of_names):
@@ -41,9 +44,10 @@ def update_output(list_of_contents, list_of_names):
                 if filename == 'tweets.js':
                     tweets_decoded = content_decoded(content)
                     #output_languages = func_languages(tweets_decoded)
-                    output_languages = None
-                    output_sentiments = func_sentiments(tweets_decoded)
-                    return output_languages, output_sentiments
+                    output_languages = func_languages(tweets_decoded)
+                    output_sentiments = None #func_sentiments(tweets_decoded)
+                    output_menciones = func_menciones(tweets_decoded)
+                    return output_languages, output_sentiments, output_menciones
 
 
 def content_decoded(content):
@@ -75,6 +79,15 @@ def func_sentiments(info_decoded):
         dcc.Tab(value='tab-1', label='Polaridad de los tweets que has escrito', children=[dcc.Graph(figure=fig_escritos)]),
         dcc.Tab(label='Polaridad de los tweets que has retwitteado', children=[dcc.Graph(figure=fig_rts)]),
     ])
+
+def func_menciones(info_decoded):
+    df_menciones = return_user_mentions_df(info_decoded)
+    fig_menciones = px.bar(df_menciones, x='usernames', y='quantity', title='Usuarios a los que más has mencionado',
+                           text_auto=True)
+    fig_menciones.update_traces(textposition='outside')
+    fig_menciones.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+
+    return dcc.Graph(figure=fig_menciones)
 
 
 if __name__ == '__main__':

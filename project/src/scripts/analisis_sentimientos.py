@@ -5,7 +5,7 @@ from src.utils.common_functions import clean_text
 from google.cloud import translate_v2 as translate
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-translate_client = translate.Client.from_service_account_json('tfgtwitter-735690f3c7f2.json')
+translate_client = translate.Client.from_service_account_json('../tfgtwitter-735690f3c7f2.json')
 analyzer = SentimentIntensityAnalyzer()
 
 
