@@ -3,3 +3,5 @@ pandas==2.1.1
 plotly==5.17.0
 plotly_express==0.4.1
 langdetect==1.0.9
+vaderSentiment~=3.3.2
+google-cloud-translate==2.0.1
