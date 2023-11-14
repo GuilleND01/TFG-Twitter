@@ -28,7 +28,7 @@ def detect_text_language(text):
     return language
 
 
-def return_language_df(file_content):
+def language_df(file_content):
     js_code = file_content.replace('window.YTD.tweets.part0 = ', '')
 
     # Read the json and obtain a df

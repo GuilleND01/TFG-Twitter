@@ -1,18 +1,13 @@
-import base64
-import io
-import json
+from dash import Dash, dcc, html
+import dash_bootstrap_components as dbc
 
-from dash import Dash, dcc, html, Input, Output, State
-import plotly.express as px
-from scripts.detector_lenguajes import return_language_df
-from scripts.analisis_sentimientos import analisis_sentimientos
-from scripts.usuarios_mas_mencionados import return_user_mentions_df
+from src.callbacks.pie_sentiment_callback import create_pie_sentiment_callbacks
+from src.callbacks.upload_data_callback import create_upload_data_callbacks
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app = Dash(__name__, title='WhatTheyKnow')
-
-app.layout = html.Div([
+# Aquí o en GUIs
+app.layout = dbc.Container([
 
     dcc.Upload([
         'Drag and Drop or ',
@@ -25,70 +20,16 @@ app.layout = html.Div([
         'borderStyle': 'dashed',
         'borderRadius': '5px',
         'textAlign': 'center'
-    }, multiple=True, id='upload-data'),
-    html.Div(id='output_languages'),
-    html.Div(id='output_sentiments'),
-    html.Div(id='output_menciones')
+    }, multiple=True, id='upload-data', className='mt-3 mb-3'),  # Margin top y margin bottom
+    html.Div(id='output_languages', className='m3'),
+    html.Div(id='output_sentiments', className='m3'),
+    html.Div(id='output_menciones', className='m3')  # Margin 3 de Bootstrap
 ])
 
-
-@app.callback(Output('output_languages', 'children'),
-              Output('output_sentiments', 'children'),
-              Output('output_menciones', 'children'),
-              Input('upload-data', 'contents'),
-              State('upload-data', 'filename'))
-def update_output(list_of_contents, list_of_names):
-    if list_of_contents is not None:
-        for content, filename in zip(list_of_contents, list_of_names):
-            if content is not None:
-                if filename == 'tweets.js':
-                    tweets_decoded = content_decoded(content)
-                    #output_languages = func_languages(tweets_decoded)
-                    output_languages = func_languages(tweets_decoded)
-                    output_sentiments = None #func_sentiments(tweets_decoded)
-                    output_menciones = func_menciones(tweets_decoded)
-                    return output_languages, output_sentiments, output_menciones
-
-
-def content_decoded(content):
-    decoded = base64.b64decode(content.split(',')[1])
-    return io.StringIO(decoded.decode('utf-8')).getvalue()
-
-
-def func_languages(info_decoded):
-    """Pongo func de funcionalidad, no se me ocurre otra cosa"""
-    df = return_language_df(info_decoded)
-    fig = px.pie(df, values='quantity', names='language', title='Lenguajes en los que más se ha twitteado')
-    fig.update_traces(textposition='inside')
-    fig.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-    return dcc.Graph(figure=fig)
-
-
-def func_sentiments(info_decoded):
-    df_contiene_rts, df_sin_rts = analisis_sentimientos(info_decoded)
-
-    fig_escritos = px.pie(df_sin_rts, values='quantity', names='tweet.polarity')
-    fig_escritos.update_traces(textposition='inside')
-    fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-
-    fig_rts = px.pie(df_contiene_rts, values='quantity', names='tweet.polarity')
-    fig_rts.update_traces(textposition='inside')
-    fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-
-    return dcc.Tabs(id="tabs-example-graph", value='tab-1', children=[
-        dcc.Tab(value='tab-1', label='Polaridad de los tweets que has escrito', children=[dcc.Graph(figure=fig_escritos)]),
-        dcc.Tab(label='Polaridad de los tweets que has retwitteado', children=[dcc.Graph(figure=fig_rts)]),
-    ])
-
-def func_menciones(info_decoded):
-    df_menciones = return_user_mentions_df(info_decoded)
-    fig_menciones = px.bar(df_menciones, x='usernames', y='quantity', title='Usuarios a los que más has mencionado',
-                           text_auto=True)
-    fig_menciones.update_traces(textposition='outside')
-    fig_menciones.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-
-    return dcc.Graph(figure=fig_menciones)
-
+# Creación de los callbacks de la app
+create_upload_data_callbacks(app)
+create_pie_sentiment_callbacks(app)
+# ... y todos los callbacks de las GUIs
 
 if __name__ == '__main__':
     app.run_server(debug=False, host="0.0.0.0", port="8080")
