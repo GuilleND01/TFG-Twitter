@@ -2,10 +2,9 @@ import base64
 import io
 
 from dash.dependencies import Input, Output, State
-
-from src.GUIs.languages_gui import return_gui_languages
 from src.GUIs.mentions_gui import return_gui_mentions
-from src.GUIs.sentiments_gui import return_gui_sentiments
+from src.GUIs.lang_sentiments_gui import return_gui_langu_senti
+
 
 
 def create_upload_data_callbacks(app):
@@ -20,8 +19,7 @@ def create_upload_data_callbacks(app):
                 if content is not None:
                     if filename == 'tweets.js':
                         tweets_decoded = content_decoded(content)
-                        output_languages = return_gui_languages(tweets_decoded)
-                        output_sentiments = return_gui_sentiments(tweets_decoded)
+                        output_languages, output_sentiments = return_gui_langu_senti(tweets_decoded)
                         output_menciones = return_gui_mentions(tweets_decoded)
                         return output_languages, output_sentiments, output_menciones
 

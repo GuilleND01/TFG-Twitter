@@ -1,3 +1,0 @@
-Metemos en esta carpeta todas las funciones que devuelvan vistas. Otra opción era hacer un solo
-archivo guis.py que tuviera todas. Lo veo peor. Creo que queda más ordenada así, sobre tod0 para
-cuando las guis tienen subguis dentro, por ejemplo la de sentiments_gui
