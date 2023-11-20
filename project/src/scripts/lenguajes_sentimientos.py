@@ -5,9 +5,10 @@ from pandas import json_normalize
 from src.utils.common_functions import clean_text
 from google.cloud import translate_v2 as translate
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from src.utils.language_codes import language_codes
 
 script_dir = os.path.dirname(__file__)
-json_path = os.path.join(script_dir, 'tfgtwitter-735690f3c7f2.json')
+json_path = os.path.join(script_dir, 'api_keys.json')
 translate_client = translate.Client.from_service_account_json(json_path)
 analyzer = SentimentIntensityAnalyzer()
 
@@ -70,5 +71,5 @@ def get_lang_and_polarity(text):
     else:
         polarity = "Sentimiento Negativo"
 
-    return src_languaje, polarity, compound
+    return language_codes[src_languaje], polarity, compound
 
