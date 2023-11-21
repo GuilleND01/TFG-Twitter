@@ -2,10 +2,9 @@ import base64
 import io
 
 from dash.dependencies import Input, Output, State
-
-from src.GUIs.languages_gui import return_gui_languages
 from src.GUIs.mentions_gui import return_gui_mentions
-from src.GUIs.sentiments_gui import return_gui_sentiments
+from src.GUIs.lang_sentiments_gui import return_gui_langu_senti
+
 
 
 def create_upload_data_callbacks(app):

@@ -1,12 +1,19 @@
 from dash import dcc
 import plotly.express as px
-from src.scripts.detector_lenguajes import language_df
 
+'''Llamada desde return_gui_langu_senti'''
 
-def return_gui_languages(info_decoded):
-    """Pongo func de funcionalidad, no se me ocurre otra cosa"""
-    df = language_df(info_decoded)
-    fig = px.pie(df, values='quantity', names='language', title='Lenguajes en los que más se ha twitteado')
-    fig.update_traces(textposition='inside')
-    fig.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-    return dcc.Graph(figure=fig)
+def create_gui_languages(language_rts, language_without_rts):
+    fig_escritos = px.pie(language_without_rts, values='quantity', names='tweet.src_language')
+    fig_escritos.update_traces(textposition='inside')
+    fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+
+    fig_rts = px.pie(language_rts, values='quantity', names='tweet.src_language')
+    fig_rts.update_traces(textposition='inside')
+    fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+
+    return dcc.Tabs(id="tabs-languages", value='tab-1', children=[
+        dcc.Tab(value='tab-1', label='IDIOMAS EN LOS QUE HAS ESCRITO', children=[dcc.Graph(figure=fig_escritos)]),
+        dcc.Tab(label='IDIOMAS EN LOS QUE HAS RETWITTEADO', children=[dcc.Graph(figure=fig_rts)])
+    ])
+

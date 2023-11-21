@@ -1,30 +1,27 @@
 from dash import dcc, html
-from src.scripts.analisis_sentimientos import analisis_sentimientos
 import plotly.express as px
 import dash_bootstrap_components as dbc
 
-
-def return_gui_sentiments(info_decoded):
-    df_contiene_rts, df_sin_rts = analisis_sentimientos(info_decoded)
-
-    fig_escritos = px.pie(df_sin_rts, values='quantity', names='tweet.polarity')
+'''Llamada desde return_gui_langu_senti'''
+def create_gui_sentiments(polarity_rts, polarity_without_rts):
+    fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity')
     fig_escritos.update_traces(textposition='inside')
     fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 
-    fig_rts = px.pie(df_contiene_rts, values='quantity', names='tweet.polarity')
+    fig_rts = px.pie(polarity_rts, values='quantity', names='tweet.polarity')
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 
-    return dcc.Tabs(id="tabs-example-graph", value='tab-1', children=[
-        dcc.Tab(value='tab-1', label='Polaridad de los tweets que has escrito', children=[
-            dbc.Row([dbc.Col(dcc.Graph(figure=fig_escritos), id='graph-escritos'),
-                     dbc.Col(html.Div(), id='paragraph-output',
+    return dcc.Tabs(id="tabs-polarity", value='tab-1', children=[
+        dcc.Tab(value='tab-1', label='POLARIDAD DE LOS TWEETS QUE HAS ESCRITO', children=[
+            dbc.Row([dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts')),
+                     dbc.Col(html.Div(), id='no-rts-output',
                              className="d-flex align-items-center justify-content-center")])
         ]),
-        dcc.Tab(label='Polaridad de los tweets que has retwitteado', children=[
-            dbc.Row([dbc.Col(dcc.Graph(figure=fig_rts)), dbc.Col(html.P("algo"))])
-        ]),
+        dcc.Tab(label='POLARIDAD DE LOS TWEETS QUE HAS RETWITTEADO', children=[
+            dbc.Row([dbc.Col(dcc.Graph(figure=fig_rts, id='graph-sentiments-rts')),
+                     dbc.Col(html.Div(), id='rts-output',
+                             className="d-flex align-items-center justify-content-center")])
+        ])
     ])
 
-#def create_Tab():
- # Va a devolver la Tab de dentro de Tabs
