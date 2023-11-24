@@ -83,12 +83,10 @@ def lenguajes_and_sentimientos(file_content):
 
 def get_lang_and_polarity(text):
     # A unique call to the API
-    # result = translate_client.translate(text, target_language='en')
-    # src_languaje = result['detectedSourceLanguage']
-    # compound = analyzer.polarity_scores(result['translatedText'])['compound']
+    result = translate_client.translate(text, target_language='en')
+    src_languaje = result['detectedSourceLanguage']
+    compound = analyzer.polarity_scores(result['translatedText'])['compound']
 
-    compound = analyzer.polarity_scores(text)['compound']
-    src_languaje = 'es'
 
     if compound >= 0.05:
         polarity = "Sentimiento Positivo"
