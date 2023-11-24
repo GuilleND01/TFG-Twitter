@@ -20,7 +20,7 @@ def create_pie_sentiment_callbacks(app):
             return create_div_tweets(category_clicked, "no_rts")
 
         else:
-            return 'Aquí saldran los 3 tweets con mas polaridad según la que tengas seleccionada del pie'
+            return 'Selecciona un sector del gráfico para ver los tweets'
 
     @app.callback(
         Output('rts-output', 'children'),
@@ -31,5 +31,5 @@ def create_pie_sentiment_callbacks(app):
             category_clicked = click_data['points'][0]['label']
             return create_div_tweets(category_clicked, "rts")
         else:
-            return 'Aquí saldran los 3 tweets con mas polaridad según la que tengas seleccionada del pie'
+            return 'Selecciona un sector del gráfico para ver los tweets'
 

@@ -56,20 +56,29 @@ def lenguajes_and_sentimientos(file_content):
     language_rts = language_rts.sort_values(by=['quantity'], ascending=False)
     language_without_rts = language_without_rts.sort_values(by=['quantity'], ascending=False)
 
-    most_positive_rts = df_contiene_rts.sort_values(by=['tweet.polarity', 'tweet.compound'], ascending=False).head(3)
-    most_negative_rts = df_contiene_rts.sort_values(by=['tweet.polarity', 'tweet.compound'], ascending=False).tail(3)
-    # df_contiene_rts['diff_with_0'] = abs(df_contiene_rts['tweet.compound'] - 0)
-    # most_neutral_rts = df_contiene_rts.sort_values(by=['tweet.polarity', 'diff_with_0']).head(3)
+    # TODO refactorizar este código para que sea DRY
+    most_positive_rts = (df_contiene_rts[df_contiene_rts['tweet.polarity'] == "Sentimiento Positivo"]
+                         .sort_values(by=['tweet.compound'], ascending=False).head(3))
+    most_negative_rts = (df_contiene_rts[df_contiene_rts['tweet.polarity'] == "Sentimiento Negativo"]
+                         .sort_values(by=['tweet.compound'], ascending=False).tail(3))
+    df_contiene_rts['diff_with_0'] = abs(df_contiene_rts['tweet.compound'] - 0)
+    most_neutral_rts = (df_contiene_rts[df_contiene_rts['tweet.polarity'] == "Sentimiento Neutral"]
+                        .sort_values(by=['diff_with_0']).head(3))
 
-    most_positive_sin_rts = df_sin_rts.sort_values(by=['tweet.polarity', 'tweet.compound'], ascending=False).head(3)
-    most_negative_sin_rts = df_sin_rts.sort_values(by=['tweet.polarity', 'tweet.compound'], ascending=False).tail(3)
+    most_positive_sin_rts = (df_sin_rts[df_sin_rts['tweet.polarity'] == "Sentimiento Positivo"]
+                             .sort_values(by=['tweet.compound'], ascending=False).head(3))
+    most_negative_sin_rts = (df_sin_rts[df_sin_rts['tweet.polarity'] == "Sentimiento Negativo"]
+                             .sort_values(by=['tweet.compound'], ascending=False).tail(3))
+    df_sin_rts['diff_with_0'] = abs(df_contiene_rts['tweet.compound'] - 0)
+    most_neutral_sin_rts = (df_sin_rts[df_sin_rts['tweet.polarity'] == "Sentimiento Neutral"]
+                            .sort_values(by=['diff_with_0']).head(3))
 
     global tweets_rts
-    tweets_rts = pd.concat([most_positive_rts, most_negative_rts])
+    tweets_rts = pd.concat([most_positive_rts, most_negative_rts, most_neutral_rts])
     global tweets_no_rts
-    tweets_no_rts = pd.concat([most_positive_sin_rts, most_negative_sin_rts])
+    tweets_no_rts = pd.concat([most_positive_sin_rts, most_negative_sin_rts, most_neutral_sin_rts])
 
-    return language_rts, language_without_rts, polarity_rts, polarity_without_rts, tweets_rts, tweets_no_rts
+    return language_rts, language_without_rts, polarity_rts, polarity_without_rts
 
 
 def get_lang_and_polarity(text):
@@ -98,4 +107,3 @@ def return_tweets(labels, rts):
     else:
         filas_filtradas = tweets_rts[tweets_rts['tweet.polarity'] == str(labels)]
         return filas_filtradas['tweet.full_text']
-
