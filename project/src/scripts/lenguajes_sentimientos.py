@@ -15,6 +15,8 @@ analyzer = SentimentIntensityAnalyzer()
 tweets_rts = pd.DataFrame
 tweets_no_rts = pd.DataFrame
 
+def obtener_url(id_usuario, id_tweet):
+    return f'https://twitter.com/{id_usuario}/status/{id_tweet}'
 
 def lenguajes_and_sentimientos(file_content):
     js_code = file_content.replace('window.YTD.tweets.part0 = ', '')
@@ -23,7 +25,8 @@ def lenguajes_and_sentimientos(file_content):
     json_dat = json.loads(js_code)
     data = json_normalize(json_dat)
 
-    df = pd.DataFrame(data['tweet.full_text'])
+    df = pd.DataFrame(data[['tweet.full_text', 'tweet.id', 'tweet.edit_info.initial.editTweetIds']])
+    df['url_tweet'] = df.apply(lambda x: obtener_url(x['tweet.id'], x['tweet.edit_info.initial.editTweetIds']))
     df = df.head(100)
 
     # Split the dataframe (tweets with rts and without)
@@ -38,6 +41,7 @@ def lenguajes_and_sentimientos(file_content):
     df_sin_rts = df_sin_rts[df_sin_rts["tweet.full_text"] != '']
     df_contiene_rts = df_contiene_rts[df_contiene_rts["tweet.full_text"] != '']
 
+    df_sin_rts['url'] = df_sin_rts.apply(lambda x : x[''])
     # Get polarity with Vader
     df_contiene_rts[['tweet.src_language', 'tweet.polarity', 'tweet.compound']] \
         = df_contiene_rts['tweet.full_text'].apply(lambda x: pd.Series(get_lang_and_polarity(x)))

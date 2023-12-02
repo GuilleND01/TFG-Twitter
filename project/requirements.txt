@@ -8,3 +8,5 @@ google-cloud-translate==2.0.1
 dash-bootstrap-components==1.5.0
 swifter==1.4.0
 ray==2.8.0
+selenium~=4.15.2
+beautifulsoup4~=4.12.2
