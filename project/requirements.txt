@@ -10,3 +10,4 @@ swifter==1.4.0
 ray==2.8.0
 selenium~=4.15.2
 beautifulsoup4~=4.12.2
+requests~=2.31.0

@@ -11,6 +11,9 @@ from src.utils.DataframeProcessing import DataFrameProcessing
 from src.utils.language_codes import language_codes
 
 
+
+
+
 class LanguagesSentiments(DataFrameProcessing):
 
     def __init__(self, file_content):
@@ -30,8 +33,7 @@ class LanguagesSentiments(DataFrameProcessing):
         self.build_dataframe_wres()
 
     def build_dataframe_wres(self):
-        df = pd.DataFrame(self.data[['tweet.full_text', 'tweet.id', 'tweet.edit_info.initial.editTweetIds']])
-        #df['url_tweet'] = df.apply(lambda x: obtener_url(x['tweet.id'], x['tweet.edit_info.initial.editTweetIds']))
+        df = pd.DataFrame(self.data[['tweet.full_text', 'tweet.id']])
         df = df.head(100)
 
         # Split the dataframe (tweets with rts and without)
@@ -46,7 +48,6 @@ class LanguagesSentiments(DataFrameProcessing):
         df_sin_rts = df_sin_rts[df_sin_rts["tweet.full_text"] != '']
         df_contiene_rts = df_contiene_rts[df_contiene_rts["tweet.full_text"] != '']
 
-        #df_sin_rts['url'] = df_sin_rts.apply(lambda x: x[''])
         # Get polarity with Vader
         df_contiene_rts[['tweet.src_language', 'tweet.polarity', 'tweet.compound']] \
             = df_contiene_rts['tweet.full_text'].apply(lambda x: pd.Series(self.get_lang_and_polarity(x)))
@@ -84,6 +85,7 @@ class LanguagesSentiments(DataFrameProcessing):
 
         self.tweets_rts = pd.concat([most_positive_rts, most_negative_rts, most_neutral_rts])
         self.tweets_no_rts = pd.concat([most_positive_sin_rts, most_negative_sin_rts, most_neutral_sin_rts])
+        self.tweets_no_rts['url_tweet'] = self.tweets_no_rts.apply(lambda x: self.obtener_url(x['tweet.id']), axis=1)
 
         self.language_rts = language_rts
         self.language_without_rts = language_without_rts
@@ -93,6 +95,9 @@ class LanguagesSentiments(DataFrameProcessing):
     def get_dataframe_wres(self):
         return self.language_rts, self.language_without_rts, self.polarity_rts, self.polarity_without_rts, \
             self.tweets_rts, self.tweets_no_rts
+
+    def obtener_url(self, tweet_id):
+        return f"https://publish.twitter.com/oembed?url=https://twitter.com/joorgemaa/status/{tweet_id}"
 
     def get_lang_and_polarity(self, text):
         # A unique call to the API
