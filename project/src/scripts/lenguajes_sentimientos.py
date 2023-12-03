@@ -10,6 +10,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from src.utils.DataframeProcessing import DataFrameProcessing
 from src.utils.language_codes import language_codes
 
+
 class LanguagesSentiments(DataFrameProcessing):
 
     def __init__(self, file_content):
@@ -30,7 +31,7 @@ class LanguagesSentiments(DataFrameProcessing):
 
     def build_dataframe_wres(self):
         df = pd.DataFrame(self.data[['tweet.full_text', 'tweet.id', 'tweet.edit_info.initial.editTweetIds']])
-        df['url_tweet'] = df.apply(lambda x: obtener_url(x['tweet.id'], x['tweet.edit_info.initial.editTweetIds']))
+        #df['url_tweet'] = df.apply(lambda x: obtener_url(x['tweet.id'], x['tweet.edit_info.initial.editTweetIds']))
         df = df.head(100)
 
         # Split the dataframe (tweets with rts and without)
@@ -45,7 +46,7 @@ class LanguagesSentiments(DataFrameProcessing):
         df_sin_rts = df_sin_rts[df_sin_rts["tweet.full_text"] != '']
         df_contiene_rts = df_contiene_rts[df_contiene_rts["tweet.full_text"] != '']
 
-        df_sin_rts['url'] = df_sin_rts.apply(lambda x: x[''])
+        #df_sin_rts['url'] = df_sin_rts.apply(lambda x: x[''])
         # Get polarity with Vader
         df_contiene_rts[['tweet.src_language', 'tweet.polarity', 'tweet.compound']] \
             = df_contiene_rts['tweet.full_text'].apply(lambda x: pd.Series(self.get_lang_and_polarity(x)))
@@ -90,13 +91,19 @@ class LanguagesSentiments(DataFrameProcessing):
         self.polarity_without_rts = polarity_without_rts
 
     def get_dataframe_wres(self):
-        return self.language_rts, self.language_without_rts, self.polarity_rts, self.polarity_without_rts
+        return self.language_rts, self.language_without_rts, self.polarity_rts, self.polarity_without_rts, \
+            self.tweets_rts, self.tweets_no_rts
 
     def get_lang_and_polarity(self, text):
         # A unique call to the API
+
+        '''
         result = self.translate_client.translate(text, target_language='en')
         src_languaje = result['detectedSourceLanguage']
         compound = self.analyzer.polarity_scores(result['translatedText'])['compound']
+        '''
+
+        compound = self.analyzer.polarity_scores(text)['compound']
 
         if compound >= 0.05:
             polarity = "Sentimiento Positivo"
@@ -105,12 +112,5 @@ class LanguagesSentiments(DataFrameProcessing):
         else:
             polarity = "Sentimiento Negativo"
 
-        return src_languaje, polarity, compound
+        return 'es', polarity, compound
 
-    def return_tweets(self, labels, rts):
-        if rts == "no_rts":
-            filas_filtradas = self.tweets_no_rts[self.tweets_no_rts['tweet.polarity'] == str(labels)]
-            return filas_filtradas['tweet.full_text']
-        else:
-            filas_filtradas = self.tweets_rts[self.tweets_rts['tweet.polarity'] == str(labels)]
-            return filas_filtradas['tweet.full_text']
