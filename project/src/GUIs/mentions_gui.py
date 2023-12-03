@@ -8,7 +8,14 @@ def return_gui_mentions(info_decoded):
     return dcc.Graph(id='bar',
                      figure={
                          'data': [
-                             {'x': list(df_menciones['usernames']), 'y': list(df_menciones['quantity']), 'type': 'bar'}
+                             {'x': list(df_menciones['usernames']), 'y': list(df_menciones['quantity']), 'type': 'bar',
+                              'marker': {
+                                  'color': 'rgba(50, 171, 96, 0.6)',
+                                  'line': {'color': 'rgba(50, 171, 96, 1)', 'width': 2},
+                                  'symbol': 'circle',
+                                  'size': 12,
+                              }
+                              }
                          ],
                          'layout': {
                              'images': [
@@ -25,6 +32,6 @@ def return_gui_mentions(info_decoded):
                                  } for index, row in df_menciones.iterrows()
                              ],
                              'barmode': 'group',
-                             'title': 'Gráfico de Barras con Imágenes'
+                             'title': 'Usuarios a los que más has mencionado'
                          }
                      })
