@@ -26,7 +26,7 @@ def create_gui_sentiments(polarity_rts, polarity_without_rts, tweets_rts, tweets
         ]),
         dcc.Tab(label='POLARIDAD DE LOS TWEETS QUE HAS RETWITTEADO', children=[
             dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_rts, id='graph-sentiments-rts')),
-                     dbc.Col(id='rts-output',
+                     dbc.Col(children=create_div_tweets(tweets_rts, 'rts'), id='rts-output',
                              className="d-flex align-items-center justify-content-center")])
         ])
     ])
@@ -50,9 +50,12 @@ def create_tweets_paragraph(df, id_div):
 
     list_tweets = []
     for i in range(len(df)):
-        res = requests.get(df.iloc[i]).json()
-        if "html" in res:
-            tweet_html = unescape(res["html"])
-            list_tweets.append(html.Iframe(srcDoc=tweet_html, className='w-100'))
+        url = df.iloc[i]
+        print(url)
+        if url is not None:
+            res = requests.get(df.iloc[i]).json()
+            if "html" in res:
+                tweet_html = unescape(res["html"])
+                list_tweets.append(html.Iframe(srcDoc=tweet_html, className='w-100'))
 
     return html.Div(children=list_tweets, id=id_div, className='d-none')

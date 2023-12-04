@@ -11,9 +11,6 @@ from src.utils.DataframeProcessing import DataFrameProcessing
 from src.utils.language_codes import language_codes
 
 
-
-
-
 class LanguagesSentiments(DataFrameProcessing):
 
     def __init__(self, file_content):
@@ -33,20 +30,33 @@ class LanguagesSentiments(DataFrameProcessing):
         self.build_dataframe_wres()
 
     def build_dataframe_wres(self):
-        df = pd.DataFrame(self.data[['tweet.full_text', 'tweet.id']])
-        df = df.head(100)
+        df = self.data.head(100)
 
         # Split the dataframe (tweets with rts and without)
-        df_contiene_rts = df[df["tweet.full_text"].str.contains("RT")]
+        df_contiene_rts = df[df["tweet.full_text"].str.match(r'^RT @\w+:')]
         df_sin_rts = df[~df["tweet.full_text"].str.contains("RT")]
+
+
+        # Drop the columns that we are not going to use and normalize de user mentions column to get the user ID of the retweet
+
+        '''Ocurre que en la columna user_mentios puede haber más de una mención, pero a la persona a la que has dado rt siempre aparece
+        en la primera pos del array de menciones, por eso este apply'''
+        df_contiene_rts['user_id_RT'] = df_contiene_rts["tweet.entities.user_mentions"].apply(lambda x: x[0]['id'] if x else None)
+        df_contiene_rts = pd.DataFrame(df_contiene_rts[['tweet.full_text', 'tweet.id', 'user_id_RT']])
+        df_sin_rts = pd.DataFrame(df_sin_rts[['tweet.full_text', 'tweet.id']])
+
 
         # Clean both dataframes
         df_sin_rts["tweet.full_text"] = df_sin_rts["tweet.full_text"].apply(clean_text)
         df_contiene_rts["tweet.full_text"] = df_contiene_rts["tweet.full_text"].apply(clean_text)
 
+        # Delete tweets with id = -1 because in the http request the tweet is not going to exist
+        df_contiene_rts = df_contiene_rts[df_contiene_rts["user_id_RT"] != "-1"]
+
         # Then, drop empty tweets
         df_sin_rts = df_sin_rts[df_sin_rts["tweet.full_text"] != '']
         df_contiene_rts = df_contiene_rts[df_contiene_rts["tweet.full_text"] != '']
+
 
         # Get polarity with Vader
         df_contiene_rts[['tweet.src_language', 'tweet.polarity', 'tweet.compound']] \
@@ -85,7 +95,8 @@ class LanguagesSentiments(DataFrameProcessing):
 
         self.tweets_rts = pd.concat([most_positive_rts, most_negative_rts, most_neutral_rts])
         self.tweets_no_rts = pd.concat([most_positive_sin_rts, most_negative_sin_rts, most_neutral_sin_rts])
-        self.tweets_no_rts['url_tweet'] = self.tweets_no_rts.apply(lambda x: self.obtener_url(x['tweet.id']), axis=1)
+        self.tweets_no_rts['url_tweet'] = self.tweets_no_rts.apply(lambda x: self.obtener_url_no_rts(x['tweet.id']), axis=1)
+        self.tweets_rts['url_tweet'] = self.tweets_rts.apply(lambda x: self.obtener_url_rts(x['tweet.id'], x['user_id_RT']), axis=1)
 
         self.language_rts = language_rts
         self.language_without_rts = language_without_rts
@@ -96,8 +107,11 @@ class LanguagesSentiments(DataFrameProcessing):
         return self.language_rts, self.language_without_rts, self.polarity_rts, self.polarity_without_rts, \
             self.tweets_rts, self.tweets_no_rts
 
-    def obtener_url(self, tweet_id):
+    def obtener_url_no_rts(self, tweet_id):
         return f"https://publish.twitter.com/oembed?url=https://twitter.com/joorgemaa/status/{tweet_id}"
+
+    def obtener_url_rts(self, tweet_id, user_id):
+        return f"https://publish.twitter.com/oembed?url=https://twitter.com/{user_id}/status/{tweet_id}"
 
     def get_lang_and_polarity(self, text):
         # A unique call to the API
