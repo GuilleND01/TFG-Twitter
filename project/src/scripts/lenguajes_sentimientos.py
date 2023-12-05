@@ -116,13 +116,12 @@ class LanguagesSentiments(DataFrameProcessing):
     def get_lang_and_polarity(self, text):
         # A unique call to the API
 
-        '''
+
         result = self.translate_client.translate(text, target_language='en')
         src_languaje = result['detectedSourceLanguage']
         compound = self.analyzer.polarity_scores(result['translatedText'])['compound']
-        '''
 
-        compound = self.analyzer.polarity_scores(text)['compound']
+
 
         if compound >= 0.05:
             polarity = "Sentimiento Positivo"
@@ -131,5 +130,5 @@ class LanguagesSentiments(DataFrameProcessing):
         else:
             polarity = "Sentimiento Negativo"
 
-        return 'es', polarity, compound
+        return src_languaje, polarity, compound
 
