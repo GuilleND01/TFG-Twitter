@@ -34,7 +34,7 @@ class LanguagesSentiments(DataFrameProcessing):
 
         # Split the dataframe (tweets with rts and without)
         df_contiene_rts = df[df["tweet.full_text"].str.match(r'^RT @\w+:')]
-        df_sin_rts = df[~df["tweet.full_text"].str.contains("RT")]
+        df_sin_rts = df[~df["tweet.full_text"].str.match(r'^RT @\w+:')]
 
 
         # Drop the columns that we are not going to use and normalize de user mentions column to get the user ID of the retweet
