@@ -37,9 +37,9 @@ def create_div_tweets(df, rts):
     corresponde a los tweets con o sin rts. La función devuelve 3 divs con tres párrafos cada uno
     en su interior correspondientes a un sector del pie'''
 
-    positive_tweets = (df[df["tweet.polarity"] == "Sentimiento Positivo"])["url_tweet"]
-    negative_tweets = (df[df["tweet.polarity"] == "Sentimiento Negativo"])["url_tweet"]
-    neutral_tweets = (df[df["tweet.polarity"] == "Sentimiento Neutral"])["url_tweet"]
+    positive_tweets = (df[df["tweet.polarity"] == "Sentimiento Positivo"])
+    negative_tweets = (df[df["tweet.polarity"] == "Sentimiento Negativo"])
+    neutral_tweets = (df[df["tweet.polarity"] == "Sentimiento Neutral"])
 
     return [create_tweets_paragraph(positive_tweets, f"positive{rts}"),
             create_tweets_paragraph(negative_tweets, f"negative{rts}"),
@@ -47,15 +47,14 @@ def create_div_tweets(df, rts):
 
 
 def create_tweets_paragraph(df, id_div):
-
     list_tweets = []
     for i in range(len(df)):
-        url = df.iloc[i] + '&hide_thread=true&hide_media=true'
+        url = df.iloc[i]["url_tweet"]
         if url is not None:
             res = requests.get(url).json()
             if "html" in res:
                 tweet_html = unescape(res["html"])
-                list_tweets.append(dbc.AccordionItem(html.Iframe(srcDoc=tweet_html, className='w-100'), title=f'Tweet {i}'))
+                list_tweets.append(dbc.AccordionItem(html.Iframe(srcDoc=tweet_html, className='w-100'), title=f'Tweet de {df.iloc[i]["username_RT"]}'))
 
 
 

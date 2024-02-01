@@ -42,7 +42,9 @@ class LanguagesSentiments(DataFrameProcessing):
         '''Ocurre que en la columna user_mentios puede haber más de una mención, pero a la persona a la que has dado rt siempre aparece
         en la primera pos del array de menciones, por eso este apply'''
         df_contiene_rts['user_id_RT'] = df_contiene_rts["tweet.entities.user_mentions"].apply(lambda x: x[0]['id'] if x else None)
-        df_contiene_rts = pd.DataFrame(df_contiene_rts[['tweet.full_text', 'tweet.id', 'user_id_RT']])
+        df_contiene_rts['username_RT'] = df_contiene_rts["tweet.full_text"].apply(lambda x: (x.split(":")[0]).split("RT ")[1])
+
+        df_contiene_rts = pd.DataFrame(df_contiene_rts[['tweet.full_text', 'tweet.id', 'user_id_RT', 'username_RT']])
         df_sin_rts = pd.DataFrame(df_sin_rts[['tweet.full_text', 'tweet.id']])
 
 
@@ -108,10 +110,10 @@ class LanguagesSentiments(DataFrameProcessing):
             self.tweets_rts, self.tweets_no_rts
 
     def obtener_url_no_rts(self, tweet_id):
-        return f"https://publish.twitter.com/oembed?url=https://twitter.com/joorgemaa/status/{tweet_id}"
+        return f"https://publish.twitter.com/oembed?url=https://twitter.com/joorgemaa/status/{tweet_id}&hide_thread=true&hide_media=true"
 
     def obtener_url_rts(self, tweet_id, user_id):
-        return f"https://publish.twitter.com/oembed?url=https://twitter.com/{user_id}/status/{tweet_id}"
+        return f"https://publish.twitter.com/oembed?url=https://twitter.com/{user_id}/status/{tweet_id}&hide_thread=true&hide_media=true&align=center"
 
     def get_lang_and_polarity(self, text):
         # A unique call to the API
