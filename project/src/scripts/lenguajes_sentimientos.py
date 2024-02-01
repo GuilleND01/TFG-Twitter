@@ -30,7 +30,7 @@ class LanguagesSentiments(DataFrameProcessing):
         self.build_dataframe_wres()
 
     def build_dataframe_wres(self):
-        df = self.data.head(100)
+        df = self.data.head(20)
 
         # Split the dataframe (tweets with rts and without)
         df_contiene_rts = df[df["tweet.full_text"].str.match(r'^RT @\w+:')]
@@ -117,10 +117,10 @@ class LanguagesSentiments(DataFrameProcessing):
         # A unique call to the API
 
 
-        result = self.translate_client.translate(text, target_language='en')
-        src_languaje = result['detectedSourceLanguage']
-        compound = self.analyzer.polarity_scores(result['translatedText'])['compound']
-
+        #result = self.translate_client.translate(text, target_language='en')
+        #src_languaje = result['detectedSourceLanguage']
+        #compound = self.analyzer.polarity_scores(result['translatedText'])['compound']
+        compound = self.analyzer.polarity_scores(text)['compound']
 
 
         if compound >= 0.05:
@@ -130,5 +130,5 @@ class LanguagesSentiments(DataFrameProcessing):
         else:
             polarity = "Sentimiento Negativo"
 
-        return src_languaje, polarity, compound
+        return 'es', polarity, compound
 

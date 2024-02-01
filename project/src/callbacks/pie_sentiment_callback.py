@@ -3,9 +3,9 @@ from dash.dependencies import Input, Output
 
 def create_pie_sentiment_callbacks(app):
 
-    class_map = {"Sentimiento Positivo": ("", "d-none", "d-none"),
-                 "Sentimiento Negativo": ("d-none", "", "d-none"),
-                 "Sentimiento Neutral": ("d-none", "d-none", "")}
+    class_map = {"Sentimiento Positivo": ("w-100", "d-none", "d-none"),
+                 "Sentimiento Negativo": ("d-none", "w-100", "d-none"),
+                 "Sentimiento Neutral": ("d-none", "d-none", "w-100")}
 
     @app.callback(
         Output('positiveno_rts', 'className'),

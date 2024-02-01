@@ -22,11 +22,11 @@ app.layout = dbc.Container([
         'borderRadius': '5px',
         'textAlign': 'center'
     }, multiple=True, id='upload-data', className='mt-3 mb-3'),  # Margin top y margin bottom
-    html.Div(id='output_languages', className='m3'),
-    html.Div(id='output_sentiments', className='m3'),
-    html.Div(id='output_menciones', className='m3'),  # Margin 3 de Bootstrap
+    dbc.Row(children=[dbc.Col(html.Div(id='output_languages', className='m3'), className='col-4'),
+                      dbc.Col(html.Div(id='output_menciones', className='m3'), className='col-8')]),
+    html.Div(id='output_sentiments', className='m3'),  # Margin 3 de Bootstrap
     html.Div(id='whitebox')
-])
+], fluid=True)
 
 # Creación de los callbacks de la app
 create_upload_data_callbacks(app)

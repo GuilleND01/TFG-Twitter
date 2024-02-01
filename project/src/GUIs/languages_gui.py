@@ -1,5 +1,7 @@
 from dash import dcc
 import plotly.express as px
+import dash_bootstrap_components as dbc
+
 
 '''Llamada desde return_gui_langu_senti'''
 
@@ -13,7 +15,7 @@ def create_gui_languages(language_rts, language_without_rts):
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 
     return dcc.Tabs(id="tabs-languages", value='tab-1', children=[
-        dcc.Tab(value='tab-1', label='IDIOMAS EN LOS QUE HAS ESCRITO', children=[dcc.Graph(figure=fig_escritos)]),
-        dcc.Tab(label='IDIOMAS EN LOS QUE HAS RETWITTEADO', children=[dcc.Graph(figure=fig_rts)])
+        dcc.Tab(value='tab-1', label='Idiomas Tweets', children=[dcc.Graph(figure=fig_escritos)]),
+        dcc.Tab(label='Idiomas Retweets', children=[dcc.Graph(figure=fig_rts)])
     ])
 

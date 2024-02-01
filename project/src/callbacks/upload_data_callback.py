@@ -20,7 +20,7 @@ def create_upload_data_callbacks(app):
                     if filename == 'tweets.js':
                         tweets_decoded = content_decoded(content)
                         output_languages, output_sentiments = return_gui_langu_senti(tweets_decoded)
-                        output_menciones = return_gui_mentions(tweets_decoded)
+                        output_menciones = None#return_gui_mentions(tweets_decoded)
                         return output_languages, output_sentiments, output_menciones
 
 

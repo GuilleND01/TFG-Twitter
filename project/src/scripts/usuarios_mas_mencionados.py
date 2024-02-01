@@ -90,6 +90,7 @@ class UserMentions(DataFrameProcessing):
         nuevo_df = nuevo_df[:10]
 
         urls_imagenes = buscar_urls_imagenes(nuevo_df)
+        print(urls_imagenes)
         nuevo_df['urls'] = nuevo_df.swifter.apply(lambda row: urls_imagenes[row['usernames']],
                                                           axis=1)
         self.data = nuevo_df
