@@ -46,7 +46,7 @@ def create_upload_data_callbacks(app):
                 return None, None, None, None
 
             output_languages, output_sentiments = return_gui_langu_senti(tweets_decoded)
-            output_menciones = return_gui_mentions(tweets_decoded)
+            output_menciones = None#return_gui_mentions(tweets_decoded)
             output_profile = return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded)
             return output_languages, output_sentiments, output_menciones, output_profile
 

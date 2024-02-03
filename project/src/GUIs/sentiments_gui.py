@@ -20,14 +20,14 @@ def create_gui_sentiments(polarity_rts, polarity_without_rts, tweets_rts, tweets
 
     return dcc.Tabs(id="tabs-polarity", value='tab-1', children=[
         dcc.Tab(value='tab-1', label='Polaridad de tus Tweets', children=[
-                dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts')),
+                dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts'), className='col-6'),
                          dbc.Col(children=create_div_tweets(tweets_no_rts, 'no_rts'), id='no-rts-output',
-                                 className="d-flex align-items-center justify-content-center")])
+                                 className="d-flex align-items-center justify-content-center col-6")])
         ]),
         dcc.Tab(label='Polaridad de tus Retweets', children=[
-            dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_rts, id='graph-sentiments-rts')),
+            dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_rts, id='graph-sentiments-rts'), className='col-6'),
                      dbc.Col(children=create_div_tweets(tweets_rts, 'rts'), id='rts-output',
-                             className="d-flex align-items-center justify-content-center")])
+                             className="d-flex align-items-center justify-content-center col-6")])
         ])
     ])
 
@@ -54,8 +54,6 @@ def create_tweets_paragraph(df, id_div):
             res = requests.get(url).json()
             if "html" in res:
                 tweet_html = unescape(res["html"])
-                list_tweets.append(dbc.AccordionItem(html.Iframe(srcDoc=tweet_html, className='w-100'), title=f'Tweet de {df.iloc[i]["username_RT"]}'))
+                list_tweets.append(html.Iframe(srcDoc=tweet_html))
 
-
-
-    return html.Div(children=dbc.Accordion(list_tweets, start_collapsed=True), id=id_div, className='d-none')
+    return html.Div(children=list_tweets, id=id_div, className='d-none')

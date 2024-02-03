@@ -1,11 +1,11 @@
 from dash.dependencies import Input, Output
 
-
 def create_pie_sentiment_callbacks(app):
 
-    class_map = {"Sentimiento Positivo": ("w-100", "d-none", "d-none"),
-                 "Sentimiento Negativo": ("d-none", "w-100", "d-none"),
-                 "Sentimiento Neutral": ("d-none", "d-none", "w-100")}
+    div_visible_style = 'container h-75 d-flex flex-row align-items-center overflow-auto'
+    class_map = {"Sentimiento Positivo": (div_visible_style, "d-none", "d-none"),
+                 "Sentimiento Negativo": ("d-none", div_visible_style, "d-none"),
+                 "Sentimiento Neutral": ("d-none", "d-none", div_visible_style)}
 
     @app.callback(
         Output('positiveno_rts', 'className'),
@@ -22,6 +22,7 @@ def create_pie_sentiment_callbacks(app):
             selected_category = click_data['points'][0]['label']
             return class_map[selected_category]
 
+
     @app.callback(
         Output('positiverts', 'className'),
         Output('negativerts', 'className'),
@@ -30,5 +31,6 @@ def create_pie_sentiment_callbacks(app):
     )
     def update_paragraph(click_data):
         if click_data:
+
             selected_category = click_data['points'][0]['label']
             return class_map[selected_category]

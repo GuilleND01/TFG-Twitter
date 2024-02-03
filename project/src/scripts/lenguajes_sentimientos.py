@@ -30,7 +30,7 @@ class LanguagesSentiments(DataFrameProcessing):
         self.build_dataframe_wres()
 
     def build_dataframe_wres(self):
-        df = self.data.head(20)
+        df = self.data.head(50)
 
         # Split the dataframe (tweets with rts and without)
         df_contiene_rts = df[df["tweet.full_text"].str.match(r'^RT @\w+:')]
@@ -42,9 +42,8 @@ class LanguagesSentiments(DataFrameProcessing):
         '''Ocurre que en la columna user_mentios puede haber más de una mención, pero a la persona a la que has dado rt siempre aparece
         en la primera pos del array de menciones, por eso este apply'''
         df_contiene_rts['user_id_RT'] = df_contiene_rts["tweet.entities.user_mentions"].apply(lambda x: x[0]['id'] if x else None)
-        df_contiene_rts['username_RT'] = df_contiene_rts["tweet.full_text"].apply(lambda x: (x.split(":")[0]).split("RT ")[1])
 
-        df_contiene_rts = pd.DataFrame(df_contiene_rts[['tweet.full_text', 'tweet.id', 'user_id_RT', 'username_RT']])
+        df_contiene_rts = pd.DataFrame(df_contiene_rts[['tweet.full_text', 'tweet.id', 'user_id_RT']])
         df_sin_rts = pd.DataFrame(df_sin_rts[['tweet.full_text', 'tweet.id']])
 
 
@@ -91,7 +90,7 @@ class LanguagesSentiments(DataFrameProcessing):
                                  .sort_values(by=['tweet.compound'], ascending=False).head(3))
         most_negative_sin_rts = (df_sin_rts[df_sin_rts['tweet.polarity'] == "Sentimiento Negativo"]
                                  .sort_values(by=['tweet.compound'], ascending=False).tail(3))
-        df_sin_rts['diff_with_0'] = abs(df_contiene_rts['tweet.compound'] - 0)
+        df_sin_rts['diff_with_0'] = abs(df_sin_rts['tweet.compound'] - 0)
         most_neutral_sin_rts = (df_sin_rts[df_sin_rts['tweet.polarity'] == "Sentimiento Neutral"]
                                 .sort_values(by=['diff_with_0']).head(3))
 
@@ -110,7 +109,7 @@ class LanguagesSentiments(DataFrameProcessing):
             self.tweets_rts, self.tweets_no_rts
 
     def obtener_url_no_rts(self, tweet_id):
-        return f"https://publish.twitter.com/oembed?url=https://twitter.com/joorgemaa/status/{tweet_id}&hide_thread=true&hide_media=true"
+        return f"https://publish.twitter.com/oembed?url=https://twitter.com/joorgemaa/status/{tweet_id}&hide_thread=true&hide_media=true&&align=center"
 
     def obtener_url_rts(self, tweet_id, user_id):
         return f"https://publish.twitter.com/oembed?url=https://twitter.com/{user_id}/status/{tweet_id}&hide_thread=true&hide_media=true&align=center"
@@ -132,5 +131,6 @@ class LanguagesSentiments(DataFrameProcessing):
         else:
             polarity = "Sentimiento Negativo"
 
+        print('es', polarity, compound)
         return 'es', polarity, compound
 
