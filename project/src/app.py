@@ -33,6 +33,8 @@ app.layout = dbc.Container([
     dbc.Row(children=[dbc.Col(html.Div(id='output_languages', className='m3'), className='col-4'),
                       dbc.Col(html.Div(id='output_menciones', className='m3'), className='col-8')]),
     html.Div(id='output_sentiments', className='m3'),  # Margin 3 de Bootstrap
+    dbc.Row(children=[dbc.Col(html.Div(id='output_heatmap', className='m3'), className='col-8'),
+                      dbc.Col(html.Div(id='output_circle', className='m3'), className='col-4')]),
     html.Div(id='whitebox')
 ], fluid=True)
 

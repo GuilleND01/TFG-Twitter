@@ -3,9 +3,9 @@ from src.scripts.user_profile import UserProfile
 from dash import html, dcc
 
 
-def return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded):
+def return_gui_profile(profile_data):
     # Llama al procesamiento de los datos
-    profile_data, tweets_df = UserProfile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded).get_dataframe_wres()
+    # profile_data, tweets_df = UserProfile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded).get_dataframe_wres()
     return html.Div(
         [
             dbc.Button('Open Profile', id="open-offcanvas", n_clicks=0),
@@ -56,8 +56,8 @@ def return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets
                                                 src="https://img.icons8.com/material-outlined/24/place-marker--v1.png",
                                                 alt='Icono location',
                                                 style={'width': '20px', 'height': '20px'}),
-                                            html.P(f"{profile_data['description']['location']}",
-                                                   style={'margin-left': '-85%'})
+                                            #html.P(f"{profile_data['description']['location']}",
+                                                   #style={'margin-left': '-85%'})
                                         ],
                                         style={'column-count': '2', 'margin-top': '-10px'}
                                     ),

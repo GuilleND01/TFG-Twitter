@@ -11,3 +11,6 @@ ray==2.8.0
 selenium~=4.15.2
 beautifulsoup4~=4.12.2
 requests~=2.31.0
+numpy~=1.26.2
+pillow~=10.2.0
+aiohttp~=3.9.3
