@@ -3,9 +3,9 @@ from src.scripts.user_profile import UserProfile
 from dash import html, dcc
 
 
-def return_gui_profile(profile_data):
+def return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded):
     # Llama al procesamiento de los datos
-    # profile_data, tweets_df = UserProfile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded).get_dataframe_wres()
+    profile_data, tweets_df = UserProfile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded).get_dataframe_wres()
     return html.Div(
         [
             dbc.Button('Open Profile', id="open-offcanvas", n_clicks=0),

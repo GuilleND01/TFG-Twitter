@@ -1,16 +1,59 @@
 import base64
 import io
+import requests
+import threading
 
 from dash.dependencies import Input, Output, State
-from dash import html
+from pprint import pprint
+
 from src.GUIs.mentions_gui import return_gui_mentions
 from src.GUIs.lang_sentiments_gui import return_gui_langu_senti
 from src.GUIs.profile_gui import return_gui_profile
 from src.GUIs.friends_gui import return_gui_friends
 
 
+class GestorHilos:
+    def __init__(self):
+        self.resultado_dict = {}
+        self.lock = threading.Lock()
+
+    def requests(self, tarea, url):
+        res = requests.get(url)
+        if res.status_code == 200:
+            json_procesado = res.json()
+        else:
+            json_procesado = {}
+
+        self.agregar_resultado({tarea: json_procesado})
+
+    def agregar_resultado(self, resultado):
+        with self.lock:
+            self.resultado_dict.update(resultado)
+
+    def devuelve_resultado(self):
+        with self.lock:
+            return self.resultado_dict
+
+
+def cloud_functions(urls):
+    listado_hilos = []
+    gestiona_hilos = GestorHilos()
+
+    for item in urls:
+        listado_hilos.append(threading.Thread(target=gestiona_hilos.requests, args=(item[0], item[1],)))
+
+    for hilo in listado_hilos:
+        hilo.start()
+
+    for hilo in listado_hilos:
+        hilo.join()
+
+    return gestiona_hilos.devuelve_resultado()
+
+
 def create_upload_data_callbacks(app):
-    @app.callback(Output('output_languages', 'children'),
+    @app.callback(Output('input-start', 'className'),
+                  Output('output_languages', 'children'),
                   Output('output_sentiments', 'children'),
                   Output('output_menciones', 'children'),
                   Output('output_profile', 'children'),
@@ -20,51 +63,35 @@ def create_upload_data_callbacks(app):
     def update_output(list_of_contents, list_of_names):
         if list_of_contents is not None:
             contents = {}
+            # Aquí se haría la subida de los ficheros
             for content, filename in zip(list_of_contents, list_of_names):
                 if content is not None:
                     contents[filename] = content
 
-            if 'profile.js' in contents:
-                profile_decoded = content_decoded(contents['profile.js'])
-            else:
-                # TODO alert
-                return None, None, None, None, None
+            # Si se han subido correctamente se configuran las urls de las CFs.
+            user_id = '898600734912073730'
 
-            if 'account.js' in contents:
-                account_decoded = content_decoded(contents['account.js'])
-            else:
-                # TODO alert
-                return None, None, None, None, None
+            urls = list()
+            # urls.append(['profile',
+            #              f'https://us-central1-tfg-twitter.cloudfunctions.net/profile?id={user_id}'])
+            # urls.append(['heat_map',
+            #              f'https://us-central1-tfg-twitter.cloudfunctions.net/heatmap_activity?id={user_id}'])
+            # urls.append(['senti_langu',
+            #              f'https://us-central1-tfg-twitter.cloudfunctions.net/sentimientos_lenguajes?id={user_id}'])
+            urls.append(['friends_circle',
+                         f'https://us-central1-tfg-twitter.cloudfunctions.net/twitter-circle?id={user_id}'])
+            # urls.append(['user_mentions',
+            #             f'https://us-central1-tfg-twitter.cloudfunctions.net/user-mentions?id={user_id}'])
 
-            if 'tweets.js' in contents:
-                tweets_decoded = content_decoded(contents['tweets.js'])
-            else:
-                # TODO alert
-                return None, None, None, None, None
+            responses = cloud_functions(urls)
 
-            if 'ageinfo.js' in contents:
-                ageinfo_decoded = content_decoded(contents['ageinfo.js'])
-            else:
-                # TODO alert
-                return None, None, None, None, None
-
-            if 'follower.js' in contents:
-                followers_decoded = content_decoded(contents['follower.js'])
-            else:
-                # TODO alert
-                return None, None, None, None, None
-
-            if 'direct-messages.js' in contents:
-                dms_decoded = content_decoded(contents['direct-messages.js'])
-            else:
-                # TODO alert
-                return None, None, None, None, None
-
-            output_languages, output_sentiments = None, None # return_gui_langu_senti(tweets_decoded)
-            output_menciones = None #return_gui_mentions(tweets_decoded)
+            # Genera las GUIs correspondientes
+            output_languages, output_sentiments = None, None  # return_gui_langu_senti(tweets_decoded)
+            output_menciones = None #return_gui_mentions(responses['user_mentions'])
             output_profile = None # return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded)
-            output_circle = return_gui_friends(dms_decoded, tweets_decoded, followers_decoded, account_decoded)
-            return output_languages, output_sentiments, output_menciones, output_profile, output_circle
+            output_circle = return_gui_friends(responses['friends_circle'])
+
+            return 'd-none', output_languages, output_sentiments, output_menciones, output_profile, output_circle
 
 
 def content_decoded(content):

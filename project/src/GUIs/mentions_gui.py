@@ -1,11 +1,12 @@
+import pandas as pd
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.express as px
 from src.scripts.usuarios_mas_mencionados import UserMentions
 
 
-def return_gui_mentions(info_decoded):
-    df_menciones = UserMentions(info_decoded).get_dataframe_wres()
+def return_gui_mentions(mentions_json):
+    df_menciones = pd.DataFrame(mentions_json)
     return html.Div(
         children=[
             dbc.Row(children=[
@@ -20,7 +21,8 @@ def return_gui_mentions(info_decoded):
                                            'line': {'color': 'rgba(50, 171, 96, 1)', 'width': 2},
                                            'symbol': 'circle',
                                            'size': 12,
-                                       }
+                                       },
+                                       'hovertemplate': 'Has mencionado al usuario <b>%{x}</b> %{y} veces <extra></extra>'
                                        }
                                   ],
                                   'layout': {
@@ -34,11 +36,12 @@ def return_gui_mentions(info_decoded):
                                               'sizex': 3,
                                               'sizey': 3,
                                               'xanchor': 'center',
-                                              'yanchor': 'bottom'
+                                              'yanchor': 'bottom',
                                           } for index, row in df_menciones.iterrows()
                                       ],
                                       'barmode': 'group',
-                                      'title': 'Usuarios a los que más has mencionado'
+                                      'title': 'Usuarios a los que más has mencionado',
+                                      'yaxis': {'range': [0, max(df_menciones['quantity']) * 1.5]},
                                   }
                               }),
                 ], className='col-11'),
@@ -61,7 +64,7 @@ def return_gui_mentions(info_decoded):
                         html.Br(),
                         html.P('''Cada una de las barras es interactiva y permite acceder al perfil del usuario en
                         cuestión.'''),
-                    ]),
+                    ], style={'text-align': 'justify'}),
                     dbc.ModalFooter(
                         dbc.Button(
                             "Cerrar", id="close_modal_men", className="ms-auto", n_clicks=0

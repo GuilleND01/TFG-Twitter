@@ -3,6 +3,9 @@ import pandas as pd
 import threading
 import time
 from selenium import webdriver
+from selenium.common import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
@@ -10,24 +13,20 @@ import requests
 from src.utils.DataframeProcessing import DataFrameProcessing
 from pandas import json_normalize
 
+
 class GestorHilos:
     def __init__(self):
         self.resultado_dict = {}
-        self.local_driver = threading.local()  # Almacenamiento local por hilo
-
-    def get_driver(self):
-        if not hasattr(self.local_driver, "driver"):
-            chrome_options = Options()
-            chrome_options.add_argument('--headless')
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            chrome_options.add_argument("--enable-javascript")
-            self.local_driver.driver = webdriver.Chrome(options=chrome_options)
-        return self.local_driver.driver
+        self.lock = threading.Lock()
 
     def urls_imagenes(self, user):
         # Crear una instancia del navegador Chrome
-        driver = self.get_driver()
+        chrome_options = Options()
+        # chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        chrome_options.add_argument("--enable-javascript")
+        driver = webdriver.Chrome(options=chrome_options)
 
         # URL a abrir
         url = "https://twiteridfinder.com/"
@@ -36,19 +35,20 @@ class GestorHilos:
         element = driver.find_element(By.ID, "tweetbox2")
         element.send_keys(f"{user}")
 
-        element2 = driver.find_element(By.ID, 'button_convert')
-        element2.click()
+        driver.execute_script("submitData()")
 
-        time.sleep(10)
+        wait = WebDriverWait(driver, 10)
+        image = wait.until(EC.presence_of_element_located((By.ID, "js-image")))
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
-        etiquetas = soup.find('img', id='js-image')
 
-        url_foto = str(etiquetas['src'])
-        if 'https://' not in url_foto:
+        try:
+            url_foto = image.get_attribute("src")
+            if 'https://' not in url_foto:
+                url_foto = 'https://pbs.twimg.com/profile_images/1673667148365852673/lJ7aNs77_normal.jpg'
+        except NoSuchElementException:
             url_foto = 'https://pbs.twimg.com/profile_images/1673667148365852673/lJ7aNs77_normal.jpg'
-            #url_foto = 'https://www.lecturas.com/medio/2022/09/08/lydia-lozano_3e165191_800x800.jpg'
 
         etiquetas = soup.find('div', id='js-results-username')
         username = etiquetas.find('a')
@@ -59,17 +59,20 @@ class GestorHilos:
 
         response = requests.get(url_foto)
 
+        driver.quit()
         self.agregar_resultado({user: [username, response.content]})
 
     def agregar_resultado(self, resultado):
-        self.resultado_dict.update(resultado)
+        with self.lock:
+            self.resultado_dict.update(resultado)
 
     def devuelve_resultado(self):
         return self.resultado_dict
 
 
 class FriendsCircle(DataFrameProcessing):
-    def __init__(self, mds_decoded, tweets_decoded, followers_decoded, account_decoded):
+    def __init__(self, mds_decoded, tweets_decoded, followers_decoded, account_decoded, profile_decoded):
+        self.profile_info = profile_decoded.replace('window.YTD.profile.part0 = ', '')
         self.account_info = account_decoded.replace('window.YTD.account.part0 = ', '')
         self.mds_info = mds_decoded.replace('window.YTD.direct_messages.part0 = ', '')
         self.follow_info = followers_decoded.replace('window.YTD.follower.part0 = ', '')
@@ -86,24 +89,15 @@ class FriendsCircle(DataFrameProcessing):
         return row['MDs'] * pesos['MDs'] + row['Mentions'] * pesos['Mentions'] + row['Follows'] * pesos['Follows'] + \
             row['RTs'] * pesos['RTs']
 
-    def buscar_urls_imagenes(self, id_list):
-        listado_hilos = []
-        gestiona_hilos = GestorHilos()
-
-        for item in id_list:
-            listado_hilos.append(threading.Thread(target=gestiona_hilos.urls_imagenes, args=(item,)))
-
-        for hilo in listado_hilos:
-            hilo.start()
-
-        for hilo in listado_hilos:
-            hilo.join()
-
-        return gestiona_hilos.devuelve_resultado()
+    def build_url_toprofile(self, user_id):
+        return f'https://twitter.com/intent/user?user_id={user_id}'
 
     def build_dataframe_wres(self):
         # Info de account.js
         json_dat_ac = json.loads(self.account_info)
+
+        # Info de profile.js
+        json_dat_fi = json.loads(self.profile_info)
 
         # Info de direct-messages.js
         json_dat_dm = json.loads(self.mds_info)
@@ -177,21 +171,36 @@ class FriendsCircle(DataFrameProcessing):
         # Cogemos los 10 con mayor peso
         capa = df_punt.iloc[0:10, 0].values.tolist()
 
-        # Buscamos las imágenes y el username
-        img_usrs = self.buscar_urls_imagenes(capa)
-
         # Construimos el dataframe final
         dict_df = {
             'user_ids': capa,
-            'x': [0,  -23.51, -38.04, -38.04, -23.51,   0,  23.51,  38.04, 38.04, 23.51],
-            'y': [40,  32.36,  12.36, -12.36, -32.36, -40, -32.36, -12.36, 12.36, 32.36],
+            'x': [0, -23.51, -38.04, -38.04, -23.51,   0,  23.51,  38.04, 38.04, 23.51],
+            'y': [40, 32.36,  12.36, -12.36, -32.36, -40, -32.36, -12.36, 12.36, 32.36],
+            'imgs': [
+                'https://static.vecteezy.com/system/resources/previews/020/168/486/non_2x/cheerful-neat-man-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-color-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/661/original/pleased-woman-with-earrings-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-color-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/711/non_2x/excited-boy-with-kinky-hair-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-color-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/718/original/smiling-female-student-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-colorful-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/491/non_2x/happy-man-with-curly-red-hair-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-color-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/701/non_2x/pretty-ginger-haired-girl-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-colorful-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/719/non_2x/pretty-boy-with-stylish-hairstyle-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-color-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/661/original/pleased-woman-with-earrings-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-color-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/711/non_2x/excited-boy-with-kinky-hair-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-color-messaging-app-user-badge-vector.jpg',
+                'https://static.vecteezy.com/system/resources/previews/020/168/718/original/smiling-female-student-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-colorful-messaging-app-user-badge-vector.jpg',
+            ]
         }
 
         df = pd.DataFrame(dict_df)
-        df['username'] = df['user_ids'].apply(lambda x: img_usrs[x][0])
-        df['img_url'] = df['user_ids'].apply(lambda x: img_usrs[x][1])
-        df['pond'] = range(10, 0,
-                           -1)  # df['user_ids'].apply(lambda x : df_punt.loc[df_punt['UserId'] == x].values[0][5])
-        df['pond'] = 1  # df['pond'].apply(lambda x : x / 100)
+        df['prof_url'] = df['user_ids'].apply(lambda x: self.build_url_toprofile(x))
+        df['pond'] = 1
 
+        df['puntua'] = df['user_ids'].apply(lambda x: round(df_punt.loc[df_punt['UserId'] == x, 'Punt'].iloc[0], 2))
+        new_row = pd.DataFrame({'user_ids': [json_dat_ac[0]['account']["accountId"]], 'x': [0], 'y': [0],
+                                'username': ['@' + json_dat_ac[0]['account']['username']],
+                                'prof_url': [self.build_url_toprofile(json_dat_ac[0]['account']["accountId"])],
+                                'pond': [1.5],
+                                'puntua': [1],
+                                'imgs': ['https://static.vecteezy.com/system/resources/previews/020/168/486/non_2x/cheerful-neat-man-flat-avatar-icon-with-green-dot-editable-default-persona-for-ux-ui-design-profile-character-picture-with-online-status-indicator-color-messaging-app-user-badge-vector.jpg',]})
+
+        df = pd.concat([df, new_row], ignore_index=True)
         return df
