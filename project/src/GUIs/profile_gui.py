@@ -3,27 +3,27 @@ from src.scripts.user_profile import UserProfile
 from dash import html, dcc
 
 
-def return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded):
-    # Llama al procesamiento de los datos
-    profile_data, tweets_df = UserProfile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded).get_dataframe_wres()
+def return_gui_profile(profile_data):
     return html.Div(
         [
-            dbc.Button('Open Profile', id="open-offcanvas", n_clicks=0),
+            dbc.Button(html.Img(src='https://cdn-icons-png.flaticon.com/512/14365/14365812.png',
+                                style={'width': '30px', 'height': '30px'}),
+                       id="open-offcanvas", n_clicks=0, color='black'),
             dbc.Offcanvas(
                 children=[
                     html.Div(
                         children=[
                             html.Div(html.Img(src=f"{profile_data['pictures']['header']}",
-                                     alt='Header', className='w-100')),
+                                              alt='Header', className='w-100')),
                             html.Br(),
                             html.Div(html.Img(src=f"{profile_data['pictures']['prof_pic']}",
-                                     alt='Profile Pic',
-                                     style={'border-radius': '50%',
-                                            'vertical-align': 'middle', 'display': 'inline-block',
-                                            'border': '5px solid', 'border-color': 'white',
-                                            'margin-top': '-20%', 'margin-right': '70%'},
-                                     className='w-25 h-25')
-                            ),
+                                              alt='Profile Pic',
+                                              style={'border-radius': '50%',
+                                                     'vertical-align': 'middle', 'display': 'inline-block',
+                                                     'border': '5px solid', 'border-color': 'white',
+                                                     'margin-top': '-20%', 'margin-right': '70%'},
+                                              className='w-25 h-25')
+                                     ),
                             html.Br(),
                             html.Div(
                                 children=[
@@ -56,8 +56,8 @@ def return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets
                                                 src="https://img.icons8.com/material-outlined/24/place-marker--v1.png",
                                                 alt='Icono location',
                                                 style={'width': '20px', 'height': '20px'}),
-                                            #html.P(f"{profile_data['description']['location']}",
-                                                   #style={'margin-left': '-85%'})
+                                            # html.P(f"{profile_data['description']['location']}",
+                                            # style={'margin-left': '-85%'})
                                         ],
                                         style={'column-count': '2', 'margin-top': '-10px'}
                                     ),

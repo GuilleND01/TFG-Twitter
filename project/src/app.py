@@ -24,7 +24,78 @@ app.layout = dbc.Container([
                     ],
                     className='text-left'
                 ),
-                html.Div(id='output_profile', className='text-right')
+                html.Div(children=[
+                    html.Div(id='output_profile', className='text-right'),
+                    dbc.Button(html.Img(src='https://cdn-icons-png.flaticon.com/512/11569/11569256.png',
+                                        style={'width': '30px', 'height': '30px'}),
+                               id="open_modal_preg", n_clicks=0, color='black'),
+                ], style={'display': 'flex'}),
+                dbc.Modal(
+                    [
+                        dbc.ModalHeader(dbc.ModalTitle("Preguntas frecuentes")),
+                        dbc.ModalBody(children=[
+                            html.P('''Aquí puedes consultar las preguntas más frecuentes que realizan los usuarios y
+                            que te pueden ayudar a resolver cualquier duda.'''),
+                            dbc.Accordion(
+                                [
+                                    dbc.AccordionItem(
+                                        children=[
+                                            '''
+                                                El uso de la aplicación es muy sencillo. Necesitas seguir los siguientes
+                                                pasos para lograrlo:
+                                            ''',
+                                            html.Ol(
+                                                children=[
+                                                    html.Li(
+                                                        children=[
+                                                            '''
+                                                        Descargar el fichero de datos que proporciona Twitter de forma
+                                                        gratuita. Puedes consultar cómo visitando el siguiente 
+                                                        ''',
+                                                            html.A('enlace',
+                                                                   href='https://help.twitter.com/es/managing-your-account/how-to-download-your-x-archive'),
+                                                            '.'
+                                                        ]
+                                                    ),
+                                                    html.Li(
+                                                        'Subir los ficheros solicitados a través del botón de subida.'),
+                                                    html.Li('Esperar a que acabe y ¡ya tienes tu información!')
+                                                ]
+                                            )
+                                        ],
+                                        title="¿Cómo funciona la aplicación?"
+                                    ),
+                                    dbc.AccordionItem(
+                                        children=[
+                                            "This is the content of the second section",
+                                        ],
+                                        title="¿Qué ficheros necesito?"
+                                    ),
+                                    dbc.AccordionItem(
+                                        children=[
+                                            '''
+                                                En la versión actual de la aplicación no es posible almacenar los datos
+                                                para posteriores consultas, pero en versiones futuras se plantea la
+                                                posibilidad de realizar este almacenaje para ahorrar tiempo de 
+                                                ejecución.
+                                            ''',
+                                        ],
+                                        title="¿Puedo guardar mis datos para consultas posteriores?"
+                                    ),
+                                ],
+                                start_collapsed=True,
+                            ),
+                        ], style={'text-align': 'justify'}),
+                        dbc.ModalFooter(
+                            dbc.Button(
+                                "Cerrar", id="close_modal_preg", className="ms-auto", n_clicks=0
+                            )
+                        ),
+                    ],
+                    id="modal_preg",
+                    is_open=False,
+                    size='lm'
+                )
             ]
         ),
         color="dark",
@@ -35,20 +106,37 @@ app.layout = dbc.Container([
         html.Div(
             dls.RingChase(children=[
                 dcc.Upload([
-                    'Drag and Drop or ',
-                    html.Br(),
-                    html.A('Select a File')
+                    html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
+                             className='m-3',
+                             style={'width': '50px', 'height': '50px'}),
+                    'Arrastre o seleccione los ficheros'
                 ], style={
                     'width': '100%',
                     'height': '60px',
                     'lineHeight': '60px',
-                    'borderWidth': '1px',
-                    'borderStyle': 'dashed',
+                    'borderWidth': '2px',
+                    'borderStyle': 'outset',
                     'borderRadius': '5px',
-                    'align-items': 'center'
+                    'align-items': 'center',
+                    'text-align': 'center'
                 }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
             ], color='#435278', fullscreen=True, debounce=1000),
             className='d-flex justify-content-center'),
+        dcc.Upload([
+            html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
+                     className='m-3',
+                     style={'width': '50px', 'height': '50px'}),
+            'Este es el que pinta y colorea'
+        ], style={
+            'width': '100%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '2px',
+            'borderStyle': 'outset',
+            'borderRadius': '5px',
+            'align-items': 'center',
+            'text-align': 'center'
+        }, multiple=True, id='color-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
         html.H3('¿Qué puedes hacer?', style={'text-align': 'center'}),
         html.Br(),
         dbc.Row(children=[
@@ -67,7 +155,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-pu', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
             dbc.Col(children=[
                 dbc.Card(
@@ -84,7 +172,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-um', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
             dbc.Col(children=[
                 dbc.Card(
@@ -101,7 +189,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-lp', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
             dbc.Col(children=[
                 dbc.Card(
@@ -118,7 +206,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-as', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
             dbc.Col(children=[
                 dbc.Card(
@@ -135,7 +223,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-ca', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
             dbc.Col(children=[
                 dbc.Card(
@@ -152,7 +240,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-ra', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
             dbc.Col(children=[
                 dbc.Card(
@@ -169,7 +257,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-tu', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
             dbc.Col(children=[
                 dbc.Card(
@@ -186,7 +274,7 @@ app.layout = dbc.Container([
                             ]
                         ),
                     ],
-                    className='p-2')
+                    id='card-ga', className='p-2', style={'borderWidth': '3px', 'borderStyle': 'outset'})
             ]),
         ], className='row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4'),
     ], id='input-start'),

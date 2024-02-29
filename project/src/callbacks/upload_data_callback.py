@@ -72,8 +72,8 @@ def create_upload_data_callbacks(app):
             user_id = '898600734912073730'
 
             urls = list()
-            # urls.append(['profile',
-            #              f'https://us-central1-tfg-twitter.cloudfunctions.net/profile?id={user_id}'])
+            urls.append(['profile',
+                         f'https://us-central1-tfg-twitter.cloudfunctions.net/profile?id={user_id}'])
             # urls.append(['heat_map',
             #              f'https://us-central1-tfg-twitter.cloudfunctions.net/heatmap_activity?id={user_id}'])
             # urls.append(['senti_langu',
@@ -87,11 +87,53 @@ def create_upload_data_callbacks(app):
 
             # Genera las GUIs correspondientes
             output_languages, output_sentiments = None, None  # return_gui_langu_senti(tweets_decoded)
-            output_menciones = None #return_gui_mentions(responses['user_mentions'])
-            output_profile = None # return_gui_profile(profile_decoded, ageinfo_decoded, account_decoded, tweets_decoded)
+            output_menciones = None  # return_gui_mentions(responses['user_mentions'])
+            output_profile = return_gui_profile(responses['profile'])
             output_circle = return_gui_friends(responses['friends_circle'])
 
             return 'd-none', output_languages, output_sentiments, output_menciones, output_profile, output_circle
+
+    @app.callback(Output('card-pu', 'style'),
+                  Output('card-um', 'style'),
+                  Output('card-lp', 'style'),
+                  Output('card-as', 'style'),
+                  Output('card-ca', 'style'),
+                  Output('card-ra', 'style'),
+                  Output('card-tu', 'style'),
+                  Output('card-ga', 'style'),
+                  Input('color-data', 'contents'),
+                  State('color-data', 'filename'))
+    def update_output(list_of_contents, list_of_names):
+        if list_of_contents is not None:
+            filenames = []
+
+            # Comprobamos los nombres de los ficheros que se han subido
+            for content, filename in zip(list_of_contents, list_of_names):
+                filenames.append(filename)
+
+            # Perfil de usuario
+            scard_pu = {'border': '3px solid red'}
+            if ("account.js" in filenames and "profile.js" in filenames and "direct-messages.js" in filenames
+                    and "follower.js" in filenames):
+                scard_pu = {'border': '3px solid green'}
+
+            # Usuarios mencionados
+            scard_um = {'border': '3px solid red'}
+            if "tweets.js" in filenames:
+                scard_um = {'border': '3px solid green'}
+
+            # Lenguajes predilectos
+            scard_lp = {'border': '3px solid red'}
+            if "tweets.js" in filenames:
+                scard_lp = {'border': '3px solid green'}
+                    
+            scard_as = {'border': '3px solid red'}
+            scard_ca = {'border': '3px solid red'}
+            scard_ra = {'border': '3px solid red'}
+            scard_tu = {'border': '3px solid red'}
+            scard_ga = {'border': '3px solid red'}
+
+            return scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga
 
 
 def content_decoded(content):
