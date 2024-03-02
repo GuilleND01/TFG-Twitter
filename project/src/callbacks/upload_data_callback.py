@@ -7,10 +7,12 @@ from dash.dependencies import Input, Output, State
 from pprint import pprint
 
 from src.GUIs.mentions_gui import return_gui_mentions
-from src.GUIs.lang_sentiments_gui import return_gui_langu_senti
 from src.GUIs.profile_gui import return_gui_profile
 from src.GUIs.friends_gui import return_gui_friends
 from src.GUIs.heatmap_activity_gui import return_heatmap_activiy_gui
+from src.GUIs.sentiments_gui import return_gui_sentiments
+from src.GUIs.languages_gui import return_gui_languages
+
 
 
 class GestorHilos:
@@ -76,10 +78,10 @@ def create_upload_data_callbacks(app):
             urls = list()
             #urls.append(['profile',
             #             f'https://us-central1-tfg-twitter.cloudfunctions.net/profile?id={user_id}'])
-            urls.append(['heat_map',
-                          f'https://us-central1-tfg-twitter.cloudfunctions.net/heatmap_activity?id={user_id}'])
-            # urls.append(['senti_langu',
-            #              f'https://us-central1-tfg-twitter.cloudfunctions.net/sentimientos_lenguajes?id={user_id}'])
+            #urls.append(['heat_map',
+            #              f'https://us-central1-tfg-twitter.cloudfunctions.net/heatmap_activity?id={user_id}'])
+            urls.append(['senti_langu',
+                          f'https://us-central1-tfg-twitter.cloudfunctions.net/sentimientos_lenguajes?id={user_id}&limit=30&traducir=False'])
             #urls.append(['friends_circle',
             #             f'https://us-central1-tfg-twitter.cloudfunctions.net/twitter-circle?id={user_id}'])
             # urls.append(['user_mentions',
@@ -88,11 +90,12 @@ def create_upload_data_callbacks(app):
             responses = cloud_functions(urls)
 
             # Genera las GUIs correspondientes
-            output_languages, output_sentiments = None, None  # return_gui_langu_senti(tweets_decoded)
+            output_languages = return_gui_languages(responses['senti_langu'])
+            output_sentiments = return_gui_sentiments(responses['senti_langu'])
             output_menciones = None  # return_gui_mentions(responses['user_mentions'])
             output_profile = None #return_gui_profile(responses['profile'])
             output_circle = None #return_gui_friends(responses['friends_circle'])
-            output_heatmap = return_heatmap_activiy_gui(responses['heat_map'])
+            output_heatmap = None #return_heatmap_activiy_gui(responses['heat_map'])
 
             return 'd-none', output_languages, output_sentiments, output_menciones, output_profile, output_circle, output_heatmap
 

@@ -1,18 +1,30 @@
 from dash import dcc, html
 import plotly.express as px
 import dash_bootstrap_components as dbc
+import json
+import pandas as pd
 
 '''Llamada desde return_gui_langu_senti'''
 
 
-def create_gui_languages(language_rts, language_without_rts):
+def return_gui_languages(langu_senti_json):
+
+    #language_without_rts = json.loads(langu_senti_json['language_no_rts'])
+    #language_rts = json.loads(langu_senti_json['language_rts'])
+
+    language_without_rts = pd.DataFrame(json.loads(langu_senti_json['language_no_rts']))
+    language_rts = pd.DataFrame(json.loads(langu_senti_json['language_rts']))
+
+
     fig_escritos = px.pie(language_without_rts, values='quantity', names='tweet.src_language')
     fig_escritos.update_traces(textposition='inside')
     fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+    fig_escritos.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets en <b>%{label}</b>')
 
     fig_rts = px.pie(language_rts, values='quantity', names='tweet.src_language')
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+    fig_rts.update_traces(hovertemplate='Has retwitteado <b>%{value}</b> tweets en <b>%{label}</b>')
 
     return html.Div(
         children=[

@@ -5,18 +5,29 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 import requests
 from html import unescape
+import pandas as pd
+import json
 
-'''Llamada desde return_gui_langu_senti'''
+def return_gui_sentiments(langu_senti_json):
+
+    polarity_without_rts = pd.DataFrame(json.loads(langu_senti_json['polarity_no_rts']))
+    polarity_rts = pd.DataFrame(json.loads(langu_senti_json['polarity_rts']))
+
+    tweets_no_rts = pd.DataFrame(json.loads(langu_senti_json['tweet_no_rts']))
+    tweets_rts = pd.DataFrame(json.loads(langu_senti_json['tweet_rts']))
 
 
-def create_gui_sentiments(polarity_rts, polarity_without_rts, tweets_rts, tweets_no_rts):
     fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity')
     fig_escritos.update_traces(textposition='inside')
     fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+    fig_escritos.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
+
 
     fig_rts = px.pie(polarity_rts, values='quantity', names='tweet.polarity')
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+    fig_rts.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
+
 
     return dcc.Tabs(id="tabs-polarity", value='tab-1', children=[
         dcc.Tab(value='tab-1', label='Polaridad de tus Tweets', children=[
@@ -49,11 +60,8 @@ def create_div_tweets(df, rts):
 def create_tweets_paragraph(df, id_div):
     list_tweets = []
     for i in range(len(df)):
-        url = df.iloc[i]["url_tweet"]
-        if url is not None:
-            res = requests.get(url).json()
-            if "html" in res:
-                tweet_html = unescape(res["html"])
-                list_tweets.append(html.Iframe(srcDoc=tweet_html))
+        html_tweet = df.iloc[i]["html_tweet"]
+        tweet_html = unescape(html_tweet)
+        list_tweets.append(html.Iframe(srcDoc=tweet_html))
 
     return html.Div(children=list_tweets, id=id_div, className='d-none')
