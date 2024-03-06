@@ -20,8 +20,7 @@ class CloudFunctionManager:
     def compose_list(self, _id, cf_list):
         for cf in cf_list:
             if cf == 'sentimientos_lenguajes':
-                pass
-                # self.urls[cf] = f'https://us-central1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}&limit=30&traducir=False'
+                self.urls[cf] = f'https://us-central1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}&limit=30&traducir=False'
             else:
                 self.urls[cf] = f'https://us-central1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}'
 

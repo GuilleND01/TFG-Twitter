@@ -74,19 +74,19 @@ def create_upload_data_callbacks(app):
             # Usuarios mencionados
             if "tweets.js" in file_list:
                 scard_um = {'border': '3px solid green'}
-                #cf_list.append('user-mentions')
+                # cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
             if "tweets.js" in file_list:
                 scard_lp = {'border': '3px solid green'}
                 scard_as = {'border': '3px solid green'}
-                cf_list.append('sentimientos_lenguajes')
+                # cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
             if ("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
                     "follower.js" in file_list and "following.js" in file_list):
                 scard_ca = {'border': '3px solid green'}
-                cf_list.append('twitter-circle')
+                # cf_list.append('twitter-circle')
 
             # Registro de la actividad
             if "tweets.js" in file_list:
@@ -97,7 +97,7 @@ def create_upload_data_callbacks(app):
                 else:
                     scard_ra = {'border': '3px solid yellow'}
 
-                cf_list.append('heatmap_activity')
+                # cf_list.append('heatmap_activity')
 
             # Tracking de usuario
 
@@ -121,7 +121,7 @@ def create_upload_data_callbacks(app):
             # Crea una instancia del bucket
             buck_inst = Bucket(file_mgmt.get_file_list(), _id)
             # Sube los ficheros almacenados
-            #buck_inst.upload_data()
+            buck_inst.upload_data()
             # Crea la lista de las Cloud Functions
             cloud_instance.compose_list(_id, cf_list)
             # Realiza las llamadas
@@ -156,7 +156,7 @@ def create_upload_data_callbacks(app):
                 heatmap = return_heatmap_activiy_gui(res['heatmap_activity'])
 
             # Borra los ficheros antes de salir
-            #buck_inst.delete_data()
+            buck_inst.delete_data()
 
             return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap
 

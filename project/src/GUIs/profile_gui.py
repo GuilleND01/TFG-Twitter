@@ -86,7 +86,10 @@ def return_gui_profile(profile_data):
                                 style={'display': 'inline-block', 'width': '100%',
                                        'text-align': 'left', 'margin-top': '-10px'}
                             ),
-                            html.Br()
+                            html.Br(),
+                            html.Div(children=[
+                                html.P('Amorch, ' + profile_data['message'])
+                            ], style={'border': '3px dotted black'}, className='p-5 d-flex justify-content-center')
                         ],
                         style={'text-align': 'center', 'background-color': 'white', 'padding-top': '10px',
                                'padding-bottom': '20px'}

@@ -19,6 +19,7 @@ class Bucket:
             blob = self.bucket.blob(f"{self._id}/{filename}")
             blob.upload_from_string(content)
             self.blobs.append(blob)
+            print(f'Subido {filename}')
 
     def delete_data(self):
         """ Elimina los ficheros del bucket """
