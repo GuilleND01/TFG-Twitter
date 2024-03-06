@@ -64,7 +64,7 @@ def return_gui_friends(friends_json):
 
     fig.update_traces(
         hovertemplate=
-        "La puntuación obtenida es de <b>%{customdata[1]}</b>"
+        "La puntuación obtenida es del <b>%{customdata[1]} %</b>"
     )
 
     return html.Div(children=[

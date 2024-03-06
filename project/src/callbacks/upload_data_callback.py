@@ -83,8 +83,8 @@ def create_upload_data_callbacks(app):
                 cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
-            if ("profile.js" in file_list and "direct-messages.js" in file_list and "tweets.js" in file_list and
-                    "follower.js" in file_list):
+            if ("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
+                    "follower.js" in file_list and "following.js" in file_list):
                 scard_ca = {'border': '3px solid green'}
                 cf_list.append('twitter-circle')
 

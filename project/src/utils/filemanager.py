@@ -5,7 +5,7 @@ class FileManager:
         "ageinfo.js",
         "profile.js",
         "follower.js",
-        "direct-messages.js",
+        "following.js",
         "tweets.js",
         "tweet-headers.js",
         "user-link-clicks.js",
