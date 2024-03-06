@@ -106,42 +106,27 @@ app.layout = html.Div(children=[
     dbc.Container([
         html.Div([
             html.Div(
-                dls.RingChase(children=[
-                    dcc.Upload([
-                        html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
-                                 className='m-3',
-                                 style={'width': '50px', 'height': '50px'}),
-                        'Arrastre o seleccione los ficheros'
-                    ], style={
-                        'width': '100%',
-                        'height': '60px',
-                        'lineHeight': '60px',
-                        'borderWidth': '2px',
-                        'borderStyle': 'outset',
-                        'borderRadius': '5px',
-                        'align-items': 'center',
-                        'text-align': 'center'
-                    }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
-                ], color='#435278', fullscreen=True, debounce=1000),
+                dcc.Upload([
+                    html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
+                             className='m-3',
+                             style={'width': '50px', 'height': '50px'}),
+                    'Arrastre o seleccione los ficheros'
+                ], style={
+                    'width': '100%',
+                    'height': '60px',
+                    'lineHeight': '60px',
+                    'borderWidth': '2px',
+                    'borderStyle': 'outset',
+                    'borderRadius': '5px',
+                    'align-items': 'center',
+                    'text-align': 'center'
+                }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
                 className='d-flex justify-content-center'),
-            dcc.Upload([
-                html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
-                         className='m-3',
-                         style={'width': '50px', 'height': '50px'}),
-                'Este es el que pinta y colorea'
-            ], style={
-                'width': '100%',
-                'height': '60px',
-                'lineHeight': '60px',
-                'borderWidth': '2px',
-                'borderStyle': 'outset',
-                'borderRadius': '5px',
-                'align-items': 'center',
-                'text-align': 'center'
-            }, multiple=True, id='color-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
             html.Br(),
             html.Div(id='alerta-archivos'),
-            dbc.Button('Submit', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True),
+            dls.RingChase(children=[
+                dbc.Button('Submit', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True),
+            ], color='#435278', fullscreen=True, debounce=1000),
             html.Br(),
             html.H3('¿Qué puedes hacer?', style={'text-align': 'center'}),
             html.Br(),

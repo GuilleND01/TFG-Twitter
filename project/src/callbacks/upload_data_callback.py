@@ -1,10 +1,8 @@
 import base64
 import io
-import requests
-import threading
+import json
 
 from dash.dependencies import Input, Output, State
-from pprint import pprint
 
 from src.GUIs.mentions_gui import return_gui_mentions
 from src.GUIs.profile_gui import return_gui_profile
@@ -13,95 +11,18 @@ from src.GUIs.heatmap_activity_gui import return_heatmap_activiy_gui
 from src.GUIs.sentiments_gui import return_gui_sentiments
 from src.GUIs.languages_gui import return_gui_languages
 import dash_bootstrap_components as dbc
+from src.utils.filemanager import FileManager
+from src.utils.cloudfunctionsmanager import CloudFunctionManager
 from src.utils.bucket import Bucket
 
-buck_inst = Bucket().get_instance()
+#  Instancias de las clases encargadas de la gestión
+file_mgmt = FileManager()
+cloud_instance = CloudFunctionManager.get_instance()
 
-
-class GestorHilos:
-    def __init__(self):
-        self.resultado_dict = {}
-        self.lock = threading.Lock()
-
-    def requests(self, tarea, url):
-        res = requests.get(url)
-        if res.status_code == 200:
-            json_procesado = res.json()
-        else:
-            json_procesado = {}
-
-        self.agregar_resultado({tarea: json_procesado})
-
-    def agregar_resultado(self, resultado):
-        with self.lock:
-            self.resultado_dict.update(resultado)
-
-    def devuelve_resultado(self):
-        with self.lock:
-            return self.resultado_dict
-
-
-def cloud_functions(urls):
-    listado_hilos = []
-    gestiona_hilos = GestorHilos()
-
-    for item in urls:
-        listado_hilos.append(threading.Thread(target=gestiona_hilos.requests, args=(item[0], item[1],)))
-
-    for hilo in listado_hilos:
-        hilo.start()
-
-    for hilo in listado_hilos:
-        hilo.join()
-
-    return gestiona_hilos.devuelve_resultado()
+cf_list = []
 
 
 def create_upload_data_callbacks(app):
-    @app.callback(Output('input-start', 'className'),
-                  Output('output_languages', 'children'),
-                  Output('output_sentiments', 'children'),
-                  Output('output_menciones', 'children'),
-                  Output('output_profile', 'children'),
-                  Output('output_circle', 'children'),
-                  Output('output_heatmap', 'children'),
-                  Input('upload-data', 'contents'),
-                  State('upload-data', 'filename'))
-    def update_output(list_of_contents, list_of_names):
-        if list_of_contents is not None:
-            contents = {}
-            # Aquí se haría la subida de los ficheros
-            for content, filename in zip(list_of_contents, list_of_names):
-                if content is not None:
-                    contents[filename] = content
-
-            # Si se han subido correctamente se configuran las urls de las CFs.
-            user_id = '990664474792165377'
-
-            urls = list()
-            urls.append(['profile',
-                         f'https://us-central1-tfg-twitter.cloudfunctions.net/profile?id={user_id}'])
-            urls.append(['heat_map',
-                         f'https://us-central1-tfg-twitter.cloudfunctions.net/heatmap_activity?id={user_id}'])
-            urls.append(['senti_langu',
-                         f'https://us-central1-tfg-twitter.cloudfunctions.net/sentimientos_lenguajes?id={user_id}&limit=30&traducir=False'])
-            urls.append(['friends_circle',
-                         f'https://us-central1-tfg-twitter.cloudfunctions.net/twitter-circle?id={user_id}'])
-            urls.append(['user_mentions',
-                         f'https://us-central1-tfg-twitter.cloudfunctions.net/user-mentions?id={user_id}'])
-
-            responses = cloud_functions(urls)
-
-            # Genera las GUIs correspondientes
-            output_languages = return_gui_languages(responses['senti_langu'])
-            output_sentiments = return_gui_sentiments(responses['senti_langu'])
-            output_menciones = return_gui_mentions(responses['user_mentions'])
-            output_profile = return_gui_profile(responses['profile'])
-            output_circle = None # return_gui_friends(responses['friends_circle'])
-            output_heatmap = return_heatmap_activiy_gui(responses['heat_map'])
-
-            return 'd-none', output_languages, output_sentiments, output_menciones, output_profile, output_circle, output_heatmap
-
     @app.callback(Output('alerta-archivos', 'children'),
                   Output('submit', 'disabled'),
                   Output('card-pu', 'style'),
@@ -112,15 +33,16 @@ def create_upload_data_callbacks(app):
                   Output('card-ra', 'style'),
                   Output('card-tu', 'style'),
                   Output('card-ga', 'style'),
-                  Input('color-data', 'contents'),
-                  State('color-data', 'filename'))
+                  Input('upload-data', 'contents'),
+                  State('upload-data', 'filename'))
     def update_output(list_of_contents, list_of_names):
         if list_of_contents is not None:
-            filenames = []
-
             # Comprobamos los nombres de los ficheros que se han subido
             for content, filename in zip(list_of_contents, list_of_names):
-                filenames.append(filename)
+                if content is not None:
+                    file_mgmt.agg_file(filename, content_decoded(content))
+
+            file_list = file_mgmt.get_file_list()
 
             scard_pu = {'border': '3px solid red'}
             scard_um = {'border': '3px solid red'}
@@ -131,43 +53,112 @@ def create_upload_data_callbacks(app):
             scard_tu = {'border': '3px solid red'}
             scard_ga = {'border': '3px solid red'}
 
-            if "account.js" not in filenames:
+            if "account.js" not in file_list:
                 return (dbc.Alert("El archivo account.js es obligatorio", color="danger", dismissable=True),
                         True, scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga)
 
+            #  Lee el contenido del fichero account.js para sacar el ID de usuario
+            ac_json = json.loads(file_list['account.js'].replace('window.YTD.account.part0 = ', ''))[0]
+            user_id = ac_json['account']['accountId']
+
+            #  Almacenamos el ID en la instancia
+            file_mgmt.set_user_id(user_id)
+
+            print(file_list.keys())
+
             # Perfil de usuario
-            if ("account.js" in filenames and "profile.js" in filenames and "direct-messages.js" in filenames
-                    and "follower.js" in filenames):
+            if "profile.js" in file_list and "ageinfo.js" in file_list:
                 scard_pu = {'border': '3px solid green'}
+                cf_list.append('profile')
 
             # Usuarios mencionados
-            if "tweets.js" in filenames:
+            if "tweets.js" in file_list:
                 scard_um = {'border': '3px solid green'}
+                cf_list.append('user-mentions')
 
-            # Lenguajes predilectos
-            if "tweets.js" in filenames:
+            # Lenguajes predilectos y análisis de sentimientos
+            if "tweets.js" in file_list:
                 scard_lp = {'border': '3px solid green'}
-
-            # Análisis de sentimientos
-            if "tweets.js" in filenames:
                 scard_as = {'border': '3px solid green'}
+                cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
-            if ("profile.js" in filenames and "direct-messages.js" in filenames and "tweets.js" in filenames and
-                    "follower.js" in filenames):
+            if ("profile.js" in file_list and "direct-messages.js" in file_list and "tweets.js" in file_list and
+                    "follower.js" in file_list):
                 scard_ca = {'border': '3px solid green'}
+                cf_list.append('twitter-circle')
 
             # Registro de la actividad
-            if ("tweet-headers.js" in filenames and "user-link-clicks.js" in filenames and "direct-message-headers.js"
-                    in filenames and "direct-message-group-headers.js" in filenames and "ad-impressions.js"
-                    in filenames):
-                scard_ra = {'border': '3px solid green'}
+            if "tweet-headers.js" in file_list:
+                if ("user-link-clicks.js" in file_list and "direct-message-headers.js"
+                        in file_list and "direct-message-group-headers.js" in file_list and "ad-impressions.js"
+                        in file_list):
+                    scard_ra = {'border': '3px solid green'}
+                else:
+                    scard_ra = {'border': '3px solid yellow'}
+
+                cf_list.append('heatmap_activity')
 
             # Tracking de usuario
 
             # Gustos y anuncios
 
             return None, False, scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga
+
+    @app.callback(
+        Output('input-start', 'className'),
+        Output('output_languages', 'children'),
+        Output('output_sentiments', 'children'),
+        Output('output_menciones', 'children'),
+        Output('output_profile', 'children'),
+        Output('output_circle', 'children'),
+        Output('output_heatmap', 'children'),
+        [Input('submit', 'n_clicks')]
+    )
+    def actualizar_output(n_clicks):
+        if n_clicks is not None:
+            _id = file_mgmt.get_id()
+            # Crea una instancia del bucket
+            buck_inst = Bucket(file_mgmt.get_file_list(), _id)
+            # Sube los ficheros almacenados
+            buck_inst.upload_data()
+            # Crea la lista de las Cloud Functions
+            cloud_instance.compose_list(_id, cf_list)
+            # Realiza las llamadas
+            cloud_instance.launch_functions()
+            # Obtiene el resultado
+            res = cloud_instance.get_results()
+            print(res)
+
+            # Por defecto, las vistas que se van a devolver van a ser None
+            lenguajes = None
+            sentiments = None
+            menciones = None
+            profile = None
+            circle = None
+            heatmap = None
+
+            # Comprobamos para cada una de las funcionalidades si tiene resultados
+            if 'sentimientos_lenguajes' in res:
+                lenguajes = return_gui_languages(res['sentimientos_lenguajes'])
+                sentiments = return_gui_sentiments(res['sentimientos_lenguajes'])
+
+            if 'user-mentions' in res:
+                menciones = return_gui_mentions(res['user-mentions'])
+
+            if 'profile' in res:
+                profile = return_gui_profile(res['profile'])
+
+            if 'twitter-circle' in res:
+                circle = return_gui_friends(res['twitter-circle'])
+
+            if 'heatmap_activity' in res:
+                heatmap = return_heatmap_activiy_gui(res['heatmap_activity'])
+
+            # Borra los ficheros antes de salir
+            buck_inst.delete_data()
+
+            return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap
 
 
 def content_decoded(content):
