@@ -32,6 +32,7 @@ app.layout = html.Div(children=[
                     dbc.Button(html.Img(src='https://cdn-icons-png.flaticon.com/512/11569/11569256.png',
                                         style={'width': '30px', 'height': '30px'}),
                                id="open_modal_preg", n_clicks=0, color='black'),
+                    dbc.Tooltip('Preguntas frecuentes de los usuarios', target='open_modal_preg', placement='top'),
                 ], style={'display': 'flex'}),
                 dbc.Modal(
                     [
