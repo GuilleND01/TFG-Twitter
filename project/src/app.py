@@ -4,6 +4,7 @@ import dash_loading_spinners as dls
 
 from src.callbacks.pie_sentiment_callback import create_pie_sentiment_callbacks
 from src.callbacks.upload_data_callback import create_upload_data_callbacks
+from src.callbacks.download_data_callback import create_download_callback
 from src.callbacks.bar_callbacks import create_bar_clicks
 from src.callbacks.bar_callbacks import create_bubble_clicks
 from src.callbacks.modal_callbacks import create_modal_callback
@@ -27,6 +28,7 @@ app.layout = html.Div(children=[
                 ),
                 html.Div(children=[
                     html.Div(id='output_profile', className='text-right'),
+                    html.Div(id='output_download', className='text-right'),
                     dbc.Button(html.Img(src='https://cdn-icons-png.flaticon.com/512/11569/11569256.png',
                                         style={'width': '30px', 'height': '30px'}),
                                id="open_modal_preg", n_clicks=0, color='black'),
@@ -282,6 +284,7 @@ app.layout = html.Div(children=[
 # Creación de los callbacks de la app
 create_upload_data_callbacks(app)
 create_pie_sentiment_callbacks(app)
+create_download_callback(app)
 # ... y todos los callbacks de las GUIs
 create_bar_clicks(app)
 create_bubble_clicks(app)

@@ -8,6 +8,7 @@ class CloudFunctionManager:
     def __init__(self):
         self.urls = {}  # Diccionario con las Cloud Functions
         self.results = {}  # Diccionario con los resultados de las llamadas
+        self._id = ''
 
     @staticmethod
     def get_instance():
@@ -18,6 +19,7 @@ class CloudFunctionManager:
         return CloudFunctionManager._instance
 
     def compose_list(self, _id, cf_list):
+        self._id = _id
         for cf in cf_list:
             if cf == 'sentimientos_lenguajes':
                 self.urls[cf] = f'https://us-central1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}&limit=30&traducir=False'
@@ -43,3 +45,6 @@ class CloudFunctionManager:
 
     def get_results(self):
         return self.results
+
+    def get_id(self):
+        return self._id

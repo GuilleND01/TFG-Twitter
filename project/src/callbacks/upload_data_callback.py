@@ -10,6 +10,7 @@ from src.GUIs.friends_gui import return_gui_friends
 from src.GUIs.heatmap_activity_gui import return_heatmap_activiy_gui
 from src.GUIs.sentiments_gui import return_gui_sentiments
 from src.GUIs.languages_gui import return_gui_languages
+from src.GUIs.downloads_gui import return_download_gui
 import dash_bootstrap_components as dbc
 from src.utils.filemanager import FileManager
 from src.utils.cloudfunctionsmanager import CloudFunctionManager
@@ -40,7 +41,8 @@ def create_upload_data_callbacks(app):
             # Comprobamos los nombres de los ficheros que se han subido
             for content, filename in zip(list_of_contents, list_of_names):
                 if content is not None:
-                    file_mgmt.agg_file(filename, content_decoded(content))
+                    if file_mgmt.agg_file(filename, content_decoded(content)):
+                        break
 
             file_list = file_mgmt.get_file_list()
 
@@ -53,43 +55,48 @@ def create_upload_data_callbacks(app):
             scard_tu = {'border': '3px solid red'}
             scard_ga = {'border': '3px solid red'}
 
-            if "account.js" not in file_list:
-                return (dbc.Alert("El archivo account.js es obligatorio", color="danger", dismissable=True),
-                        True, scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga)
+            # Si el fichero no es descargado, cogemos el id.
+            cf_avai = {}
+            if not file_mgmt.get_download_file():
+                if "account.js" not in file_list:
+                    return (dbc.Alert("El archivo account.js es obligatorio", color="danger", dismissable=True),
+                            True, scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga)
 
-            #  Lee el contenido del fichero account.js para sacar el ID de usuario
-            ac_json = json.loads(file_list['account.js'].replace('window.YTD.account.part0 = ', ''))[0]
-            user_id = ac_json['account']['accountId']
+                #  Lee el contenido del fichero account.js para sacar el ID de usuario
+                ac_json = json.loads(file_list['account.js'].replace('window.YTD.account.part0 = ', ''))[0]
+                user_id = ac_json['account']['accountId']
 
-            #  Almacenamos el ID en la instancia
-            file_mgmt.set_user_id(user_id)
+                #  Almacenamos el ID en la instancia
+                file_mgmt.set_user_id(user_id)
+            else:
+                cf_avai = eval(file_mgmt.get_download_content())
 
             print(file_list.keys())
 
             # Perfil de usuario
-            if "profile.js" in file_list and "ageinfo.js" in file_list:
+            if ("profile.js" in file_list and "ageinfo.js" in file_list) or 'profile' in cf_avai:
                 scard_pu = {'border': '3px solid green'}
                 cf_list.append('profile')
 
             # Usuarios mencionados
-            if "tweets.js" in file_list:
+            if "tweets.js" in file_list or 'user-mentions' in cf_avai:
                 scard_um = {'border': '3px solid green'}
                 # cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
-            if "tweets.js" in file_list:
+            if "tweets.js" in file_list or 'sentimientos-lenguajes' in cf_avai:
                 scard_lp = {'border': '3px solid green'}
                 scard_as = {'border': '3px solid green'}
                 # cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
-            if ("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
-                    "follower.js" in file_list and "following.js" in file_list):
+            if (("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
+                    "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
                 scard_ca = {'border': '3px solid green'}
-                # cf_list.append('twitter-circle')
+                cf_list.append('twitter-circle')
 
             # Registro de la actividad
-            if "tweets.js" in file_list:
+            if "tweets.js" in file_list or 'heatmap_activity' in cf_avai:
                 if ("user-link-clicks.js" in file_list and "direct-message-headers.js"
                         in file_list and "direct-message-group-headers.js" in file_list and "ad-impressions.js"
                         in file_list):
@@ -113,21 +120,27 @@ def create_upload_data_callbacks(app):
         Output('output_profile', 'children'),
         Output('output_circle', 'children'),
         Output('output_heatmap', 'children'),
+        Output('output_download', 'children'),
         [Input('submit', 'n_clicks')]
     )
     def actualizar_output(n_clicks):
         if n_clicks is not None:
-            _id = file_mgmt.get_id()
-            # Crea una instancia del bucket
-            buck_inst = Bucket(file_mgmt.get_file_list(), _id)
-            # Sube los ficheros almacenados
-            buck_inst.upload_data()
-            # Crea la lista de las Cloud Functions
-            cloud_instance.compose_list(_id, cf_list)
-            # Realiza las llamadas
-            cloud_instance.launch_functions()
-            # Obtiene el resultado
-            res = cloud_instance.get_results()
+            buck_inst = None
+            if not file_mgmt.get_download_file():
+                _id = file_mgmt.get_id()
+                # Crea una instancia del bucket
+                buck_inst = Bucket(file_mgmt.get_file_list(), _id)
+                # Sube los ficheros almacenados
+                buck_inst.upload_data()
+                # Crea la lista de las Cloud Functions
+                cloud_instance.compose_list(_id, cf_list)
+                # Realiza las llamadas
+                cloud_instance.launch_functions()
+                # Obtiene el resultado
+                res = cloud_instance.get_results()
+            else:
+                res = eval(file_mgmt.get_download_content())
+
             print(res)
 
             # Por defecto, las vistas que se van a devolver van a ser None
@@ -156,9 +169,13 @@ def create_upload_data_callbacks(app):
                 heatmap = return_heatmap_activiy_gui(res['heatmap_activity'])
 
             # Borra los ficheros antes de salir
-            buck_inst.delete_data()
+            if not file_mgmt.get_download_file():
+                buck_inst.delete_data()
+                down = return_download_gui()
+            else:
+                down = None
 
-            return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap
+            return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap, down
 
 
 def content_decoded(content):
