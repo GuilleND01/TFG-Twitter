@@ -11,7 +11,7 @@ from src.callbacks.modal_callbacks import create_modal_callback
 from src.callbacks.offcanvas_callbacks import create_offcanvas_callback
 from src.callbacks.heatmap_callback import create_heatmap_callback
 
-app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 
 # Aquí o en GUIs
 app.layout = html.Div(children=[
@@ -29,8 +29,7 @@ app.layout = html.Div(children=[
                 html.Div(children=[
                     html.Div(id='output_profile', className='text-right'),
                     html.Div(id='output_download', className='text-right'),
-                    dbc.Button(html.Img(src='https://cdn-icons-png.flaticon.com/512/11569/11569256.png',
-                                        style={'width': '30px', 'height': '30px'}),
+                    dbc.Button(html.I(className='bi bi-question-circle'),
                                id="open_modal_preg", n_clicks=0, color='black'),
                     dbc.Tooltip('Preguntas frecuentes de los usuarios', target='open_modal_preg', placement='top'),
                 ], style={'display': 'flex'}),
@@ -102,9 +101,7 @@ app.layout = html.Div(children=[
                 )
             ]
         ),
-        color="dark",
-        dark=True,
-        className='pt-4 pb-4'
+        className='pt-4 pb-4 bg-light'
     ),
     dbc.Container([
         html.Div([
@@ -272,14 +269,15 @@ app.layout = html.Div(children=[
                 ]),
             ], className='row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4'),
         ], id='input-start'),
-        dbc.Row(children=[dbc.Col(html.Div(id='output_languages', className='m3'), className='col-4'),
-                          dbc.Col(html.Div(id='output_menciones', className='m3'), className='col-8')]),
-        html.Div(id='output_sentiments', className='m3'),  # Margin 3 de Bootstrap
+        dbc.Row(children=[dbc.Col(html.Div(id='output_languages'), className='col-4'),
+                          dbc.Col(html.Div(id='output_menciones'), className='col-8')],
+                className="d-flex justify-content-evenly"),
+        html.Div(id='output_sentiments', className='mt-3'),  # Margin 3 de Bootstrap
         dbc.Row(children=[dbc.Col(html.Div(id='output_heatmap', className='m3'), className='col-8'),
                           dbc.Col(html.Div(id='output_circle', className='m3'), className='col-4')]),
         html.Div(id='whitebox'),
         html.Div(id='whitebox-1'),
-    ], fluid=True)
+    ], fluid=True, className="m-3 mt-5")
 ])
 
 # Creación de los callbacks de la app

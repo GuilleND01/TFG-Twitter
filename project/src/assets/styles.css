@@ -1,2 +1,20 @@
+/* Estilos generales */
+
+/* Para los Iframes de los tweets */
 iframe { margin:0; padding:0; height:100%; }
 iframe { display:block; width:100%; border:none; }
+
+
+/* Estilo de las tabs */
+.estilo_tab{
+    width: calc(85% / 2) !important;
+    padding: 5px !important;
+    border-radius: 15px !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+
+}
+
+.tab .jsx-3468109796 {
+    padding: 0px;
+}
+

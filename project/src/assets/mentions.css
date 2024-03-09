@@ -1,0 +1,22 @@
+/* Estilo redondo de la columna con fondo gris*/
+#output_menciones .p-3.bg-light{
+    border-radius: 40px;
+}
+
+/* Estilo redondo del div donde está el gráfico y altura*/
+#output_menciones .main-svg{
+    border-radius: 40px;
+    height: 402px !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+#output_menciones .svg-container{
+    height: 402px !important;
+}
+
+/* Botones por defecto de Dash */
+#output_menciones .js-plotly-plot .plotly .modebar{
+    position: absolute;
+    top: 8px;
+    right: 21px;
+}

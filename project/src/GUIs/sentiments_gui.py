@@ -18,6 +18,10 @@ def return_gui_sentiments(langu_senti_json):
 
 
     fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity')
+
+    """Colores: fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity', color='tweet.polarity',
+    color_discrete_map={'Sentimiento Neutral':'#FDFD96', 'Sentimiento Positivo':'#77DD77', 'Sentimiento Negativo':'#FF6961'})"""
+
     fig_escritos.update_traces(textposition='inside')
     fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
     fig_escritos.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
@@ -29,19 +33,38 @@ def return_gui_sentiments(langu_senti_json):
     fig_rts.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
 
 
-    return dcc.Tabs(id="tabs-polarity", value='tab-1', children=[
-        dcc.Tab(value='tab-1', label='Polaridad de tus Tweets', children=[
-                dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts'), className='col-6'),
-                         dbc.Col(children=create_div_tweets(tweets_no_rts, 'no_rts'), id='no-rts-output',
-                                 className="d-flex align-items-center justify-content-center col-6")])
-        ]),
-        dcc.Tab(label='Polaridad de tus Retweets', children=[
-            dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_rts, id='graph-sentiments-rts'), className='col-6'),
-                     dbc.Col(children=create_div_tweets(tweets_rts, 'rts'), id='rts-output',
-                             className="d-flex align-items-center justify-content-center col-6")])
-        ])
-    ])
-
+    return html.Div(
+        children=[html.Div(children=[html.Span('Sentimiento de tu actividad', className='ms-3 h5'), html.Button(html.I(className="bi bi-info-circle"),
+            id="open_modal_senti", className='btn')], className='d-flex justify-content-between align-items-center mb-3'),
+            html.Div(children=[dcc.Tabs(id="tabs-polarity", className='d-flex justify-content-around mb-3', value='tab-1', children=[
+                dcc.Tab(value='tab-1', label='Tweets', className='estilo_tab',children=[
+                        dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts'), className='col-6'),
+                                 dbc.Col(children=create_div_tweets(tweets_no_rts, 'no_rts'), id='no-rts-output',
+                                         className="d-flex align-items-center justify-content-center col-6")])
+                ]),
+                dcc.Tab(label='Retweets', className='estilo_tab', children=[
+                    dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_rts, id='graph-sentiments-rts'), className='col-6'),
+                             dbc.Col(children=create_div_tweets(tweets_rts, 'rts'), id='rts-output',
+                                     className="d-flex align-items-center justify-content-center col-6")])
+                ])
+            ])]),
+          dbc.Modal(
+              [
+                  dbc.ModalHeader(dbc.ModalTitle("Sentimiento de tu actividad")),
+                  dbc.ModalBody(children=[
+                      html.P('''ToDO. Pensar también cómo hacer que al dar a un sector el resto se vuelva opaco.'''),
+                  ]),
+                  dbc.ModalFooter(
+                      dbc.Button(
+                          "Cerrar", id="close_modal_senti", className="ms-auto", n_clicks=0
+                      )
+                  ),
+              ],
+              id="modal_senti",
+              is_open=False,
+          ),
+        ], className='p-3 bg-light'
+    )
 
 def create_div_tweets(df, rts):
     '''La función recibe un dataframe y una variable de control "rts" que significa si el div que se va a construir

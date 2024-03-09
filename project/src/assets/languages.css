@@ -1,0 +1,24 @@
+/* Estilo redondo de la columna con fondo gris*/
+#output_languages .p-3.bg-light{
+    border-radius: 40px;
+}
+
+/* Estilo redondo del div donde está el gráfico y altura*/
+#output_languages .main-svg{
+    border-radius: 40px;
+    height: 350px !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* El gráfico de lenguajes por defecto tiene 450px de alto, me parecia mut grande*/
+#output_languages .svg-container{
+    height: 350px !important;
+}
+
+/* Botones por defecto de Dash */
+#output_languages .js-plotly-plot .plotly .modebar{
+    position: absolute;
+    top: 8px;
+    right: 21px;
+}
+
