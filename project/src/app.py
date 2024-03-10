@@ -273,7 +273,7 @@ app.layout = html.Div(children=[
                           dbc.Col(html.Div(id='output_menciones'), className='col-8')],
                 className="d-flex justify-content-evenly"),
         html.Div(id='output_sentiments', className='mt-3'),  # Margin 3 de Bootstrap
-        dbc.Row(children=[dbc.Col(html.Div(id='output_heatmap', className='m3'), className='col-8'),
+        dbc.Row(children=[dbc.Col(html.Div(id='output_heatmap', className='mt-3'), className='col-8'),
                           dbc.Col(html.Div(id='output_circle', className='m3'), className='col-4')]),
         html.Div(id='whitebox'),
         html.Div(id='whitebox-1'),

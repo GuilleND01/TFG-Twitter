@@ -39,7 +39,6 @@ def create_heatmap_callback(app):
 
         fig = px.imshow(data, y=dias, x=[f"{str(i).zfill(2)}" for i in range(24)],
                         labels=dict(x="Hora", y="Día", color="Actividad"),
-        
-
+                        color_continuous_scale='blues'
         )
         return fig

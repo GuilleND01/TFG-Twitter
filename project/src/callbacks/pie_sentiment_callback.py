@@ -23,6 +23,7 @@ def create_pie_sentiment_callbacks(app):
             return class_map[selected_category]
 
 
+
     @app.callback(
         Output('positiverts', 'className'),
         Output('negativerts', 'className'),

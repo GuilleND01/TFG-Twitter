@@ -14,6 +14,17 @@ def create_modal_callback(app):
         return is_open
 
     @app.callback(
+        Output("modal_heatmap", "is_open"),
+        [Input("open_modal_heatmap", "n_clicks"),
+         Input("close_modal_heatmap", "n_clicks")],
+        [State("modal_heatmap", "is_open")],
+    )
+    def toggle_modal(n1, n2, is_open):
+        if n1 or n2:
+            return not is_open
+        return is_open
+
+    @app.callback(
         Output("modal_senti", "is_open"),
         [Input("open_modal_senti", "n_clicks"),
          Input("close_modal_senti", "n_clicks")],

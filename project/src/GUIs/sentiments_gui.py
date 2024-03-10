@@ -17,17 +17,18 @@ def return_gui_sentiments(langu_senti_json):
     tweets_rts = pd.DataFrame(json.loads(langu_senti_json['tweet_rts']))
 
 
-    fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity')
+    #fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity')
 
-    """Colores: fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity', color='tweet.polarity',
-    color_discrete_map={'Sentimiento Neutral':'#FDFD96', 'Sentimiento Positivo':'#77DD77', 'Sentimiento Negativo':'#FF6961'})"""
+    fig_escritos = px.pie(polarity_without_rts, values='quantity', names='tweet.polarity', color='tweet.polarity',
+    color_discrete_map={'Sentimiento Neutral':'#579CEE', 'Sentimiento Positivo':'#6BAF77', 'Sentimiento Negativo':'#F68F1A'})
 
     fig_escritos.update_traces(textposition='inside')
     fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
     fig_escritos.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
 
 
-    fig_rts = px.pie(polarity_rts, values='quantity', names='tweet.polarity')
+    fig_rts = px.pie(polarity_rts, values='quantity', names='tweet.polarity', color='tweet.polarity',
+    color_discrete_map={'Sentimiento Neutral':'#579CEE', 'Sentimiento Positivo':'#6BAF77', 'Sentimiento Negativo':'#F68F1A'})
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
     fig_rts.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
@@ -35,7 +36,8 @@ def return_gui_sentiments(langu_senti_json):
 
     return html.Div(
         children=[html.Div(children=[html.Span('Sentimiento de tu actividad', className='ms-3 h5'), html.Button(html.I(className="bi bi-info-circle"),
-            id="open_modal_senti", className='btn')], className='d-flex justify-content-between align-items-center mb-3'),
+            id="open_modal_senti", className='btn')], className='d-flex justify-content-between align-items-center'),
+            html.Div("Conoce cuál es la polaridad de la huella digital que dejas.", className='ms-3 mb-3 opacity-25'),
             html.Div(children=[dcc.Tabs(id="tabs-polarity", className='d-flex justify-content-around mb-3', value='tab-1', children=[
                 dcc.Tab(value='tab-1', label='Tweets', className='estilo_tab',children=[
                         dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts'), className='col-6'),
@@ -75,7 +77,8 @@ def create_div_tweets(df, rts):
     negative_tweets = (df[df["tweet.polarity"] == "Sentimiento Negativo"])
     neutral_tweets = (df[df["tweet.polarity"] == "Sentimiento Neutral"])
 
-    return [create_tweets_paragraph(positive_tweets, f"positive{rts}"),
+    return [
+            create_tweets_paragraph(positive_tweets, f"positive{rts}"),
             create_tweets_paragraph(negative_tweets, f"negative{rts}"),
             create_tweets_paragraph(neutral_tweets, f"neutral{rts}")]
 

@@ -1,6 +1,7 @@
 import dash
 from dash import dcc, html
 import plotly.express as px
+import dash_bootstrap_components as dbc
 import json
 
 dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
@@ -27,19 +28,50 @@ def return_heatmap_activiy_gui(heatmap_json):
             lista.append(suma)
         data.append(lista)
 
-    fig = px.imshow(data, y=dias, x=[f"{str(i).zfill(2)}" for i in range(24)], labels=dict(x="Hora", y="Día", color="Actividad"))
+    fig = px.imshow(data, y=dias, x=[f"{str(i).zfill(2)}" for i in range(24)], labels=dict(x="Hora", y="Día", color="Actividad"),
+                    color_continuous_scale='blues')
 
-    return html.Div([
-        dcc.Graph(id="graph-heatmap", figure=fig),
-        html.P("Interacciones incluidas:"),
-        dcc.Checklist(
-            id='opciones',
-            options=json_opciones,  # Depende de los archivos que tenga el usuario, por ejemplo, si no tiene archivo
-            # de mensaje directos en grupos, el cálculo en el servidor no se habrá hecho con ese archivo, entonces
-            # tampoco será una opción de la checklist. Para 990664474792165377 he quitado el de mensajes de grupos para
-            # hacer la prueba
-            value=json_opciones,  # Por defecto todas marcadas
-            inline=True,
-            labelClassName='me-3'
-        ),
-    ])
+
+    return html.Div(
+        children=[
+            html.Div(children=[
+                    html.P(children=[html.Span('Registro de tu actividad', className='ms-3 h5')], className='d-inline-flex m-0'),
+                    html.P(children=[
+                        html.Button(html.I(className='bi bi-calendar4-week'), className='btn'),
+                        html.Button(html.I(className="bi bi-info-circle"), id="open_modal_heatmap", className='btn'),
+                    ], className='d-flex align-items-center m-0')],
+            className='d-flex justify-content-between align-items-center m-0'),
+            html.Div("Descubre las horas en las que estás más activo y encuentra patrones de comportamiento. ", className='ms-3 mb-3 opacity-25'),
+            html.Div(children=[dcc.Graph(id="graph-heatmap", figure=fig),
+                html.P("Interacciones incluidas:", className='mt-2 d-inline-flex me-3'),
+                dcc.Checklist(
+                    id='opciones',
+                    options=json_opciones,  # Depende de los archivos que tenga el usuario, por ejemplo, si no tiene archivo
+                    # de mensaje directos en grupos, el cálculo en el servidor no se habrá hecho con ese archivo, entonces
+                    # tampoco será una opción de la checklist. Para 990664474792165377 he quitado el de mensajes de grupos para
+                    # hacer la prueba
+                    value=json_opciones,  # Por defecto todas marcadas
+                    inline=True,
+                    labelClassName='me-3',
+                    className='d-inline-flex'
+                )]),
+            dbc.Modal(
+                [
+                    dbc.ModalHeader(dbc.ModalTitle("Registro de tu actividad")),
+                    dbc.ModalBody(children=[
+                        html.P('''ToDo'''),
+                    ]),
+                    dbc.ModalFooter(
+                        dbc.Button(
+                            "Cerrar", id="close_modal_heatmap", className="ms-auto", n_clicks=0
+                        )
+                    ),
+                ],
+                id="modal_heatmap",
+                is_open=False,
+            )
+        ]
+        , className='p-3 bg-light'
+    )
+
+

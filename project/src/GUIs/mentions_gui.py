@@ -17,8 +17,8 @@ def return_gui_mentions(mentions_json):
                       {'x': list(df_menciones['usernames']), 'y': list(df_menciones['quantity']),
                        'type': 'bar',
                        'marker': {
-                           'color': 'rgba(50, 171, 96, 0.6)',
-                           'line': {'color': 'rgba(50, 171, 96, 1)', 'width': 2},
+                           'color': 'rgba(57, 139, 191, 1)',
+                           'line': {'color': 'rgba(31, 103, 165, 1)', 'width': 2},
                            'symbol': 'circle',
                            'size': 12,
                        },
@@ -33,10 +33,10 @@ def return_gui_mentions(mentions_json):
                               'yref': 'y',
                               'x': row['usernames'],
                               'y': row['quantity'] - 1,
-                              'sizex': 3,
-                              'sizey': 3,
+                              'sizex': 7,
+                              'sizey': 7,
                               'xanchor': 'center',
-                              'yanchor': 'bottom',
+                              'yanchor': 'bottom'
                           } for index, row in df_menciones.iterrows()
                       ],
                       'barmode': 'group',

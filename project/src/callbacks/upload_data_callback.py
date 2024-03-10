@@ -93,7 +93,7 @@ def create_upload_data_callbacks(app):
             if (("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
                     "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
                 scard_ca = {'border': '3px solid green'}
-                #cf_list.append('twitter-circle')
+                cf_list.append('twitter-circle')
 
             # Registro de la actividad
             if "tweets.js" in file_list or 'heatmap_activity' in cf_avai:
@@ -104,7 +104,7 @@ def create_upload_data_callbacks(app):
                 else:
                     scard_ra = {'border': '3px solid yellow'}
 
-                # cf_list.append('heatmap_activity')
+                cf_list.append('heatmap_activity')
 
             # Tracking de usuario
 
