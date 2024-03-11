@@ -42,11 +42,13 @@ def return_heatmap_activiy_gui(heatmap_json):
                     ], className='d-flex align-items-center m-0')],
             className='d-flex justify-content-between align-items-center m-0'),
             html.Div("Descubre las horas en las que estás más activo y encuentra patrones de comportamiento. ", className='ms-3 mb-3 opacity-25'),
-            html.Div(children=[dcc.Graph(id="graph-heatmap", figure=fig),
-                html.P("Interacciones incluidas:", className='mt-2 d-inline-flex me-3'),
+            html.Div(children=[dcc.Graph(id="graph-heatmap", figure=fig)]),
+            html.Div(children=[
+                html.P("Interacciones:", className='d-inline-flex me-3 m-0'),
                 dcc.Checklist(
                     id='opciones',
-                    options=json_opciones,  # Depende de los archivos que tenga el usuario, por ejemplo, si no tiene archivo
+                    options=json_opciones,
+                    # Depende de los archivos que tenga el usuario, por ejemplo, si no tiene archivo
                     # de mensaje directos en grupos, el cálculo en el servidor no se habrá hecho con ese archivo, entonces
                     # tampoco será una opción de la checklist. Para 990664474792165377 he quitado el de mensajes de grupos para
                     # hacer la prueba
@@ -54,7 +56,8 @@ def return_heatmap_activiy_gui(heatmap_json):
                     inline=True,
                     labelClassName='me-3',
                     className='d-inline-flex'
-                )]),
+                )
+            ], className='d-flex align-items-center ms-3 mt-3'),
             dbc.Modal(
                 [
                     dbc.ModalHeader(dbc.ModalTitle("Registro de tu actividad")),

@@ -76,7 +76,7 @@ def create_upload_data_callbacks(app):
             # Perfil de usuario
             if ("profile.js" in file_list and "ageinfo.js" in file_list) or 'profile' in cf_avai:
                 scard_pu = {'border': '3px solid green'}
-                #cf_list.append('profile')
+                cf_list.append('profile')
 
             # Usuarios mencionados
             if "tweets.js" in file_list or 'user-mentions' in cf_avai:

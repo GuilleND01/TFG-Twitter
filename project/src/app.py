@@ -103,7 +103,7 @@ app.layout = html.Div(children=[
         ),
         className='pt-4 pb-4 bg-light'
     ),
-    dbc.Container([
+    html.Div([
         html.Div([
             html.Div(
                 dcc.Upload([
@@ -274,10 +274,10 @@ app.layout = html.Div(children=[
                 className="d-flex justify-content-evenly"),
         html.Div(id='output_sentiments', className='mt-3'),  # Margin 3 de Bootstrap
         dbc.Row(children=[dbc.Col(html.Div(id='output_heatmap', className='mt-3'), className='col-8'),
-                          dbc.Col(html.Div(id='output_circle', className='m3'), className='col-4')]),
+                          dbc.Col(html.Div(id='output_circle', className='mt-3'), className='col-4')]),
         html.Div(id='whitebox'),
         html.Div(id='whitebox-1'),
-    ], fluid=True, className="m-3 mt-5")
+    ], className="m-3 mt-5")
 ])
 
 # Creación de los callbacks de la app

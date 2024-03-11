@@ -1,21 +1,21 @@
 /* Estilo redondo de la columna con fondo gris*/
-#output_heatmap .p-3.bg-light{
+#output_circle .p-3.bg-light{
     border-radius: 40px;
 }
 
 /* Estilo redondo del div donde está el gráfico y altura*/
-#output_heatmap .main-svg{
+#output_circle .main-svg{
     border-radius: 40px;
-    height: 388px !important;
+    height: 428px !important;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
-#output_heatmap .svg-container{
-    height: 388px !important;
+#output_circle .svg-container{
+    height: 428px !important;
 }
 
 /* Botones por defecto de Dash */
-#output_heatmap .js-plotly-plot .plotly .modebar{
+#output_circle .js-plotly-plot .plotly .modebar{
     position: absolute;
     top: 8px;
     right: 21px;

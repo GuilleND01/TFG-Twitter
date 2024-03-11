@@ -20,7 +20,6 @@ def return_gui_friends(friends_json):
         size='pond',
         opacity=0.8,
         labels={'x': '', 'y': ''},
-        title='Círculo de amigos',
         custom_data=['prof_url', 'puntua'],
         # color='rgb'
     )
@@ -67,38 +66,34 @@ def return_gui_friends(friends_json):
         "La puntuación obtenida es del <b>%{customdata[1]} %</b>"
     )
 
-    return html.Div(children=[
-        dbc.Row(children=[
-            dbc.Col(children=[
+    return html.Div(
+        children=[
+            html.Div(
+                children=[html.Span('Círculo de amigos', className='ms-3 h5'), html.Button(html.I(className="bi bi-info-circle"),
+                    id="open_modal_cir", className='btn')], className='d-flex justify-content-between align-items-center'),
+            html.Div("Conoce a tus amigos más cercanos.", className='ms-3 mb-3 opacity-25'),
+            html.Div(children=[
                 dcc.Graph(id='friends-circle', figure=fig),
-            ], className='col-11'),
-            dbc.Col(children=[
-                html.Div(
-                    dbc.Button("i", id="open_modal_cir", n_clicks=0,
-                               className='mx-auto d-block rounded-circle text-center',
-                               style={'border': '2px solid', 'border-color': '#4AA7E4', 'background-color': 'white',
-                                      'color': '#4AA7E4', 'width': '40px', 'height': '40px', 'font-family': 'serif'}),
-                    style={'text-align': 'center'}
-                ),
-            ], className='col-1 text-center', style={'margin-top': '10px'})
-        ]),
-        dbc.Modal(
-            [
-                dbc.ModalHeader(dbc.ModalTitle("Círculo de amigos")),
-                dbc.ModalBody(children=[
-                    html.P('''Obtiene un listado de los usuarios con los que más has interactuado teniendo en cuenta
-                    las siguientes interacciones: mensajes directos, seguir al usuario, menciones y retweets.'''),
-                    html.Br(),
-                    html.P('''Cada una de las imágenes es interactiva y permite acceder al perfil del usuario al que
-                    representa. También aparece la puntuación que ha obtenido tras la ejecución del algoritmo.'''),
-                ]),
-                dbc.ModalFooter(
-                    dbc.Button(
-                        "Cerrar", id="close_modal_cir", className="ms-auto", n_clicks=0
-                    )
-                ),
-            ],
-            id="modal_cir",
-            is_open=False,
-        ),
-    ], style={'background-color': 'white'})
+                dbc.Modal(
+                    [
+                        dbc.ModalHeader(dbc.ModalTitle("Círculo de amigos")),
+                        dbc.ModalBody(children=[
+                            html.P('''Obtiene un listado de los usuarios con los que más has interactuado teniendo en cuenta
+                        las siguientes interacciones: mensajes directos, seguir al usuario, menciones y retweets.'''),
+                            html.Br(),
+                            html.P('''Cada una de las imágenes es interactiva y permite acceder al perfil del usuario al que
+                        representa. También aparece la puntuación que ha obtenido tras la ejecución del algoritmo.'''),
+                        ]),
+                        dbc.ModalFooter(
+                            dbc.Button(
+                                "Cerrar", id="close_modal_cir", className="ms-auto", n_clicks=0
+                            )
+                        ),
+                    ],
+                    id="modal_cir",
+                    is_open=False,
+                )
+            ])
+        ], className='p-3 bg-light'
+    )
+
