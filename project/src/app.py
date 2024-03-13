@@ -27,12 +27,12 @@ app.layout = html.Div(children=[
                     className='text-left'
                 ),
                 html.Div(children=[
-                    html.Div(id='output_profile', className='text-right'),
                     html.Div(id='output_download', className='text-right'),
                     dbc.Button(html.I(className='bi bi-question-circle'),
                                id="open_modal_preg", n_clicks=0, color='black'),
                     dbc.Tooltip('Preguntas frecuentes de los usuarios', target='open_modal_preg', placement='top'),
-                ], style={'display': 'flex'}),
+                    html.Div(id='output_profile', className='text-right')
+                ], className='d-flex align-items-center'),
                 dbc.Modal(
                     [
                         dbc.ModalHeader(dbc.ModalTitle("Preguntas frecuentes")),
@@ -101,7 +101,7 @@ app.layout = html.Div(children=[
                 )
             ]
         ),
-        className='pt-4 pb-4 bg-light'
+        className='pt-3 bg-light'
     ),
     html.Div([
         html.Div([

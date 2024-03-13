@@ -6,7 +6,8 @@ from dash import html, dcc
 def return_gui_profile(profile_data):
     return html.Div(
         [
-            dbc.Button(html.I(className="bi bi-person-circle"),
+            dbc.Button(html.Img(src=f"{profile_data['pictures']['prof_pic']}", style={'border-radius': '50%'},
+                                id='foto_perfil_navbar'),
                        id="open-offcanvas", n_clicks=0, color='black', className='btn'),
             dbc.Tooltip('Consulta tu perfil', target='open-offcanvas', placement='top'),
             dbc.Offcanvas(

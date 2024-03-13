@@ -44,7 +44,6 @@ def return_heatmap_activiy_gui(heatmap_json):
             html.Div("Descubre las horas en las que estás más activo y encuentra patrones de comportamiento. ", className='ms-3 mb-3 opacity-25'),
             html.Div(children=[dcc.Graph(id="graph-heatmap", figure=fig)]),
             html.Div(children=[
-                html.P("Interacciones:", className='d-inline-flex me-3 m-0'),
                 dcc.Checklist(
                     id='opciones',
                     options=json_opciones,
@@ -54,8 +53,7 @@ def return_heatmap_activiy_gui(heatmap_json):
                     # hacer la prueba
                     value=json_opciones,  # Por defecto todas marcadas
                     inline=True,
-                    labelClassName='me-3',
-                    className='d-inline-flex'
+                    labelClassName='me-3'
                 )
             ], className='d-flex align-items-center ms-3 mt-3'),
             dbc.Modal(
