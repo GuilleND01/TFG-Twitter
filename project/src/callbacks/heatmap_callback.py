@@ -6,20 +6,31 @@ import plotly.express as px
 
 dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 
-
 def create_heatmap_callback(app):
 
     @app.callback(
-        Output("graph-heatmap", "figure"),
-        Input("opciones", "value"))
-    def filter_heatmap(cols):
+        [Output("graph-heatmap", "figure"),
+         Output("switch_frecuencia", "className"),
+         Output("texto-periodo", 'children')],
+        [Input("opciones", "value"),
+        Input("switch_frecuencia", "value")],
+    )
+    def filter_heatmap(cols, value_switch):
 
         # Recupero los datos
         cloud_instance = CloudFunctionManager.get_instance()
         heatmap_json = cloud_instance.get_results()['heatmap_activity']
 
-        #json_opciones = list(heatmap_json["opciones_checklist"].keys())
-        json_data = json.loads(heatmap_json['data'])
+        print(value_switch)
+        # Recoger el switch y su valor, trabajar en función del él
+        if value_switch == True:
+            json_data = json.loads(heatmap_json["data_90"])
+            class_switch = 'opacity-100'
+            texto_periodo = str(heatmap_json['fecha_90_dias_atras'])[:-12] + " - " + str(heatmap_json['fecha_generacion_archivo'])[:-12]
+        else:
+            json_data = json.loads(heatmap_json["data_total"])
+            class_switch = 'opacity-50'
+            texto_periodo = ""
 
         data = []
 
@@ -41,4 +52,5 @@ def create_heatmap_callback(app):
                         labels=dict(x="Hora", y="Día", color="Actividad"),
                         color_continuous_scale='blues'
         )
-        return fig
+        return fig, class_switch, texto_periodo
+

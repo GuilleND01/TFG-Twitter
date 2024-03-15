@@ -10,7 +10,7 @@ dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Doming
 def return_heatmap_activiy_gui(heatmap_json):
 
     json_opciones = list(heatmap_json["opciones_checklist"].keys())
-    json_data = json.loads(heatmap_json['data'])
+    json_data = json.loads(heatmap_json['data_total'])
 
     data = []
 
@@ -31,13 +31,14 @@ def return_heatmap_activiy_gui(heatmap_json):
     fig = px.imshow(data, y=dias, x=[f"{str(i).zfill(2)}" for i in range(24)], labels=dict(x="Hora", y="Día", color="Actividad"),
                     color_continuous_scale='blues')
 
-
     return html.Div(
         children=[
             html.Div(children=[
-                    html.P(children=[html.Span('Registro de tu actividad', className='ms-3 h5')], className='d-inline-flex m-0'),
+                    html.P(children=[html.Span('Registro de tu actividad', className='ms-3 h5 m-0')], className='d-inline-flex m-0'),
+                    html.Span(id='texto-periodo', className='ms-2 opacity-75'),
                     html.P(children=[
-                        html.Button(html.I(className='bi bi-calendar4-week'), className='btn'),
+                        dbc.Switch(id='switch_frecuencia', value=False, label='Ver solo últimos 90 días',
+                        ),
                         html.Button(html.I(className="bi bi-info-circle"), id="open_modal_heatmap", className='btn'),
                     ], className='d-flex align-items-center m-0')],
             className='d-flex justify-content-between align-items-center m-0'),

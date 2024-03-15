@@ -9,7 +9,7 @@ def return_gui_mentions(mentions_json):
     df_menciones = pd.DataFrame(mentions_json)
 
     return html.Div(children=[
-        html.Div(children=[html.Span('Usuarios a los que más has mencionado', className='ms-3 h5'), html.Button(html.I(className="bi bi-info-circle"),
+        html.Div(children=[html.Span('Usuarios a los que más has mencionado', className='ms-3 h5 m-0'), html.Button(html.I(className="bi bi-info-circle"),
         id="open_modal_men", className='btn')], className='d-flex justify-content-between align-items-center mb-3'),
         dcc.Graph(id='bar',
               figure={

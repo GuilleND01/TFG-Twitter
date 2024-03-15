@@ -35,7 +35,7 @@ def return_gui_sentiments(langu_senti_json):
 
 
     return html.Div(
-        children=[html.Div(children=[html.Span('Sentimiento de tu actividad', className='ms-3 h5'), html.Button(html.I(className="bi bi-info-circle"),
+        children=[html.Div(children=[html.Span('Sentimiento de tu actividad', className='ms-3 h5 m-0'), html.Button(html.I(className="bi bi-info-circle"),
             id="open_modal_senti", className='btn')], className='d-flex justify-content-between align-items-center'),
             html.Div("Conoce cuál es la polaridad de la huella digital que dejas.", className='ms-3 mb-3 opacity-25'),
             html.Div(children=[dcc.Tabs(id="tabs-polarity", className='d-flex justify-content-around mb-3', value='tab-1', children=[
