@@ -56,7 +56,7 @@ def return_heatmap_activiy_gui(heatmap_json):
                     inline=True,
                     labelClassName='me-3'
                 )
-            ], className='d-flex align-items-center ms-3 mt-3'),
+            ], className='d-flex align-items-center ms-3 mt-3', id='div_opciones'),
             dbc.Modal(
                 [
                     dbc.ModalHeader(dbc.ModalTitle("Registro de tu actividad")),

@@ -6,12 +6,12 @@
 /* Estilo redondo del div donde está el gráfico y altura*/
 #output_heatmap .main-svg{
     border-radius: 40px;
-    height: 388px !important;
+    height: 364px !important;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
 #output_heatmap .svg-container{
-    height: 388px !important;
+    height: 364px !important;
 }
 
 /* Botones por defecto de Dash */
@@ -23,4 +23,10 @@
 
 #output_heatmap .form-label{
     margin-bottom: 0px !important;
+}
+
+/* Ajustar el tamaño del div donde salen las labels de opciones para que sea independiente
+del número de ellas*/
+#div_opciones{
+    height: 48px;
 }
