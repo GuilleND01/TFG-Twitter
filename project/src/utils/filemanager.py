@@ -2,10 +2,12 @@ class FileManager:
     file_mask = [
         "account.js",
         "ad-impressions.js",
+        "ad-engagements.js",
         "ageinfo.js",
         "profile.js",
         "follower.js",
         "following.js",
+        "manifest.js",
         "tweets.js",
         "tweet-headers.js",
         "user-link-clicks.js",

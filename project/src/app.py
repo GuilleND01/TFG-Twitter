@@ -275,6 +275,8 @@ app.layout = html.Div(children=[
         html.Div(id='output_sentiments', className='mt-3'),  # Margin 3 de Bootstrap
         dbc.Row(children=[dbc.Col(html.Div(id='output_heatmap', className='mt-3'), className='col-8'),
                           dbc.Col(html.Div(id='output_circle', className='mt-3'), className='col-4')]),
+        dbc.Row(children=[dbc.Col(html.Div(id='output_aden1', className='mt-3'), className='col-4'),
+                          dbc.Col(html.Div(id='output_aden2', className='mt-3'), className='col-8')]),
         html.Div(id='whitebox'),
         html.Div(id='whitebox-1'),
     ], className="m-3 mt-5")

@@ -1,0 +1,20 @@
+/* Estilo redondo de la columna con fondo gris*/
+#output_aden2 .p-3.bg-light{
+    border-radius: 40px;
+}
+
+/* Estilo redondo del div donde está el gráfico y altura*/
+#jsx-4017309047 tab-content {
+    border-radius: 40px;
+    height: 388px !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    background-color: white;
+}
+
+.estilo_tab_adv{
+    width: calc(85% / 5) !important;
+    padding: 5px !important;
+    border-radius: 15px !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    border: 1px solid #1975FA !important;
+}
