@@ -101,7 +101,7 @@ app.layout = html.Div(children=[
                 )
             ]
         ),
-        className='pt-3 bg-light'
+        className='p-3 bg-light'
     ),
     html.Div([
         html.Div([
