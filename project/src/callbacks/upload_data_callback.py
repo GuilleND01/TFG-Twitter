@@ -77,12 +77,12 @@ def create_upload_data_callbacks(app):
             # Perfil de usuario
             if ("profile.js" in file_list and "ageinfo.js" in file_list) or 'profile' in cf_avai:
                 scard_pu = {'border': '3px solid green'}
-                #cf_list.append('profile')
+                cf_list.append('profile')
 
             # Usuarios mencionados
             if "tweets.js" in file_list or 'user-mentions' in cf_avai:
                 scard_um = {'border': '3px solid green'}
-                #cf_list.append('user-mentions')
+                cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
             if "tweets.js" in file_list or 'sentimientos-lenguajes' in cf_avai:
@@ -94,7 +94,7 @@ def create_upload_data_callbacks(app):
             if (("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
                     "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
                 scard_ca = {'border': '3px solid green'}
-                #cf_list.append('twitter-circle')
+                cf_list.append('twitter-circle')
 
             # Registro de la actividad
             if ("tweets.js" in file_list and "manifest.js" in file_list) or 'heatmap_activity' in cf_avai:

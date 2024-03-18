@@ -39,20 +39,22 @@ def return_gui_languages(langu_senti_json):
             ]),
             dbc.Modal(
                 [
-                    dbc.ModalHeader(dbc.ModalTitle("Lenguajes que más has empleado / retwiteado")),
+                    dbc.ModalHeader(
+                        children=[
+                            html.Img(src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png',
+                                     style={'height': '30px', 'width': '30px'},
+                                     className='m-1'),
+                            dbc.ModalTitle("Lenguajes que más has empleado / retwiteado", className='m-1'),
+                        ], style={'background-color': '#6FADFF'}),
                     dbc.ModalBody(children=[
                         html.P('''Esta funcionalidad permite consultar (en dos vistas distintas) los lenguajes en los
-                        que más ha publicado el usuario, así como los lenguajes más comunes en los que suele retwitear.
-                        El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.'''),
-                    ]),
-                    dbc.ModalFooter(
-                        dbc.Button(
-                            "Cerrar", id="close_modal_lang", className="ms-auto", n_clicks=0
-                        )
-                    ),
+                            que más ha publicado el usuario, así como los lenguajes más comunes en los que suele retwitear.
+                            El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.''')
+                    ], style={'text-align': 'justify'}),
                 ],
                 id="modal_lang",
                 is_open=False,
+                className='modal-dialog-centered'
             ),
         ], className='p-3 bg-light'
     )

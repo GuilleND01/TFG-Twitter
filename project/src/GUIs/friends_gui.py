@@ -76,23 +76,27 @@ def return_gui_friends(friends_json):
                 dcc.Graph(id='friends-circle', figure=fig),
                 dbc.Modal(
                     [
-                        dbc.ModalHeader(dbc.ModalTitle("Círculo de amigos")),
+                        dbc.ModalHeader(
+                            children=[
+                                html.Img(src='https://cdn-icons-png.flaticon.com/512/2671/2671250.png',
+                                         style={'height': '30px', 'width': '30px'},
+                                         className='m-1'),
+                                dbc.ModalTitle("Círculo de Amigos", className='m-1'),
+                            ], style={'background-color': '#6FADFF'}),
                         dbc.ModalBody(children=[
-                            html.P('''Obtiene un listado de los usuarios con los que más has interactuado teniendo en cuenta
-                        las siguientes interacciones: mensajes directos, seguir al usuario, menciones y retweets.'''),
-                            html.Br(),
-                            html.P('''Cada una de las imágenes es interactiva y permite acceder al perfil del usuario al que
-                        representa. También aparece la puntuación que ha obtenido tras la ejecución del algoritmo.'''),
-                        ]),
-                        dbc.ModalFooter(
-                            dbc.Button(
-                                "Cerrar", id="close_modal_cir", className="ms-auto", n_clicks=0
-                            )
-                        ),
+                            dbc.ModalBody(children=[
+                                html.P('''Obtiene un listado de los usuarios con los que más has interactuado teniendo en cuenta
+                                    las siguientes interacciones: mensajes directos, seguir al usuario, menciones y retweets.'''),
+                                html.Br(),
+                                html.P('''Cada una de las imágenes es interactiva y permite acceder al perfil del usuario al que
+                                    representa. También aparece la puntuación que ha obtenido tras la ejecución del algoritmo.'''),
+                            ]),
+                        ], style={'text-align': 'justify'}),
                     ],
                     id="modal_cir",
                     is_open=False,
-                )
+                    className='modal-dialog-centered'
+                ),
             ])
         ], className='p-3 bg-light'
     )

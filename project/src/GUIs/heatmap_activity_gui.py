@@ -59,19 +59,25 @@ def return_heatmap_activiy_gui(heatmap_json):
             ], className='d-flex align-items-center ms-3 mt-3', id='div_opciones'),
             dbc.Modal(
                 [
-                    dbc.ModalHeader(dbc.ModalTitle("Registro de tu actividad")),
+                    dbc.ModalHeader(
+                        children=[
+                            html.Img(src='https://cdn-icons-png.flaticon.com/512/4066/4066004.png',
+                                     style={'height': '30px', 'width': '30px'},
+                                     className='m-1'),
+                            dbc.ModalTitle("Registro de tu actividad", className='m-1'),
+                        ], style={'background-color': '#6FADFF'}),
                     dbc.ModalBody(children=[
-                        html.P('''ToDo'''),
-                    ]),
-                    dbc.ModalFooter(
-                        dbc.Button(
-                            "Cerrar", id="close_modal_heatmap", className="ms-auto", n_clicks=0
-                        )
-                    ),
+                        dbc.ModalBody(children=[
+                            html.P('''Registro de la actividad del usuario en forma de mapa de calor. Esta actividad
+                            es obtenida, entre otras posibles fuentes, de las publicaciones realizadas, los clicks
+                            que se realizan o los anuncios que se visionan.'''),
+                        ]),
+                    ], style={'text-align': 'justify'}),
                 ],
                 id="modal_heatmap",
                 is_open=False,
-            )
+                className='modal-dialog-centered'
+            ),
         ]
         , className='p-3 bg-light'
     )

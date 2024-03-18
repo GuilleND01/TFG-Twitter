@@ -50,21 +50,24 @@ def return_gui_sentiments(langu_senti_json):
                                      className="d-flex align-items-center justify-content-center col-6")])
                 ])
             ])]),
-          dbc.Modal(
+            dbc.Modal(
               [
-                  dbc.ModalHeader(dbc.ModalTitle("Sentimiento de tu actividad")),
+                  dbc.ModalHeader(
+                      children=[
+                          html.Img(src='https://cdn-icons-png.flaticon.com/512/2564/2564959.png',
+                                   style={'height': '30px', 'width': '30px'},
+                                   className='m-1'),
+                          dbc.ModalTitle("Polaridad de tu actividad", className='m-1'),
+                      ], style={'background-color': '#6FADFF'}),
                   dbc.ModalBody(children=[
-                      html.P('''ToDO. Pensar también cómo hacer que al dar a un sector el resto se vuelva opaco.'''),
-                  ]),
-                  dbc.ModalFooter(
-                      dbc.Button(
-                          "Cerrar", id="close_modal_senti", className="ms-auto", n_clicks=0
-                      )
-                  ),
+                      html.P('''Esta funcionalidad permite consultar (en dos vistas distintas) la polaridad de las publicaciones d
+                        el usuario, así como la de los retwits. El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.''')
+                  ], style={'text-align': 'justify'}),
               ],
               id="modal_senti",
               is_open=False,
-          ),
+              className='modal-dialog-centered'
+            ),
         ], className='p-3 bg-light'
     )
 
