@@ -10,6 +10,7 @@ from src.callbacks.bar_callbacks import create_bubble_clicks
 from src.callbacks.modal_callbacks import create_modal_callback
 from src.callbacks.offcanvas_callbacks import create_offcanvas_callback
 from src.callbacks.heatmap_callback import create_heatmap_callback
+from src.callbacks.combo_callbacks import create_combo_clicks
 
 app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 
@@ -292,6 +293,7 @@ create_bubble_clicks(app)
 create_modal_callback(app)
 create_offcanvas_callback(app)
 create_heatmap_callback(app)
+create_combo_clicks(app)
 
 if __name__ == '__main__':
     app.run_server(debug=False, host="0.0.0.0", port="2020")

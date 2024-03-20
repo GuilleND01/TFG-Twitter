@@ -1,8 +1,18 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
+import plotly.express as px
+from pandas import json_normalize
 
 
 def return_gui_advertisers(adv_json):
+    px_chart = {}
+    for adv in adv_json:
+        # Tenemos que guardar el gráfico
+        df = json_normalize(eval(adv['criteria']))
+        fig = px.pie(df, values='Count', names='TargetingValue')
+        fig.update_layout(showlegend=False)
+        px_chart[adv['advertiser']] = fig
+
     return html.Div(children=[
         html.Div(children=[
             html.P(children=[html.Span('Anunciantes más interesados', className='ms-3 h5')],
@@ -41,22 +51,7 @@ def return_gui_advertisers(adv_json):
                                         html.Br(),
                                         dbc.Row(
                                             children=[
-                                                dbc.ListGroup(
-                                                    children=[
-                                                        dbc.ListGroupItem(
-                                                            html.Div(
-                                                                [
-                                                                    html.H6(f"{item['TargetingValue']}",
-                                                                            className="mb-1"),
-                                                                    html.Small(f"{item['TargetingType']}"),
-                                                                ],
-                                                                className="d-flex w-100 justify-content-between",
-                                                            ),
-                                                        )
-                                                        for item in eval(res['criteria'])
-                                                    ],
-                                                    className='h-100 w-100'
-                                                )
+                                                dcc.Graph(figure=px_chart[res['advertiser']], className='h-100 w-100')
                                             ], className='m-2'
                                         ),
                                     ],

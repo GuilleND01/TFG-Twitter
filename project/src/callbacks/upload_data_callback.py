@@ -12,6 +12,7 @@ from src.GUIs.sentiments_gui import return_gui_sentiments
 from src.GUIs.languages_gui import return_gui_languages
 from src.GUIs.downloads_gui import return_download_gui
 from src.GUIs.advertiser_info_gui import return_gui_advertisers
+from src.GUIs.person_criteria_gui import return_gui_criteria
 import dash_bootstrap_components as dbc
 from src.utils.filemanager import FileManager
 from src.utils.cloudfunctionsmanager import CloudFunctionManager
@@ -77,24 +78,24 @@ def create_upload_data_callbacks(app):
             # Perfil de usuario
             if ("profile.js" in file_list and "ageinfo.js" in file_list) or 'profile' in cf_avai:
                 scard_pu = {'border': '3px solid green'}
-                cf_list.append('profile')
+                # cf_list.append('profile')
 
             # Usuarios mencionados
             if "tweets.js" in file_list or 'user-mentions' in cf_avai:
                 scard_um = {'border': '3px solid green'}
-                cf_list.append('user-mentions')
+                # cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
             if "tweets.js" in file_list or 'sentimientos-lenguajes' in cf_avai:
                 scard_lp = {'border': '3px solid green'}
                 scard_as = {'border': '3px solid green'}
-                cf_list.append('sentimientos_lenguajes')
+                # cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
             if (("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
-                    "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
+                 "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
                 scard_ca = {'border': '3px solid green'}
-                cf_list.append('twitter-circle')
+                # cf_list.append('twitter-circle')
 
             # Registro de la actividad
             if ("tweets.js" in file_list and "manifest.js" in file_list) or 'heatmap_activity' in cf_avai:
@@ -105,11 +106,14 @@ def create_upload_data_callbacks(app):
                 else:
                     scard_ra = {'border': '3px solid yellow'}
 
-                cf_list.append('heatmap_activity')
+                # cf_list.append('heatmap_activity')
 
-            # Tracking de usuario
+            # Criterios más relevantes
+            if 'ad-engagements.js' in file_list:
+                scard_tu = {'border': '3px solid green'}
+                cf_list.append('person-criteria')
 
-            # Gustos y anuncios
+            # Anunciantes más interesados
             if "ad-engagements.js" in file_list:
                 scard_ga = {'border': '3px solid green'}
                 cf_list.append('advertiser-info-1')
@@ -125,6 +129,7 @@ def create_upload_data_callbacks(app):
         Output('output_circle', 'children'),
         Output('output_heatmap', 'children'),
         Output('output_download', 'children'),
+        Output('output_aden1', 'children'),
         Output('output_aden2', 'children'),
         [Input('submit', 'n_clicks')]
     )
@@ -134,9 +139,9 @@ def create_upload_data_callbacks(app):
             if not file_mgmt.get_download_file():
                 _id = file_mgmt.get_id()
                 # Crea una instancia del bucket
-                #buck_inst = Bucket(file_mgmt.get_file_list(), _id)
+                # buck_inst = Bucket(file_mgmt.get_file_list(), _id)
                 # Sube los ficheros almacenados
-                #buck_inst.upload_data()
+                # buck_inst.upload_data()
                 # Crea la lista de las Cloud Functions
                 cloud_instance.compose_list(_id, cf_list)
                 # Realiza las llamadas
@@ -156,6 +161,7 @@ def create_upload_data_callbacks(app):
             circle = None
             heatmap = None
             adinfo = None
+            percri = None
 
             # Comprobamos para cada una de las funcionalidades si tiene resultados
             if 'sentimientos_lenguajes' in res:
@@ -177,14 +183,17 @@ def create_upload_data_callbacks(app):
             if 'advertiser-info-1' in res:
                 adinfo = return_gui_advertisers(res['advertiser-info-1'])
 
+            if 'person-criteria' in res:
+                percri = return_gui_criteria(res['person-criteria'])
+
             # Borra los ficheros antes de salir
             if not file_mgmt.get_download_file():
-                #buck_inst.delete_data()
+                # buck_inst.delete_data()
                 down = return_download_gui()
             else:
                 down = None
 
-            return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap, down, adinfo
+            return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap, down, percri, adinfo
 
 
 def content_decoded(content):
