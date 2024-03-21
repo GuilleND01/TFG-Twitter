@@ -78,43 +78,43 @@ def create_upload_data_callbacks(app):
             # Perfil de usuario
             if ("profile.js" in file_list and "ageinfo.js" in file_list) or 'profile' in cf_avai:
                 scard_pu = {'border': '3px solid green'}
-                # cf_list.append('profile')
+                cf_list.append('profile')
 
             # Usuarios mencionados
             if "tweets.js" in file_list or 'user-mentions' in cf_avai:
                 scard_um = {'border': '3px solid green'}
-                # cf_list.append('user-mentions')
+                cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
-            if "tweets.js" in file_list or 'sentimientos-lenguajes' in cf_avai:
+            if "tweets.js" in file_list or 'sentimientos_lenguajes' in cf_avai:
                 scard_lp = {'border': '3px solid green'}
                 scard_as = {'border': '3px solid green'}
-                # cf_list.append('sentimientos_lenguajes')
+                cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
             if (("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
                  "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
                 scard_ca = {'border': '3px solid green'}
-                # cf_list.append('twitter-circle')
+                cf_list.append('twitter-circle')
 
             # Registro de la actividad
             if ("tweets.js" in file_list and "manifest.js" in file_list) or 'heatmap_activity' in cf_avai:
-                if ("user-link-clicks.js" in file_list and "direct-message-headers.js"
+                if (("user-link-clicks.js" in file_list and "direct-message-headers.js"
                         in file_list and "direct-message-group-headers.js" in file_list and "ad-impressions.js"
-                        in file_list):
+                        in file_list) or 'heatmap_activity' in cf_avai):
                     scard_ra = {'border': '3px solid green'}
                 else:
                     scard_ra = {'border': '3px solid yellow'}
 
-                # cf_list.append('heatmap_activity')
+                cf_list.append('heatmap_activity')
 
             # Criterios más relevantes
-            if 'ad-engagements.js' in file_list:
+            if 'ad-engagements.js' in file_list or 'person-criteria' in cf_avai:
                 scard_tu = {'border': '3px solid green'}
                 cf_list.append('person-criteria')
 
             # Anunciantes más interesados
-            if "ad-engagements.js" in file_list:
+            if "ad-engagements.js" in file_list or 'advertiser-info-1' in cf_avai:
                 scard_ga = {'border': '3px solid green'}
                 cf_list.append('advertiser-info-1')
 
@@ -150,6 +150,7 @@ def create_upload_data_callbacks(app):
                 res = cloud_instance.get_results()
             else:
                 res = eval(file_mgmt.get_download_content())
+                cloud_instance.set_results(res)
 
             print(res)
 

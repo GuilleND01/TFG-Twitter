@@ -46,5 +46,8 @@ class CloudFunctionManager:
     def get_results(self):
         return self.results
 
+    def set_results(self, res):
+        self.results = res
+
     def get_id(self):
         return self._id
