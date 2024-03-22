@@ -67,9 +67,10 @@ def create_upload_data_callbacks(app):
                 #  Lee el contenido del fichero account.js para sacar el ID de usuario
                 ac_json = json.loads(file_list['account.js'].replace('window.YTD.account.part0 = ', ''))[0]
                 user_id = ac_json['account']['accountId']
-
+                username = '@' + ac_json['account']['username']
                 #  Almacenamos el ID en la instancia
                 file_mgmt.set_user_id(user_id)
+                file_mgmt.set_username(username)
             else:
                 cf_avai = eval(file_mgmt.get_download_content())
 
@@ -142,6 +143,8 @@ def create_upload_data_callbacks(app):
                 # buck_inst = Bucket(file_mgmt.get_file_list(), _id)
                 # Sube los ficheros almacenados
                 # buck_inst.upload_data()
+                # Guarda el nombre de usuario
+                cloud_instance.set_username(file_mgmt.get_username())
                 # Crea la lista de las Cloud Functions
                 cloud_instance.compose_list(_id, cf_list)
                 # Realiza las llamadas

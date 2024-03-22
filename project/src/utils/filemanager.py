@@ -18,6 +18,7 @@ class FileManager:
     def __init__(self):
         self.file_list = {}
         self.user_id = ''
+        self.username = ''
         self.download_file = False
         self.download_content = ''
 
@@ -30,6 +31,7 @@ class FileManager:
     def agg_file(self, filename, content):
         if self.filter_filename(filename):
             self.file_list[filename] = content
+            self.download_file = False
             return False
 
         if filename[:12] == 'whattheyknow':
@@ -43,6 +45,12 @@ class FileManager:
 
     def get_id(self):
         return self.user_id
+
+    def set_username(self, username):
+        self.username = username
+
+    def get_username(self):
+        return self.username
 
     def get_download_file(self):
         return self.download_file

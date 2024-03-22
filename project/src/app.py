@@ -280,6 +280,7 @@ app.layout = html.Div(children=[
                           dbc.Col(html.Div(id='output_aden2', className='mt-3'), className='col-8')]),
         html.Div(id='whitebox'),
         html.Div(id='whitebox-1'),
+        html.Div(id='whitebox-2'),
     ], className="m-3 mt-5")
 ])
 

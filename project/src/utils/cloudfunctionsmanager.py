@@ -9,6 +9,7 @@ class CloudFunctionManager:
         self.urls = {}  # Diccionario con las Cloud Functions
         self.results = {}  # Diccionario con los resultados de las llamadas
         self._id = ''
+        self.username = ''
 
     @staticmethod
     def get_instance():
@@ -51,3 +52,9 @@ class CloudFunctionManager:
 
     def get_id(self):
         return self._id
+
+    def set_username(self, username):
+        self.username = username
+
+    def get_username(self):
+        return self.username

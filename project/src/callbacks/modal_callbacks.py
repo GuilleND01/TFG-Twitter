@@ -87,3 +87,15 @@ def create_modal_callback(app):
             return not is_open
 
         return is_open
+
+    @app.callback(
+        Output("modal_down", "is_open"),
+        [Input("open_modal_down", "n_clicks")],
+        [State("modal_down", "is_open")],
+    )
+    def toggle_modal(n1, is_open):
+        if n1:
+            return not is_open
+
+        return is_open
+
