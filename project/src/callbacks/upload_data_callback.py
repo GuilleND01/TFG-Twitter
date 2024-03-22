@@ -4,19 +4,19 @@ import json
 
 from dash.dependencies import Input, Output, State
 
-from src.GUIs.mentions_gui import return_gui_mentions
-from src.GUIs.profile_gui import return_gui_profile
-from src.GUIs.friends_gui import return_gui_friends
-from src.GUIs.heatmap_activity_gui import return_heatmap_activiy_gui
-from src.GUIs.sentiments_gui import return_gui_sentiments
-from src.GUIs.languages_gui import return_gui_languages
-from src.GUIs.downloads_gui import return_download_gui
-from src.GUIs.advertiser_info_gui import return_gui_advertisers
-from src.GUIs.person_criteria_gui import return_gui_criteria
+from GUIs.mentions_gui import return_gui_mentions
+from GUIs.profile_gui import return_gui_profile
+from GUIs.friends_gui import return_gui_friends
+from GUIs.heatmap_activity_gui import return_heatmap_activiy_gui
+from GUIs.sentiments_gui import return_gui_sentiments
+from GUIs.languages_gui import return_gui_languages
+from GUIs.downloads_gui import return_download_gui
+from GUIs.advertiser_info_gui import return_gui_advertisers
+from GUIs.person_criteria_gui import return_gui_criteria
 import dash_bootstrap_components as dbc
-from src.utils.filemanager import FileManager
-from src.utils.cloudfunctionsmanager import CloudFunctionManager
-from src.utils.bucket import Bucket
+from utils.filemanager import FileManager
+from utils.cloudfunctionsmanager import CloudFunctionManager
+from utils.bucket import Bucket
 
 #  Instancias de las clases encargadas de la gestión
 file_mgmt = FileManager()

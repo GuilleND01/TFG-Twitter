@@ -1,5 +1,5 @@
 from dash import Input, Output, State, html
-from src.utils.cloudfunctionsmanager import CloudFunctionManager
+from utils.cloudfunctionsmanager import CloudFunctionManager
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase

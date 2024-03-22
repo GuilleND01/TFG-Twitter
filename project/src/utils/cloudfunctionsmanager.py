@@ -1,5 +1,5 @@
 import threading
-from src.utils.threading_functions import ThreadingFuntions
+from utils.threading_functions import ThreadingFuntions
 
 
 class CloudFunctionManager:

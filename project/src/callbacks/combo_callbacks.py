@@ -2,7 +2,7 @@ from dash.dependencies import Input, Output
 from dash import dcc
 from pandas import json_normalize
 import plotly.express as px
-from src.utils.cloudfunctionsmanager import CloudFunctionManager
+from utils.cloudfunctionsmanager import CloudFunctionManager
 
 
 def create_combo_clicks(app):

@@ -1,5 +1,4 @@
 import dash_bootstrap_components as dbc
-from src.scripts.user_profile import UserProfile
 from dash import html, dcc
 
 

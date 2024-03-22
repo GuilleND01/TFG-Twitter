@@ -2,15 +2,15 @@ from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
 import dash_loading_spinners as dls
 
-from src.callbacks.pie_sentiment_callback import create_pie_sentiment_callbacks
-from src.callbacks.upload_data_callback import create_upload_data_callbacks
-from src.callbacks.download_data_callback import create_download_callback
-from src.callbacks.bar_callbacks import create_bar_clicks
-from src.callbacks.bar_callbacks import create_bubble_clicks
-from src.callbacks.modal_callbacks import create_modal_callback
-from src.callbacks.offcanvas_callbacks import create_offcanvas_callback
-from src.callbacks.heatmap_callback import create_heatmap_callback
-from src.callbacks.combo_callbacks import create_combo_clicks
+from callbacks.pie_sentiment_callback import create_pie_sentiment_callbacks
+from callbacks.upload_data_callback import create_upload_data_callbacks
+from callbacks.download_data_callback import create_download_callback
+from callbacks.bar_callbacks import create_bar_clicks
+from callbacks.bar_callbacks import create_bubble_clicks
+from callbacks.modal_callbacks import create_modal_callback
+from callbacks.offcanvas_callbacks import create_offcanvas_callback
+from callbacks.heatmap_callback import create_heatmap_callback
+from callbacks.combo_callbacks import create_combo_clicks
 
 app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 
@@ -297,4 +297,4 @@ create_heatmap_callback(app)
 create_combo_clicks(app)
 
 if __name__ == '__main__':
-    app.run_server(debug=False, host="0.0.0.0", port="2020")
+    app.run_server(debug=False, host="0.0.0.0")

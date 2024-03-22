@@ -2,7 +2,6 @@ import pandas as pd
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.express as px
-from src.scripts.usuarios_mas_mencionados import UserMentions
 
 
 def return_gui_mentions(mentions_json):

@@ -1,5 +1,5 @@
 from dash.dependencies import Input, Output
-from src.utils.cloudfunctionsmanager import CloudFunctionManager
+from utils.cloudfunctionsmanager import CloudFunctionManager
 import json
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
@@ -21,7 +21,6 @@ def create_heatmap_callback(app):
         cloud_instance = CloudFunctionManager.get_instance()
         heatmap_json = cloud_instance.get_results()['heatmap_activity']
 
-        print(value_switch)
         # Recoger el switch y su valor, trabajar en función del él
         if value_switch == True:
             json_data = json.loads(heatmap_json["data_90"])

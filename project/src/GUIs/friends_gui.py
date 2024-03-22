@@ -4,7 +4,6 @@ from dash import dcc, html
 import plotly.express as px
 from PIL import Image, ImageDraw, ImageFilter
 from io import BytesIO
-from src.scripts.friends_circle import FriendsCircle
 import requests
 import dash_bootstrap_components as dbc
 import numpy as np

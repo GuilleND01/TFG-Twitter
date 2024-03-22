@@ -3,13 +3,15 @@
 FROM python:3.11
 
 # Copy local code to the container image.
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . ./
+WORKDIR /app
+
+# Copy the contents of the project folder to the container at /app
+COPY . .
 
 # Install production dependencies.
 RUN pip install -r requirements.txt
 
 EXPOSE 8080
 
-CMD python app.py
+
+CMD python src/app.py
