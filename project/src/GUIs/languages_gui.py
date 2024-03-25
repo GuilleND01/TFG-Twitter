@@ -31,7 +31,8 @@ def return_gui_languages(langu_senti_json):
     return html.Div(
         children=[
             html.Div(children=[html.Span('Tus idiomas más utilizados', className='ms-3 h5 m-0'), html.Button(html.I(className="bi bi-info-circle"),
-            id="open_modal_lang", className='btn')], className='d-flex justify-content-between align-items-center mb-3'),
+            id="open_modal_lang", className='btn')], className='d-flex justify-content-between align-items-center'),
+            html.Div("Descubre cómo te comunicas.", className='ms-3 mb-3 opacity-25'),
             html.Div(children=[
                 dcc.Tabs(id="tabs-languages", value='tab-1', className="d-flex justify-content-evenly mb-3",children=[
                     dcc.Tab(value='tab-1', label='Tweets', className='estilo_tab',

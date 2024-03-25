@@ -41,7 +41,7 @@ def return_gui_sentiments(langu_senti_json):
             html.Div(children=[dcc.Tabs(id="tabs-polarity", className='d-flex justify-content-around mb-3', value='tab-1', children=[
                 dcc.Tab(value='tab-1', label='Tweets', className='estilo_tab',children=[
                         dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts'), className='col-6'),
-                                 dbc.Col(children=[html.P("hola", id='info_no_rts'), create_div_tweets(tweets_no_rts, 'no_rts')], id='no-rts-output',
+                                 dbc.Col(children=create_div_tweets(tweets_no_rts, 'no_rts'), id='no-rts-output',
                                          className="d-flex align-items-center justify-content-center col-6")])
                 ]),
                 dcc.Tab(label='Retweets', className='estilo_tab', children=[
@@ -80,7 +80,10 @@ def create_div_tweets(df, rts):
     negative_tweets = (df[df["tweet.polarity"] == "Sentimiento Negativo"])
     neutral_tweets = (df[df["tweet.polarity"] == "Sentimiento Neutral"])
 
-    return [
+    info_tweets = "Selecciona un sector para ver tus tweets con más polaridad en la categoría." if rts == 'no_rts' else \
+        "Selecciona un sector para ver tus retweets con más polaridad en la categoría."
+
+    return [html.P(info_tweets, id=f"info_{rts}", className='opacity-50 mx-4'),
             create_tweets_paragraph(positive_tweets, f"positive{rts}"),
             create_tweets_paragraph(negative_tweets, f"negative{rts}"),
             create_tweets_paragraph(neutral_tweets, f"neutral{rts}")]

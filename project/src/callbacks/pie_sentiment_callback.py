@@ -11,18 +11,17 @@ def create_pie_sentiment_callbacks(app):
                  "Sentimiento Neutral": ("d-none", "d-none", div_visible_style, "d-none")}
 
     @app.callback(
-        Output('positiveno_rts', 'className'),
+        [Output('positiveno_rts', 'className'),
         Output('negativeno_rts', 'className'),
         Output('neutralno_rts', 'className'),
-        Output('info_no_rts', 'className'),
+        Output('info_no_rts', 'className')],
         [Input('graph-sentiments-no-rts', 'clickData')]
     )
     def update_paragraph(click_data):
 
         ''' La función devuelve una tupla con las clases que se van a aplicar a los elemento de Output. Dependiendo
         de el selected_category, se aplican unas u otra definidas en el mapa de arriba.'''
-        print(click_data)
-        if click_data:
+        if click_data is not None:
             selected_category = click_data['points'][0]['label']
             return class_map[selected_category]
 
@@ -30,13 +29,13 @@ def create_pie_sentiment_callbacks(app):
 
 
     @app.callback(
-        Output('positiverts', 'className'),
+        [Output('positiverts', 'className'),
         Output('negativerts', 'className'),
         Output('neutralrts', 'className'),
+        Output('info_rts', 'className')],
         [Input('graph-sentiments-rts', 'clickData')]
     )
     def update_paragraph(click_data):
-        if click_data:
-
+        if click_data is not None:
             selected_category = click_data['points'][0]['label']
             return class_map[selected_category]
