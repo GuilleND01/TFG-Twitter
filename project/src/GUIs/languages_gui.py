@@ -20,11 +20,13 @@ def return_gui_languages(langu_senti_json):
     fig_escritos.update_traces(textposition='inside')
     fig_escritos.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
     fig_escritos.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets en <b>%{label}</b>')
+    fig_escritos.update_layout(showlegend=False)
 
     fig_rts = px.pie(language_rts, values='quantity', names='tweet.src_language', hole=.5)
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
     fig_rts.update_traces(hovertemplate='Has retwitteado <b>%{value}</b> tweets en <b>%{label}</b>')
+    fig_rts.update_layout(showlegend=False)
 
     return html.Div(
         children=[
