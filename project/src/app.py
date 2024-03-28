@@ -226,7 +226,7 @@ app.layout = html.Div(children=[
                                 [
                                     html.H4("Registro de la actividad"),
                                     html.P(
-                                        "Consulta en forma de mapa de calor tus horarios de actividad en la aplicación,"
+                                        "Consulta en forma de mapa de calor tus horarios de actividad en la aplicación, "
                                         "pudiendo apreciar para cada día de la semana tus picos de interacción.",
                                     ),
                                 ]
@@ -237,14 +237,14 @@ app.layout = html.Div(children=[
                 dbc.Col(children=[
                     dbc.Card(
                         [
-                            dbc.CardImg(src="https://cdn-icons-png.flaticon.com/512/854/854878.png ", top=True,
+                            dbc.CardImg(src="https://cdn-icons-png.flaticon.com/512/1055/1055669.png", top=True,
                                         className='mx-auto', style={'height': '50%', 'width': '50%'}),
                             dbc.CardBody(
                                 [
-                                    html.H4("Tracking de usuario"),
+                                    html.H4("Criterios objetivo"),
                                     html.P(
-                                        "Consulta un registro visual en el que se pueden apreciar todas las localizaciones "
-                                        "desde las que has realizado publicaciones y la frecuencia con la que lo has hecho.",
+                                        "Consulta de forma gráfica para cada uno de los tipos posibles de criterios"
+                                        "los valores por los que han aparecido en los anuncios que has consultado.",
                                     ),
                                 ]
                             ),
@@ -254,14 +254,15 @@ app.layout = html.Div(children=[
                 dbc.Col(children=[
                     dbc.Card(
                         [
-                            dbc.CardImg(src="https://cdn-icons-png.flaticon.com/512/1055/1055669.png", top=True,
+                            dbc.CardImg(src="https://cdn-icons-png.flaticon.com/512/2415/2415903.png", top=True,
                                         className='mx-auto', style={'height': '50%', 'width': '50%'}),
                             dbc.CardBody(
                                 [
-                                    html.H4("Gustos y anuncios"),
+                                    html.H4("Anunciantes más populares"),
                                     html.P(
-                                        "Obtiene un perfil de usuario para ti en función de la actividad de gustos y "
-                                        "anuncios que generas en la aplicación en base a tus interacciones.",
+                                        "Consulta los 5 anunciantes que más anuncios has consultado. Para "
+                                        "cada uno de ellos se muestra el anuncio más reciente y los criterios "
+                                        "por los que aparece.",
                                     ),
                                 ]
                             ),

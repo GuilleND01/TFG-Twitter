@@ -11,7 +11,7 @@ def return_gui_criteria(cri_json):
                 html.Button(html.I(className="bi bi-info-circle"), id="open_modal_cri", className='btn'),
             ], className='d-flex align-items-center m-0')],
             className='d-flex justify-content-between align-items-center m-0'),
-        html.Div("Consulta los criterios por los que los anunciantes muestran sus anuncios.",
+        html.Div("Consulta los criterios por los que aparecen los anuncios.",
                  className='ms-3 mb-3 opacity-25'),
         html.Div(
             children=[
@@ -20,8 +20,10 @@ def return_gui_criteria(cri_json):
                     id='pombo-box',
                     options=[{'label': key, 'value': key} for key in cri_json],
                     value=next(iter(cri_json)),
-                    placeholder='Selecciona un tipo de criterio...'
+                    placeholder='Selecciona un tipo de criterio...',
+                    clearable=False
                 ),
+                html.Br(),
                 html.Div(id='graph-criteria')
             ],
             className='p-4 m-2',

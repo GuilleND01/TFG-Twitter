@@ -7,7 +7,6 @@ from email import encoders
 import ssl
 import smtplib
 
-
 html_code = f'''
     <html>
         <head>
@@ -29,7 +28,23 @@ html_code = f'''
 
 def create_download_callback(app):
     @app.callback(
-        Output('whitebox-2', 'children'),
+        Output('download-data', 'data'),
+        [Input('file-don', 'n_clicks')],
+        prevent_initial_call=True,
+    )
+    def enlace_clickeado(n_clicks):
+        if n_clicks is not None:
+            cloud_inst = CloudFunctionManager.get_instance()
+            print(cloud_inst.get_results())
+            return {
+                'content': str(cloud_inst.get_results()),
+                'filename': f"whattheyknow-{cloud_inst.get_id()}.json"
+            }
+
+        return None
+
+    @app.callback(
+        Output('check-mail', 'children'),
         [Input('submit_button', 'n_clicks')],
         [State('input_email', 'value')]
     )
@@ -63,5 +78,7 @@ def create_download_callback(app):
                 smtp.login(email_emisor, email_contrasena)
                 smtp.sendmail(email_emisor, email_receptor, em.as_string())
             print(input_value)
+
+            return html.Small('¡Datos enviados correctamente!', className='m-2')
 
         return None

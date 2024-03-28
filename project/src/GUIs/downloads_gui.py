@@ -21,6 +21,11 @@ def return_download_gui():
                     enviados. Una vez descargados puedes resubirlos a la aplicación en posteriores ejecuciones para 
                     poder reducir los tiempos de espera.'''),
                     html.Br(),
+                    html.P(children=['Si no quieres recibirlos al correo, también puedes descargarlos pulsando ',
+                                     html.A('aquí', id='file-don', style={'color': 'blue', 'text-decoration':
+                                                                          'underline'}), '.']),
+                    dcc.Download(id='download-data'),
+                    html.Br(),
                     html.Div(
                         children=[
                             dbc.Label("Introduzca su correo electrónico: "),
@@ -28,7 +33,13 @@ def return_download_gui():
                         ]
                     ),
                     html.Br(),
-                    dbc.Button("Enviar datos", id='submit_button', color="primary", className="mr-2"),
+                    html.Div(
+                        [
+                            dbc.Button("Enviar datos", id='submit_button', color="primary", className="mr-2"),
+                            html.Div(id='check-mail', className='d-flex align-items-center justify-content-center')
+                        ],
+                        className='d-flex'
+                    )
                 ], style={'text-align': 'justify'}),
             ],
             id="modal_down",
