@@ -35,9 +35,9 @@ def return_gui_languages(langu_senti_json):
             html.Div("Descubre cómo te comunicas.", className='ms-3 mb-3 opacity-25'),
             html.Div(children=[
                 dcc.Tabs(id="tabs-languages", value='tab-1', className="d-flex justify-content-evenly mb-3",children=[
-                    dcc.Tab(value='tab-1', label='Tweets', className='estilo_tab',
+                    dcc.Tab(value='tab-1', label=f"Tweets ({langu_senti_json['tweets_despues_limpiar']})", className='estilo_tab',
                             children=[dcc.Graph(figure=fig_escritos)]),
-                    dcc.Tab(label='Retweets', className='estilo_tab', children=[dcc.Graph(figure=fig_rts)])
+                    dcc.Tab(label=f"Retweets ({langu_senti_json['retweets_despues_limpiar']})", className='estilo_tab', children=[dcc.Graph(figure=fig_rts)])
                 ])
             ]),
             dbc.Modal(
@@ -52,7 +52,10 @@ def return_gui_languages(langu_senti_json):
                     dbc.ModalBody(children=[
                         html.P('''Esta funcionalidad permite consultar (en dos vistas distintas) los lenguajes en los
                             que más ha publicado el usuario, así como los lenguajes más comunes en los que suele retwitear.
-                            El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.''')
+                            El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.'''),
+                        html.P(f"Se han omitido del análisis {langu_senti_json['tweets_antes_limpiar'] - langu_senti_json['tweets_despues_limpiar']} tweets y "
+                               f"{langu_senti_json['retweets_antes_limpiar'] - langu_senti_json['retweets_despues_limpiar']} retweets debido a que no contenían texto a analizar."
+                        )
                     ], style={'text-align': 'justify'}),
                 ],
                 id="modal_lang",
