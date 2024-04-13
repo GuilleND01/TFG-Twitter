@@ -12,6 +12,12 @@ def return_heatmap_activiy_gui(heatmap_json):
     json_opciones = list(heatmap_json["opciones_checklist"].keys())
     json_data = json.loads(heatmap_json['data_total'])
 
+    dict_contador_total = heatmap_json["contadores_totales"]
+
+    lista_opciones_con_numeros = []
+    for key in heatmap_json["opciones_checklist"].keys():
+        lista_opciones_con_numeros.append(f"{key} ({dict_contador_total[heatmap_json['opciones_checklist'][key]]})")
+
     data = []
 
     for dia in range(len(dias)):
@@ -47,12 +53,12 @@ def return_heatmap_activiy_gui(heatmap_json):
             html.Div(children=[
                 dcc.Checklist(
                     id='opciones',
-                    options=json_opciones,
+                    options=lista_opciones_con_numeros,
                     # Depende de los archivos que tenga el usuario, por ejemplo, si no tiene archivo
                     # de mensaje directos en grupos, el cálculo en el servidor no se habrá hecho con ese archivo, entonces
                     # tampoco será una opción de la checklist. Para 990664474792165377 he quitado el de mensajes de grupos para
                     # hacer la prueba
-                    value=json_opciones,  # Por defecto todas marcadas
+                    value=lista_opciones_con_numeros,  # Por defecto todas marcadas
                     inline=True,
                     labelClassName='me-3'
                 )

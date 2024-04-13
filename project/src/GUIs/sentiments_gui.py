@@ -31,7 +31,7 @@ def return_gui_sentiments(langu_senti_json):
     color_discrete_map={'Sentimiento Neutral':'#579CEE', 'Sentimiento Positivo':'#6BAF77', 'Sentimiento Negativo':'#F68F1A'})
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-    fig_rts.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
+    fig_rts.update_traces(hovertemplate='Has retwitteado <b>%{value}</b> tweets con <b>%{label}</b>')
 
 
     return html.Div(
