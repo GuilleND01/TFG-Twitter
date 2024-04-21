@@ -28,7 +28,7 @@ def return_gui_advertisers(adv_json):
                     clearable=False
                 ),
                 html.Br(),
-                html.Div(id='graph-advertiser', className='d-flex justify-content-center align-items-center h-100')
+                html.Div(id='graph-advertiser')
             ],
             className='p-4 m-2',
             style={'border-radius': '40px',

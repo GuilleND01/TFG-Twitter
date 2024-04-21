@@ -77,7 +77,7 @@ def create_combo_clicks(app):
 
             df = json_normalize(eval(res['criteria']))
             fig = px.pie(df, values='Count', names='TargetingValue')
-            # fig.update_layout(showlegend=False)
+            fig.update_layout(showlegend=False)
             fig.update_traces(
                 hovertemplate=
                 "El criterio <b>%{label}</b> se ha"
@@ -88,18 +88,14 @@ def create_combo_clicks(app):
             return dbc.Row(
                 children=[
                     dbc.Col(
-                        html.Iframe(srcDoc=res['recent'], style={'margin': '0', 'padding': '0',
-                                                                 'height': '150%',
-                                                                 'width': '100%',
-                                                                 'border': 'none'
-                                                                 }),
-                        className='col-5'
+                        html.Iframe(srcDoc=res['recent']),
+                        className='col-6'
                     ),
                     dbc.Col(
-                        dcc.Graph(figure=fig, className='h-100 w-100'),
-                        className='col-7'
+                        dcc.Graph(figure=fig),
+                        className='col-6'
                     )
-                ], className='d-flex justify-content-center align-items-center'
+                ]
             )
 
         return None

@@ -11,7 +11,7 @@ def return_gui_criteria(cri_json):
                 html.Button(html.I(className="bi bi-info-circle"), id="open_modal_cri", className='btn'),
             ], className='d-flex align-items-center m-0')],
             className='d-flex justify-content-between align-items-center m-0'),
-        html.Div("Consulta los criterios por los que aparecen los anuncios.",
+        html.Div("Criterios por los que aparecen tus anuncios.",
                  className='ms-3 mb-3 opacity-25'),
         html.Div(
             children=[

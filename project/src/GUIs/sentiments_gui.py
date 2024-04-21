@@ -31,7 +31,7 @@ def return_gui_sentiments(langu_senti_json):
     color_discrete_map={'Sentimiento Neutral':'#579CEE', 'Sentimiento Positivo':'#6BAF77', 'Sentimiento Negativo':'#F68F1A'})
     fig_rts.update_traces(textposition='inside')
     fig_rts.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-    fig_rts.update_traces(hovertemplate='Has escrito <b>%{value}</b> tweets con <b>%{label}</b>')
+    fig_rts.update_traces(hovertemplate='Has retwitteado <b>%{value}</b> tweets con <b>%{label}</b>')
 
 
     return html.Div(
@@ -39,12 +39,12 @@ def return_gui_sentiments(langu_senti_json):
             id="open_modal_senti", className='btn')], className='d-flex justify-content-between align-items-center'),
             html.Div("Conoce cuál es la polaridad de la huella digital que dejas.", className='ms-3 mb-3 opacity-25'),
             html.Div(children=[dcc.Tabs(id="tabs-polarity", className='d-flex justify-content-around mb-3', value='tab-1', children=[
-                dcc.Tab(value='tab-1', label='Tweets', className='estilo_tab',children=[
+                dcc.Tab(value='tab-1', label=f"Tweets ({langu_senti_json['tweets_despues_limpiar']})", className='estilo_tab',children=[
                         dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_escritos, id='graph-sentiments-no-rts'), className='col-6'),
                                  dbc.Col(children=create_div_tweets(tweets_no_rts, 'no_rts'), id='no-rts-output',
                                          className="d-flex align-items-center justify-content-center col-6")])
                 ]),
-                dcc.Tab(label='Retweets', className='estilo_tab', children=[
+                dcc.Tab(label=f"Retweets ({langu_senti_json['retweets_despues_limpiar']})", className='estilo_tab', children=[
                     dbc.Row(children=[dbc.Col(dcc.Graph(figure=fig_rts, id='graph-sentiments-rts'), className='col-6'),
                              dbc.Col(children=create_div_tweets(tweets_rts, 'rts'), id='rts-output',
                                      className="d-flex align-items-center justify-content-center col-6")])
@@ -61,7 +61,11 @@ def return_gui_sentiments(langu_senti_json):
                       ], style={'background-color': '#6FADFF'}),
                   dbc.ModalBody(children=[
                       html.P('''Esta funcionalidad permite consultar (en dos vistas distintas) la polaridad de las publicaciones d
-                        el usuario, así como la de los retwits. El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.''')
+                        el usuario, así como la de los retwits. El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.'''),
+                      html.P(
+                          f"Se han omitido del análisis {langu_senti_json['tweets_antes_limpiar'] - langu_senti_json['tweets_despues_limpiar']} tweets y "
+                          f"{langu_senti_json['retweets_antes_limpiar'] - langu_senti_json['retweets_despues_limpiar']} retweets debido a que no contenían texto a analizar."
+                          )
                   ], style={'text-align': 'justify'}),
               ],
               id="modal_senti",
