@@ -12,6 +12,7 @@ from callbacks.offcanvas_callbacks import create_offcanvas_callback
 from callbacks.heatmap_callback import create_heatmap_callback
 from callbacks.combo_callbacks import create_combo_clicks
 
+#Cambio
 app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 
 # Aquí o en GUIs
