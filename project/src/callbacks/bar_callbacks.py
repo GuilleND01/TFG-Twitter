@@ -1,28 +1,29 @@
 from dash.dependencies import Input, Output
 import webbrowser
+from dash import clientside_callback
+
 
 
 def create_bar_clicks(app):
-    @app.callback(
-        Output('whitebox', 'children'),
-        [Input('bar', 'clickData')]
-    )
-    def display_click_data(clickData):
-        if clickData is not None:
-            username = str(clickData['points'][0]['x']).replace("@", "")
-            url = f"https://www.twitter.com/{username}"
-            webbrowser.open_new(url)
 
-        return ''
+    clientside_callback("""
+    function (clickData) {
+        if (clickData !== null) {
+            var username = clickData.points[0].x.replace("@", "");
+            var url = 'https://www.twitter.com/' + username;
+            window.open(url);
+        }
+    }
+    """, Output('whitebox', 'children'), [Input('bar', 'clickData')])
+
 
 def create_bubble_clicks(app):
-    @app.callback(
-        Output('whitebox-1', 'children'),
-        [Input('friends-circle', 'clickData')]
-    )
-    def display_click_data(clickData):
-        if clickData is not None:
-            url = clickData['points'][0]['customdata'][0]
-            webbrowser.open_new(url)
 
-        return ''
+    clientside_callback("""
+    function (clickData) {
+        if (clickData !== null) {
+            var url = clickData['points'][0]['customdata'][0];
+            window.open(url);
+        }
+    }
+    """, Output('whitebox-1', 'children'), [Input('friends-circle', 'clickData')])
