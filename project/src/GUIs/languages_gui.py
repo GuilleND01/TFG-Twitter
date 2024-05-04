@@ -47,12 +47,11 @@ def return_gui_languages(langu_senti_json):
                             html.Img(src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png',
                                      style={'height': '30px', 'width': '30px'},
                                      className='m-1'),
-                            dbc.ModalTitle("Lenguajes que más has empleado / retwiteado", className='m-1'),
+                            html.Div("Tus idiomas más utilizados", className='m-1 h5'),
                         ], style={'background-color': '#6FADFF'}),
                     dbc.ModalBody(children=[
-                        html.P('''Esta funcionalidad permite consultar (en dos vistas distintas) los lenguajes en los
-                            que más ha publicado el usuario, así como los lenguajes más comunes en los que suele retwitear.
-                            El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.'''),
+                        html.P('''Consulta los idiomas en los que más has twitteado y retwitteado. Sitúate sobre cada uno de los sectores del gráfico circular para ver 
+                        el número de tweets en cada idioma. '''),
                         html.P(f"Se han omitido del análisis {langu_senti_json['tweets_antes_limpiar'] - langu_senti_json['tweets_despues_limpiar']} tweets y "
                                f"{langu_senti_json['retweets_antes_limpiar'] - langu_senti_json['retweets_despues_limpiar']} retweets debido a que no contenían texto a analizar."
                         )

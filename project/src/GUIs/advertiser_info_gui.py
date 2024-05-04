@@ -42,7 +42,7 @@ def return_gui_advertisers(adv_json):
                         html.Img(src='https://cdn-icons-png.flaticon.com/512/2415/2415903.png',
                                  style={'height': '30px', 'width': '30px'},
                                  className='m-1'),
-                        dbc.ModalTitle("Anunciantes más interesados", className='m-1'),
+                        html.Div("Anunciantes más interesados", className='m-1 h5'),
                     ], style={'background-color': '#6FADFF'}),
                 dbc.ModalBody(children=[
                     html.P('''Muestra hasta un máximo de los cinco anunciantes de los que más has recibido 

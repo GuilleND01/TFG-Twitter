@@ -20,14 +20,12 @@ app.layout = html.Div(children=[
     dbc.Navbar(
         dbc.Container(
             [
-                dbc.Row(
-                    [
-                        dbc.Col(html.Img(src='https://cdn-icons-png.flaticon.com/512/607/607554.png ', height="30px"),
-                                className='col-2'),
-                        dbc.Col(dbc.NavbarBrand("WhatTheyKnow"), className="col-2"),
-                    ],
-                    className='text-left'
-                ),
+                html.Div(
+                    children=[
+                        html.Img(src='assets/Diseño_sin_título__8_-removebg-preview.png', height="60px"),
+                        html.Span("WhatTheyKnow", className='h4 mb-0 ms-2'),
+                    ]
+                , className='d-flex align-items-center'),
                 html.Div(children=[
                     html.Div(id='output_download', className='text-right'),
                     dbc.Button(html.I(className='bi bi-question-circle'),
@@ -102,9 +100,7 @@ app.layout = html.Div(children=[
                     size='lm'
                 )
             ]
-        ),
-        className='p-3 bg-light'
-    ),
+        ), className='p-2'),
     html.Div([
         html.Div([
             html.Div(

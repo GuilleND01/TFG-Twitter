@@ -38,7 +38,7 @@ def return_gui_criteria(cri_json):
                         html.Img(src='https://cdn-icons-png.flaticon.com/512/1055/1055669.png',
                                  style={'height': '30px', 'width': '30px'},
                                  className='m-1'),
-                        dbc.ModalTitle("Criterios preferentes", className='m-1'),
+                        html.Div("Criterios de tus anuncios", className='m-1 h5'),
                     ], style={'background-color': '#6FADFF'}),
                 dbc.ModalBody(children=[
                     html.P('''Permite seleccionar entre los tipos de criterios posibles y mostrar para cada uno
