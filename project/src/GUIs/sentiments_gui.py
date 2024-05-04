@@ -57,11 +57,12 @@ def return_gui_sentiments(langu_senti_json):
                           html.Img(src='https://cdn-icons-png.flaticon.com/512/2564/2564959.png',
                                    style={'height': '30px', 'width': '30px'},
                                    className='m-1'),
-                          dbc.ModalTitle("Polaridad de tu actividad", className='m-1'),
+                          html.Div("Sentimiento de tu actividad", className='m-1 h5'),
                       ], style={'background-color': '#6FADFF'}),
                   dbc.ModalBody(children=[
-                      html.P('''Esta funcionalidad permite consultar (en dos vistas distintas) la polaridad de las publicaciones d
-                        el usuario, así como la de los retwits. El contenido se muestra en forma de gráfica, permitiendo ver claramente los porcentajes.'''),
+                      html.P('''Comprende cómo se percibe en términos de sentimientos la información que publicas. Tanto, por parte de tus seguidores como
+                        de la comunidad en general. Cuando realices click sobre alguno de los sectores, podrás ver los tres tweets con mayor polaridad para la
+                        categoría seleccionada. Desliza a la derecha en el panel para verlos todos.'''),
                       html.P(
                           f"Se han omitido del análisis {langu_senti_json['tweets_antes_limpiar'] - langu_senti_json['tweets_despues_limpiar']} tweets y "
                           f"{langu_senti_json['retweets_antes_limpiar'] - langu_senti_json['retweets_despues_limpiar']} retweets debido a que no contenían texto a analizar."

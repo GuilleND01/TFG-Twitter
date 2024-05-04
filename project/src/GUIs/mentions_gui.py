@@ -52,15 +52,13 @@ def return_gui_mentions(mentions_json):
                         html.Img(src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png',
                                  style={'height': '30px', 'width': '30px'},
                                  className='m-1'),
-                        dbc.ModalTitle("Usuarios a los que más has mencionado", className='m-1'),
+                        html.Div("Usuarios a los que más has mencionado", className='m-1 h5'),
                     ], style={'background-color': '#6FADFF'}),
                 dbc.ModalBody(children=[
-                    html.P('''Muestra un gráfico que contiene la información de los usuarios a los que más has
-                                                mencionado en tus publicaciones, realizando un recuento y representándolo ordenado
-                                                en forma de barras.'''),
-                    html.Br(),
-                    html.P('''Cada una de las barras es interactiva y permite acceder al perfil del usuario en
-                                                cuestión.'''),
+                    html.P('''Visualiza en el gráfico la información de los usuarios a los que más has
+                    mencionado en tus publicaciones. Cada una de las barras es interactiva y te permite acceder al perfil 
+                    del usuario haciendo click sobre ella.'''),
+
                 ], style={'text-align': 'justify'}),
             ],
             id="modal_men",

@@ -80,16 +80,15 @@ def return_gui_friends(friends_json):
                                 html.Img(src='https://cdn-icons-png.flaticon.com/512/2671/2671250.png',
                                          style={'height': '30px', 'width': '30px'},
                                          className='m-1'),
-                                dbc.ModalTitle("Círculo de Amigos", className='m-1'),
+                                html.Div("Círculo de Amigos", className='m-1 h5'),
                             ], style={'background-color': '#6FADFF'}),
                         dbc.ModalBody(children=[
-                            dbc.ModalBody(children=[
-                                html.P('''Obtiene un listado de los usuarios con los que más has interactuado teniendo en cuenta
-                                    las siguientes interacciones: mensajes directos, seguir al usuario, menciones y retweets.'''),
-                                html.Br(),
-                                html.P('''Cada una de las imágenes es interactiva y permite acceder al perfil del usuario al que
-                                    representa. También aparece la puntuación que ha obtenido tras la ejecución del algoritmo.'''),
-                            ]),
+
+                            html.P('''Conoce quiénes son tus amigos más cercanos teniendo en cuenta
+                                las siguientes interacciones: mensajes directos, seguir al usuario, menciones y retweets.'''),
+                            html.P('''Cada una de las imágenes es interactiva y permite acceder al perfil del usuario al que
+                                representa. También aparece la puntuación que ha obtenido tras la ejecución del algoritmo.'''),
+
                         ], style={'text-align': 'justify'}),
                     ],
                     id="modal_cir",

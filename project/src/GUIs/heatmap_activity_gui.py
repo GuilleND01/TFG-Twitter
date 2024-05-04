@@ -70,14 +70,16 @@ def return_heatmap_activiy_gui(heatmap_json):
                             html.Img(src='https://cdn-icons-png.flaticon.com/512/4066/4066004.png',
                                      style={'height': '30px', 'width': '30px'},
                                      className='m-1'),
-                            dbc.ModalTitle("Registro de tu actividad", className='m-1'),
+                            html.Div("Registro de tu actividad", className='m-1 h5'),
                         ], style={'background-color': '#6FADFF'}),
                     dbc.ModalBody(children=[
-                        dbc.ModalBody(children=[
-                            html.P('''Registro de la actividad del usuario en forma de mapa de calor. Esta actividad
-                            es obtenida, entre otras posibles fuentes, de las publicaciones realizadas, los clicks
-                            que se realizan o los anuncios que se visionan.'''),
-                        ]),
+
+                        html.P('''Lleva un control del uso de la red social y de cada una de tus interacciones. Observa 
+                        cuáles son tus patrones de actividad a lo largo de la semana y los cambios en tus hábitos a lo largo
+                        del tiempo. '''),
+                        html.P('''En el panel inferior puedes seleccionar el tipo de interacción que quieres incluir en el mapa de calor. 
+                         Además, podrás limitir el análisis a los últimos 90 días.''')
+
                     ], style={'text-align': 'justify'}),
                 ],
                 id="modal_heatmap",
