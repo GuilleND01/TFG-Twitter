@@ -3,6 +3,23 @@ from dash import html, dcc
 
 
 def return_gui_profile(profile_data):
+    webicon = html.Div(  # Icono de la web
+        children=[
+            html.I(className='bi bi-globe'),
+            html.P(f"{profile_data['description']['website']}",
+                   style={'margin-left': '-85%'})
+        ],
+        style={'column-count': '2', 'margin-top': '-10px'}
+    ) if profile_data['description']['website'] is not None else None
+    locationicon = html.Div(  # Icono de la localización
+        children=[
+            html.I(className='bi bi-geo-alt'),
+            html.P(f"{profile_data['description']['location']}",
+                   style={'margin-left': '-85%'})
+        ],
+        style={'column-count': '2', 'margin-top': '-10px'}
+    ) if profile_data['description']['location'] is not None else None
+
     return html.Div(
         [
             dbc.Button(html.Img(src=f"{profile_data['pictures']['prof_pic']}", style={'border-radius': '50%'},
@@ -40,32 +57,11 @@ def return_gui_profile(profile_data):
                             html.Br(),
                             html.Div(
                                 children=[
-                                    html.Div(  # Icono de la web
-                                        children=[
-                                            html.Img(src="https://img.icons8.com/ios/50/globe--v1.png",
-                                                     alt='Icono web',
-                                                     style={'width': '20px', 'height': '20px'}),
-                                            html.P(f"{profile_data['description']['website']}",
-                                                   style={'margin-left': '-85%'})
-                                        ],
-                                        style={'column-count': '2'}
-                                    ),
-                                    html.Div(  # Icono de la localización
-                                        children=[
-                                            html.Img(
-                                                src="https://img.icons8.com/material-outlined/24/place-marker--v1.png",
-                                                alt='Icono location',
-                                                style={'width': '20px', 'height': '20px'}),
-                                            # html.P(f"{profile_data['description']['location']}",
-                                            # style={'margin-left': '-85%'})
-                                        ],
-                                        style={'column-count': '2', 'margin-top': '-10px'}
-                                    ),
+                                    webicon,
+                                    locationicon,
                                     html.Div(  # Icono del cumpleaños
                                         children=[
-                                            html.Img(src="https://img.icons8.com/material-outlined/24/birthday.png",
-                                                     alt='Icono cumpleaños',
-                                                     style={'width': '20px', 'height': '20px'}),
+                                            html.I(className='bi bi-balloon'),
                                             html.P(
                                                 f"{profile_data['age']['birthDate']} ({profile_data['age']['age']} años)",
                                                 style={'margin-left': '-85%'})
@@ -74,9 +70,7 @@ def return_gui_profile(profile_data):
                                     ),
                                     html.Div(  # Icono de creación de la cuenta
                                         children=[
-                                            html.Img(src="https://img.icons8.com/ios/50/twitter--v1.png",
-                                                     alt='Icono cuenta',
-                                                     style={'width': '20px', 'height': '20px'}),
+                                            html.I(className='bi bi-calendar'),
                                             html.P(f"{profile_data['profile']['createdAt']}",
                                                    style={'margin-left': '-85%'})
                                         ],
@@ -88,8 +82,11 @@ def return_gui_profile(profile_data):
                             ),
                             html.Br(),
                             html.Div(children=[
-                                html.P('Amorch, ' + profile_data['message'])
-                            ], style={'border': '3px dotted black'}, className='p-5 d-flex justify-content-center')
+                                html.P(profile_data['message'])
+                            ], className='p-4 m-2 d-flex justify-content-center',
+                                style={'border-radius': '40px',
+                                       'box-shadow': '0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)',
+                                       'background-color': 'white'})
                         ],
                         style={'text-align': 'center', 'background-color': 'white', 'padding-top': '10px',
                                'padding-bottom': '20px'}

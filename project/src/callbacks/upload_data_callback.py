@@ -77,12 +77,13 @@ def create_upload_data_callbacks(app):
             print(file_list.keys())
 
             # Perfil de usuario
-            if ("profile.js" in file_list and "ageinfo.js" in file_list) or 'profile' in cf_avai:
+            if (("profile.js" in file_list and "ageinfo.js" in file_list and 'manifest.js' in file_list)
+                    or 'profile' in cf_avai):
                 scard_pu = {'border': '3px solid green'}
                 cf_list.append('profile')
 
             # Usuarios mencionados
-            if "tweets.js" in file_list or 'user-mentions' in cf_avai:
+            if ("tweets.js" in file_list) or 'user-mentions' in cf_avai:
                 scard_um = {'border': '3px solid green'}
                 cf_list.append('user-mentions')
 
