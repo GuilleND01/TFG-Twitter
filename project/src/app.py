@@ -170,7 +170,7 @@ app.layout = html.Div(children=[
                                         className='mx-auto', style={'height': '50%', 'width': '50%'}),
                             dbc.CardBody(
                                 [
-                                    html.H4("Lenguajes predilectos"),
+                                    html.H4("Idiomas más utilizados"),
                                     html.P(
                                         "Consulta los porcentajes de los idiomas en los que has escrito tus "
                                         "publicaciones así como el porcentaje en el caso de los retweets que has realizado.",
@@ -221,7 +221,7 @@ app.layout = html.Div(children=[
                                         className='mx-auto', style={'height': '50%', 'width': '50%'}),
                             dbc.CardBody(
                                 [
-                                    html.H4("Registro de la actividad"),
+                                    html.H4("Registro de tu actividad"),
                                     html.P(
                                         "Consulta en forma de mapa de calor tus horarios de actividad en la aplicación, "
                                         "pudiendo apreciar para cada día de la semana tus picos de interacción.",

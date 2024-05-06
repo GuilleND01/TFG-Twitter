@@ -6,7 +6,7 @@ def return_gui_profile(profile_data):
     webicon = html.Div(  # Icono de la web
         children=[
             html.I(className='bi bi-globe'),
-            html.P(f"{profile_data['description']['website']}",
+            html.P(html.A(f"{profile_data['description']['website']}", href=f"{profile_data['description']['website']}", target="_blank"),
                    style={'margin-left': '-85%'})
         ],
         style={'column-count': '2', 'margin-top': '-10px'}
@@ -49,7 +49,7 @@ def return_gui_profile(profile_data):
                                            style={'font-weight': 'bold', 'font-size': '20px'}),
                                     html.P(f"{profile_data['profile']['username']}",
                                            style={'font-size': '12px', 'margin-top': '-15px'}),
-                                    html.P(f"{profile_data['description']['bio']}")
+                                    html.P(f"{profile_data['description']['bio']}", style={'text-align': 'justify'})
                                 ],
                                 style={'display': 'inline-block', 'width': '100%',
                                        'text-align': 'left', 'margin-bottom': '20px', 'margin-top': '-32px'}
@@ -88,8 +88,7 @@ def return_gui_profile(profile_data):
                                        'box-shadow': '0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)',
                                        'background-color': 'white'})
                         ],
-                        style={'text-align': 'center', 'background-color': 'white', 'padding-top': '10px',
-                               'padding-bottom': '20px'}
+                        style={'text-align': 'center', 'background-color': 'white', 'padding-bottom': '20px'}
                     )
                 ],
                 id="offcanvas",

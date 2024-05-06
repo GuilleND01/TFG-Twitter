@@ -8,8 +8,6 @@ iframe { display:block; width:100%; border:none; }
 	display: none;
 }
 
-
-
 /* Estilo de las tabs */
 .estilo_tab{
     width: calc(85% / 2) !important;
@@ -19,8 +17,11 @@ iframe { display:block; width:100%; border:none; }
     border: 1px solid #1975FA !important;
 }
 
-
 .tab .jsx-3468109796 {
     padding: 0px;
 }
 
+/* Para alinear el texto de las cards de la pantallas principal*/
+.card-body p {
+    text-align: justify;
+}
