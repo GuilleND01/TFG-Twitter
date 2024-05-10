@@ -103,7 +103,15 @@ app.layout = html.Div(children=[
         ), className='p-2'),
     html.Div([
         html.Div([
-            html.Div(
+            dbc.Row([
+                dbc.Col([
+                    html.P([html.I(className='bi bi-1-circle me-3'), html.Span('Descarga tu archivo de Twitter visitando el siguiente '), html.A(f"enlace", href=f"https://help.twitter.com/es/managing-your-account/how-to-download-your-x-archive", target="_blank")]),
+                    html.P([html.I(className='bi bi-2-circle me-3'), html.Span('Arrastra los ficheros que quieras que analicemos. Verás en verdes las funcionalidades que podemos realizar con ellos')], style={"text-align": "center"}),
+                    html.P([html.I(className='bi bi-3-circle me-3'), html.Span('Presiona Enviar y espera tus resultados')]),
+                    html.P('Puedes adjuntar tu fichero de WhatTheyKnow si ya hemos analizado tus datos alguna vez y lo has descargado', className='opacity-25 px-5', style={'text-align': 'center'}),
+                ], className='d-flex flex-column align-items-center justify-content-center'),
+                dbc.Col([
+                html.Div(
                 dcc.Upload([
                     html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
                              className='m-3',
@@ -120,11 +128,12 @@ app.layout = html.Div(children=[
                     'text-align': 'center'
                 }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
                 className='d-flex justify-content-center'),
-            html.Br(),
             html.Div(id='alerta-archivos'),
             dls.RingChase(children=[
-                dbc.Button('Submit', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True),
-            ], color='#435278', fullscreen=True, debounce=1000),
+                dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True),
+            ], color='#435278', fullscreen=True, debounce=1000)
+                ])
+            ]),
             html.Br(),
             html.H3('¿Qué puedes hacer?', style={'text-align': 'center'}),
             html.Br(),
