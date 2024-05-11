@@ -111,7 +111,6 @@ app.layout = html.Div(children=[
                     html.P('Puedes adjuntar tu fichero de WhatTheyKnow si ya hemos analizado tus datos alguna vez y lo has descargado', className='opacity-25 px-5', style={'text-align': 'center'}),
                 ], className='d-flex flex-column align-items-center justify-content-center'),
                 dbc.Col([
-                html.Div(
                 dcc.Upload([
                     html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
                              className='m-3',
@@ -127,12 +126,11 @@ app.layout = html.Div(children=[
                     'align-items': 'center',
                     'text-align': 'center'
                 }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
-                className='d-flex justify-content-center'),
             html.Div(id='alerta-archivos'),
             dls.RingChase(children=[
                 dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True),
             ], color='#435278', fullscreen=True, debounce=1000)
-                ])
+                ], className='d-flex flex-column align-items-center justify-content-center')
             ]),
             html.Br(),
             html.H3('¿Qué puedes hacer?', style={'text-align': 'center'}),
