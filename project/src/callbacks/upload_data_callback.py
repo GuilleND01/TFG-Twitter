@@ -85,7 +85,7 @@ def create_upload_data_callbacks(app):
             # Usuarios mencionados
             if ("tweets.js" in file_list) or 'user-mentions' in cf_avai:
                 scard_um = {'border': '3px solid green'}
-                cf_list.append('user-mentions')
+                #cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
             if "tweets.js" in file_list or 'sentimientos_lenguajes' in cf_avai:
@@ -118,7 +118,7 @@ def create_upload_data_callbacks(app):
             # Anunciantes más interesados
             if "ad-engagements.js" in file_list or 'advertiser-info-1' in cf_avai:
                 scard_ga = {'border': '3px solid green'}
-                #cf_list.append('advertiser-info-1')
+                cf_list.append('advertiser-info-1')
 
             return None, False, scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga
 

@@ -1,5 +1,9 @@
 import threading
 import requests
+from google.auth.transport.requests import Request
+from google.oauth2 import id_token
+import os
+
 
 
 class ThreadingFuntions:
@@ -8,7 +12,19 @@ class ThreadingFuntions:
         self.lock = threading.Lock()
 
     def requests(self, tarea, url):
-        res = requests.get(url)
+
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "tfg-twitter-3c5ccb548a38.json"
+
+        target_audience = url.split('?')[0]
+        id_token_request = Request()
+        id_token_claims = id_token.fetch_id_token(id_token_request, target_audience)
+
+        headers = {
+            'Authorization': 'Bearer ' + id_token_claims,
+            'Content-Type': 'application/json'
+        }
+
+        res = requests.get(url, headers=headers)
         if res.status_code == 200:
             json_procesado = res.json()
         else:
