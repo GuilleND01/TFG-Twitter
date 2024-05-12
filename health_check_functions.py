@@ -7,13 +7,13 @@ gcp_json = json.loads(sys.argv[1])
 credentials = service_account.Credentials.from_service_account_info(gcp_json)
 
 cloud_functions_list = [
-    "projects/tfg-twitter/locations/us-central1/functions/heatmap_activity",
-    "projects/tfg-twitter/locations/us-central1/functions/advertiser-info-1",
-    "projects/tfg-twitter/locations/us-central1/functions/person-criteria",
-    "projects/tfg-twitter/locations/us-central1/functions/profile",
-    "projects/tfg-twitter/locations/us-central1/functions/user-mentions",
-    "projects/tfg-twitter/locations/us-central1/functions/twitter-circle",
-    "projects/tfg-twitter/locations/us-central1/functions/sentimientos_lenguajes",
+    "projects/tfg-twitter/locations/europe-southwest1/functions/heatmap_activity",
+    "projects/tfg-twitter/locations/europe-southwest1/functions/advertiser-info-1",
+    "projects/tfg-twitter/locations/europe-southwest1/functions/person-criteria",
+    "projects/tfg-twitter/locations/europe-southwest1/functions/profile",
+    "projects/tfg-twitter/locations/europe-southwest1/functions/user-mentions",
+    "projects/tfg-twitter/locations/europe-southwest1/functions/twitter-circle",
+    "projects/tfg-twitter/locations/europe-southwest1/functions/sentimientos_lenguajes",
 ]
 
 client = functions_v2.FunctionServiceClient(credentials=credentials)
