@@ -38,3 +38,7 @@ iframe { display:block; width:100%; border:none; }
     transition: ease-out 0.15s;
 }
 
+.accordion-button {
+    font-weight: bold;
+}
+

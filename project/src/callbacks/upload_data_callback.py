@@ -85,7 +85,7 @@ def create_upload_data_callbacks(app):
             # Usuarios mencionados
             if ("tweets.js" in file_list) or 'user-mentions' in cf_avai:
                 scard_um = {'border': '3px solid green'}
-                #cf_list.append('user-mentions')
+                cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
             if "tweets.js" in file_list or 'sentimientos_lenguajes' in cf_avai:

@@ -7,12 +7,13 @@ from callbacks.upload_data_callback import create_upload_data_callbacks
 from callbacks.download_data_callback import create_download_callback
 from callbacks.bar_callbacks import create_bar_clicks
 from callbacks.bar_callbacks import create_bubble_clicks
+from callbacks.bar_callbacks import create_pic_hover
 from callbacks.modal_callbacks import create_modal_callback
 from callbacks.offcanvas_callbacks import create_offcanvas_callback
 from callbacks.heatmap_callback import create_heatmap_callback
 from callbacks.combo_callbacks import create_combo_clicks
 
-#Cambio
+# Cambio
 app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 
 # Aquí o en GUIs
@@ -25,7 +26,7 @@ app.layout = html.Div(children=[
                         html.Img(src='assets/Diseño_sin_título__8_-removebg-preview.png', height="60px"),
                         html.Span("WhatTheyKnow", className='h4 mb-0 ms-2'),
                     ]
-                , className='d-flex align-items-center'),
+                    , className='d-flex align-items-center'),
                 html.Div(children=[
                     html.Div(id='output_download', className='text-right'),
                     dbc.Button(html.I(className='bi bi-question-circle'),
@@ -35,7 +36,13 @@ app.layout = html.Div(children=[
                 ], className='d-flex align-items-center'),
                 dbc.Modal(
                     [
-                        dbc.ModalHeader(dbc.ModalTitle("Preguntas frecuentes")),
+                        dbc.ModalHeader(
+                            children=[
+                                html.Img(src='https://cdn-icons-png.flaticon.com/512/5726/5726558.png',
+                                         style={'height': '30px', 'width': '30px'},
+                                         className='m-1'),
+                                html.Div("Preguntas frecuentes", className='m-1 h5'),
+                            ], style={'background-color': '#6FADFF'}),
                         dbc.ModalBody(children=[
                             html.P('''Aquí puedes consultar las preguntas más frecuentes que realizan los usuarios y
                             que te pueden ayudar a resolver cualquier duda.'''),
@@ -70,34 +77,85 @@ app.layout = html.Div(children=[
                                     ),
                                     dbc.AccordionItem(
                                         children=[
-                                            "This is the content of the second section",
+                                            "En la página de inicio se encuentran descritas las distintas "
+                                            "funcionalidades que es posible realizar con esta herramienta. En caso de "
+                                            "subir ficheros para comenzar el procesamiento, los colores de los bordes "
+                                            "de las tarjetas cambiarán en función de la posibilidad de"
+                                            "ejecución de la funcionalidad correspondiente. El código de colores es "
+                                            "el siguiente:",
+                                            html.Ul(
+                                                children=[
+                                                    html.Li([html.Strong('Verde'), ''': se han subido todos los 
+                                                    ficheros correspondientes y la funcionalidad se puede ejecutar al 
+                                                    completo.''']),
+                                                    html.Li([html.Strong('Amarillo'), ''': se han subido algunos de 
+                                                    los ficheros correspondientes y aunque la funcionalidad se puede 
+                                                    ejecutar, los resultados estarán incompletos.''']),
+                                                    html.Li([html.Strong('Rojo'), ''': no se dispone de los ficheros 
+                                                    necesarios para comenzar el procesamiento por lo que la 
+                                                    funcionalidad no se puede ejecutar.''']),
+                                                ]
+                                            )
                                         ],
-                                        title="¿Qué ficheros necesito?"
+                                        title="¿Qué representa cada uno de los colores de las funcionalidades?"
                                     ),
                                     dbc.AccordionItem(
                                         children=[
-                                            '''
-                                                En la versión actual de la aplicación no es posible almacenar los datos
-                                                para posteriores consultas, pero en versiones futuras se plantea la
-                                                posibilidad de realizar este almacenaje para ahorrar tiempo de 
-                                                ejecución.
-                                            ''',
+                                            html.P('''Sí, una vez hayas realizado un procesamiento de datos empleando la 
+                                            herramienta, se ofrece la posibilidad de obtener una copia de los datos 
+                                            extraídos para poder emplearlos en consultas posteriores sin tener que 
+                                            esperar a que vuelvan a generarse.'''),
+                                            html.Br(),
+                                            html.P('''Para ello, sitúate en la parte superior, donde aparece un botón de 
+                                            descarga de ficheros. Dentro de él se abre un menú en el que se ofrecen 
+                                            dos alternativas para la obtención de los datos: descargarlos de forma 
+                                            inmediata pulsando el enlace o bien recibirlos en el correo electrónico 
+                                            indicando la dirección de destino en el formulario de la parte inferior.''')
                                         ],
                                         title="¿Puedo guardar mis datos para consultas posteriores?"
+                                    ),
+                                    dbc.AccordionItem(
+                                        children=[
+                                            '''De forma general, para comenzar el procesamiento es necesaria la subida
+                                            del fichero account.js. En particular, para cada una de las funcionalidades
+                                            se detallan a continuación los ficheros necesarios:''',
+                                            html.Ul(
+                                                children=[
+                                                    html.Li([html.Strong('Perfil de usuario'), ''': se necesitan de 
+                                                    forma obligatoria los ficheros profile.js, ageinfo.js y 
+                                                    manifest.js.''']),
+                                                    html.Li([html.Strong('Usuarios más mencionados'), ''': se 
+                                                    necesita de forma obligatoria el fichero tweets.js.''']),
+                                                    html.Li([html.Strong('Idiomas más utilizados'), ''': se 
+                                                    necesita de forma obligatoria el fichero tweets.js.''']),
+                                                    html.Li([html.Strong('Análisis de sentimientos'), ''': se 
+                                                    necesita de forma obligatoria el fichero tweets.js.''']),
+                                                    html.Li([html.Strong('Círculo de amigos'), ''': se necesitan de 
+                                                    forma obligatoria los ficheros profile.js, 
+                                                    direct-message-headers.js, tweets.js, follower.js y following.js''']),
+                                                    html.Li([html.Strong('Registro de tu actividad'), ''': se 
+                                                    necesitan de forma obligatoria los ficheros tweets.js y 
+                                                    menifest.js y, de forma adicional, los ficheros 
+                                                    user-link-clicks.js, direct-message-headers.js, 
+                                                    direct-message-group-headers.js y ad-impressions.js''']),
+                                                    html.Li([html.Strong('Criterios objetivo'), ''': se 
+                                                    necesita de forma obligatoria el fichero ad-engagements.js.''']),
+                                                    html.Li([html.Strong('Anunciantes más populares'), ''': se 
+                                                    necesita de forma obligatoria el fichero ad-engagements.js.''']),
+                                                ]
+                                            )
+                                        ],
+                                        title="¿Qué ficheros necesito para cada una de las funcionalidades?"
                                     ),
                                 ],
                                 start_collapsed=True,
                             ),
                         ], style={'text-align': 'justify'}),
-                        dbc.ModalFooter(
-                            dbc.Button(
-                                "Cerrar", id="close_modal_preg", className="ms-auto", n_clicks=0
-                            )
-                        ),
                     ],
                     id="modal_preg",
                     is_open=False,
-                    size='lm'
+                    size='lg',
+                    className='modal-dialog-centered'
                 )
             ]
         ), className='p-2'),
@@ -105,31 +163,42 @@ app.layout = html.Div(children=[
         html.Div([
             dbc.Row([
                 dbc.Col([
-                    html.P([html.I(className='bi bi-1-circle me-3'), html.Span('Descarga tu archivo de Twitter visitando el siguiente '), html.A(f"enlace", href=f"https://help.twitter.com/es/managing-your-account/how-to-download-your-x-archive", target="_blank")], className='h5 mb-3'),
-                    html.P([html.I(className='bi bi-2-circle me-3'), html.Span('Arrastra los ficheros que quieras que analicemos. Verás en verdes las funcionalidades que podemos realizar con ellos')], style={"text-align": "center"}, className='h5 mb-3'),
-                    html.P([html.I(className='bi bi-3-circle me-3'), html.Span('Presiona Enviar y espera tus resultados')], className='h5 mb-2'),
-                    html.P('Puedes adjuntar tu fichero de WhatTheyKnow si ya hemos analizado tus datos alguna vez y lo has descargado', className='opacity-25 px-5', style={'text-align': 'center'}),
+                    html.P([html.I(className='bi bi-1-circle me-3'),
+                            html.Span('Descarga tu archivo de Twitter visitando el siguiente '), html.A(f"enlace",
+                                                                                                        href=f"https://help.twitter.com/es/managing-your-account/how-to-download-your-x-archive",
+                                                                                                        target="_blank")],
+                           className='h5 mb-3'),
+                    html.P([html.I(className='bi bi-2-circle me-3'), html.Span(
+                        'Arrastra los ficheros que quieras que analicemos. Verás en verdes las funcionalidades que podemos realizar con ellos')],
+                           style={"text-align": "center"}, className='h5 mb-3'),
+                    html.P(
+                        [html.I(className='bi bi-3-circle me-3'), html.Span('Presiona Enviar y espera tus resultados')],
+                        className='h5 mb-2'),
+                    html.P(
+                        'Puedes adjuntar tu fichero de WhatTheyKnow si ya hemos analizado tus datos alguna vez y lo has descargado',
+                        className='opacity-25 px-5', style={'text-align': 'center'}),
                 ], className='d-flex flex-column align-items-center justify-content-center'),
                 dbc.Col([
-                dcc.Upload([
-                    html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
-                             className='m-3',
-                             style={'width': '50px', 'height': '50px'}),
-                    'Arrastre o seleccione los ficheros'
-                ], style={
-                    'width': '100%',
-                    'height': '60px',
-                    'lineHeight': '60px',
-                    'borderWidth': '2px',
-                    'borderStyle': 'outset',
-                    'borderRadius': '5px',
-                    'align-items': 'center',
-                    'text-align': 'center'
-                }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
-            html.Div(id='alerta-archivos'),
-            dls.RingChase(children=[
-                dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True),
-            ], color='#435278', fullscreen=True, debounce=1000)
+                    dcc.Upload([
+                        html.Img(src="https://cdn-icons-png.flaticon.com/512/4007/4007710.png",
+                                 className='m-3',
+                                 style={'width': '50px', 'height': '50px'}),
+                        'Arrastre o seleccione los ficheros'
+                    ], style={
+                        'width': '100%',
+                        'height': '60px',
+                        'lineHeight': '60px',
+                        'borderWidth': '2px',
+                        'borderStyle': 'outset',
+                        'borderRadius': '5px',
+                        'align-items': 'center',
+                        'text-align': 'center'
+                    }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
+                    html.Div(id='alerta-archivos'),
+                    dls.RingChase(children=[
+                        dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'},
+                                   disabled=True),
+                    ], color='#435278', fullscreen=True, debounce=1000)
                 ], className='d-flex flex-column align-items-center justify-content-center')
             ]),
             html.Br(),
@@ -300,6 +369,7 @@ create_modal_callback(app)
 create_offcanvas_callback(app)
 create_heatmap_callback(app)
 create_combo_clicks(app)
+create_pic_hover(app)
 
 if __name__ == '__main__':
     app.run_server(debug=False, host="0.0.0.0")

@@ -45,14 +45,16 @@ def return_gui_advertisers(adv_json):
                         html.Div("Anunciantes más interesados", className='m-1 h5'),
                     ], style={'background-color': '#6FADFF'}),
                 dbc.ModalBody(children=[
-                    html.P('''Muestra hasta un máximo de los cinco anunciantes de los que más has recibido 
-                                        anuncios en tu perfil. Para cada uno de ellos se muestra la siguiente información: el 
-                                        último twit que has recibido de dicho anunciante, el número total de anuncios recibidos y 
-                                        una categorización de los motivos por los que te han aparecido las publicaciones de este 
-                                        anunciante.'''),
+                    html.P('''Muestra hasta un máximo de los cinco anunciantes de los que más has recibido anuncios 
+                    en tu perfil. Para cada uno de ellos se muestra la siguiente información: el último twit que has 
+                    recibido de dicho anunciante, el número total de anuncios recibidos y una categorización de los 
+                    motivos por los que te han aparecido las publicaciones de este anunciante.'''),
                     html.Br(),
-                    html.P('''Para cada uno de los criterios (que se muestran en la parte izquierda de la 
-                                        lista) se proporciona el conjunto global al que pertenecen.''')
+                    html.P('''Para cada uno de los criterios (que se muestran en la parte izquierda de la lista) se 
+                    proporciona el conjunto global al que pertenecen. Estos criterios que aparecen en el gráfico son 
+                    los más repetidos en las publicaciones elaboradas por el anunciante (y como máximo 5) y se 
+                    muestran junto al número de repeticiones cuando sitúas el cursor sobre cada uno de los sectores 
+                    del gráfico.''')
                 ], style={'text-align': 'justify'}),
             ],
             id="modal_adv",
