@@ -105,9 +105,9 @@ app.layout = html.Div(children=[
         html.Div([
             dbc.Row([
                 dbc.Col([
-                    html.P([html.I(className='bi bi-1-circle me-3'), html.Span('Descarga tu archivo de Twitter visitando el siguiente '), html.A(f"enlace", href=f"https://help.twitter.com/es/managing-your-account/how-to-download-your-x-archive", target="_blank")]),
-                    html.P([html.I(className='bi bi-2-circle me-3'), html.Span('Arrastra los ficheros que quieras que analicemos. Verás en verdes las funcionalidades que podemos realizar con ellos')], style={"text-align": "center"}),
-                    html.P([html.I(className='bi bi-3-circle me-3'), html.Span('Presiona Enviar y espera tus resultados')]),
+                    html.P([html.I(className='bi bi-1-circle me-3'), html.Span('Descarga tu archivo de Twitter visitando el siguiente '), html.A(f"enlace", href=f"https://help.twitter.com/es/managing-your-account/how-to-download-your-x-archive", target="_blank")], className='h5 mb-3'),
+                    html.P([html.I(className='bi bi-2-circle me-3'), html.Span('Arrastra los ficheros que quieras que analicemos. Verás en verdes las funcionalidades que podemos realizar con ellos')], style={"text-align": "center"}, className='h5 mb-3'),
+                    html.P([html.I(className='bi bi-3-circle me-3'), html.Span('Presiona Enviar y espera tus resultados')], className='h5 mb-2'),
                     html.P('Puedes adjuntar tu fichero de WhatTheyKnow si ya hemos analizado tus datos alguna vez y lo has descargado', className='opacity-25 px-5', style={'text-align': 'center'}),
                 ], className='d-flex flex-column align-items-center justify-content-center'),
                 dbc.Col([

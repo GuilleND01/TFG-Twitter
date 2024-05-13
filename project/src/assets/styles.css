@@ -25,3 +25,16 @@ iframe { display:block; width:100%; border:none; }
 .card-body p {
     text-align: justify;
 }
+
+/* Animación para poner todas en opaco menos la que está seleccionada*/
+.card:hover {
+    opacity: 1;
+    scale: 1.02;
+}
+
+.card:not(:hover) {
+    opacity: 0.4;
+    transition: ease-in 0.20s;
+    transition: ease-out 0.15s;
+}
+
