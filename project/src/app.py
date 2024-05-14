@@ -195,10 +195,11 @@ app.layout = html.Div(children=[
                         'text-align': 'center'
                     }, multiple=True, id='upload-data', className='mt-3 mb-3 p-5 d-flex justify-content-center'),
                     html.Div(id='alerta-archivos'),
-                    dls.RingChase(children=[
+                    html.Div(children=[dls.RingChase(children=[
                         dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'},
                                    disabled=True),
-                    ], color='#435278', fullscreen=True, debounce=1000)
+                    ], color='#435278', fullscreen=True, debounce=1000)], id='enviar_div')
+
                 ], className='d-flex flex-column align-items-center justify-content-center')
             ]),
             html.Br(),

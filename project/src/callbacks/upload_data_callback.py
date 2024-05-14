@@ -15,6 +15,7 @@ from GUIs.advertiser_info_gui import return_gui_advertisers
 from GUIs.person_criteria_gui import return_gui_criteria
 import dash_bootstrap_components as dbc
 from utils.filemanager import FileManager
+from dash import html
 from utils.cloudfunctionsmanager import CloudFunctionManager
 from utils.bucket import Bucket
 
@@ -200,7 +201,18 @@ def create_upload_data_callbacks(app):
 
             return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap, down, percri, adinfo
 
-
+    @app.callback(
+        Output('enviar_div', 'children'),
+        [Input('submit', 'n_clicks')]
+    )
+    def actualizar_boton_loading(n_clicks):
+        if n_clicks is not None:
+            return html.Div(className='spinner-border text-primary')
+        else:
+            return [dls.RingChase(children=[
+                dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'},
+                           disabled=True),
+            ], color='#435278', fullscreen=True, debounce=1000)]
 def content_decoded(content):
     decoded = base64.b64decode(content.split(',')[1])
     return io.StringIO(decoded.decode('utf-8')).getvalue()
