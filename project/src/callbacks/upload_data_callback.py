@@ -79,24 +79,24 @@ def create_upload_data_callbacks(app):
             # Perfil de usuario
             if (("profile.js" in file_list and "ageinfo.js" in file_list and 'manifest.js' in file_list)
                     or 'profile' in cf_avai):
-                scard_pu = {'border': '3px solid green'}
+                scard_pu = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 cf_list.append('profile')
 
             # Usuarios mencionados
             if ("tweets.js" in file_list) or 'user-mentions' in cf_avai:
-                scard_um = {'border': '3px solid green'}
+                scard_um = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
             if "tweets.js" in file_list or 'sentimientos_lenguajes' in cf_avai:
-                scard_lp = {'border': '3px solid green'}
-                scard_as = {'border': '3px solid green'}
+                scard_lp = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                scard_as = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
             if (("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
                  "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
-                scard_ca = {'border': '3px solid green'}
+                scard_ca = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 cf_list.append('twitter-circle')
 
             # Registro de la actividad
@@ -104,7 +104,7 @@ def create_upload_data_callbacks(app):
                 if (("user-link-clicks.js" in file_list and "direct-message-headers.js"
                         in file_list and "direct-message-group-headers.js" in file_list and "ad-impressions.js"
                         in file_list) or 'heatmap_activity' in cf_avai):
-                    scard_ra = {'border': '3px solid green'}
+                    scard_ra = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 else:
                     scard_ra = {'border': '3px solid yellow'}
 
@@ -112,12 +112,12 @@ def create_upload_data_callbacks(app):
 
             # Criterios más relevantes
             if 'ad-engagements.js' in file_list or 'person-criteria' in cf_avai:
-                scard_tu = {'border': '3px solid green'}
+                scard_tu = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 cf_list.append('person-criteria')
 
             # Anunciantes más interesados
             if "ad-engagements.js" in file_list or 'advertiser-info-1' in cf_avai:
-                scard_ga = {'border': '3px solid green'}
+                scard_ga = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 cf_list.append('advertiser-info-1')
 
             return None, False, scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga
@@ -141,9 +141,9 @@ def create_upload_data_callbacks(app):
             if not file_mgmt.get_download_file():
                 _id = file_mgmt.get_id()
                 # Crea una instancia del bucket
-                # buck_inst = Bucket(file_mgmt.get_file_list(), _id)
+                buck_inst = Bucket(file_mgmt.get_file_list(), _id)
                 # Sube los ficheros almacenados
-                # buck_inst.upload_data()
+                buck_inst.upload_data()
                 # Guarda el nombre de usuario
                 cloud_instance.set_username(file_mgmt.get_username())
                 # Crea la lista de las Cloud Functions

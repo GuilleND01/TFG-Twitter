@@ -37,7 +37,7 @@ def create_pic_hover(app):
     )
     def update_tooltip_content(hoverData):
         if hoverData is None:
-            return no_update
+            return False, None, None
 
         user = html.Strong(hoverData["points"][0]['x'])
         mentions = hoverData["points"][0]['y']
