@@ -7,7 +7,7 @@ class Bucket:
     def __init__(self, filelist, _id):
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "tfg-twitter-3c5ccb548a38.json"
 
-        storage_client = storage.Client("api_keys.json")
+        storage_client = storage.Client()
         self.bucket = storage_client.get_bucket("tfg-twitter")
         self.filelist = filelist
         self._id = _id
