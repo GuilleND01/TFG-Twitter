@@ -51,7 +51,7 @@ jobs:
         # NOTE: If required, update to the appropriate source folder
         source: ./project/
         env_vars: |
-          GOOGLE_APPLICATION_CREDENTIALS='${{ secrets.GCP_JSON }}' 
+          GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GCP_JSON }} 
 
     # If required, use the Cloud Run url output in later steps
     - name: Show Output
