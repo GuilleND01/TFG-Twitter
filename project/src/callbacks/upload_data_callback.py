@@ -15,6 +15,7 @@ from GUIs.advertiser_info_gui import return_gui_advertisers
 from GUIs.person_criteria_gui import return_gui_criteria
 import dash_bootstrap_components as dbc
 from utils.filemanager import FileManager
+from dash import html
 from utils.cloudfunctionsmanager import CloudFunctionManager
 from utils.bucket import Bucket
 
@@ -77,33 +78,34 @@ def create_upload_data_callbacks(app):
             print(file_list.keys())
 
             # Perfil de usuario
-            if ("profile.js" in file_list and "ageinfo.js" in file_list) or 'profile' in cf_avai:
-                scard_pu = {'border': '3px solid green'}
-                #cf_list.append('profile')
+            if (("profile.js" in file_list and "ageinfo.js" in file_list and 'manifest.js' in file_list)
+                    or 'profile' in cf_avai):
+                scard_pu = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                cf_list.append('profile')
 
             # Usuarios mencionados
-            if "tweets.js" in file_list or 'user-mentions' in cf_avai:
-                scard_um = {'border': '3px solid green'}
-                #cf_list.append('user-mentions')
+            if ("tweets.js" in file_list) or 'user-mentions' in cf_avai:
+                scard_um = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                cf_list.append('user-mentions')
 
             # Lenguajes predilectos y análisis de sentimientos
             if "tweets.js" in file_list or 'sentimientos_lenguajes' in cf_avai:
-                scard_lp = {'border': '3px solid green'}
-                scard_as = {'border': '3px solid green'}
-                #cf_list.append('sentimientos_lenguajes')
+                scard_lp = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                scard_as = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                cf_list.append('sentimientos_lenguajes')
 
             # Círculo de amigos
             if (("profile.js" in file_list and "direct-message-headers.js" in file_list and "tweets.js" in file_list and
                  "follower.js" in file_list and "following.js" in file_list) or 'twitter-circle' in cf_avai):
-                scard_ca = {'border': '3px solid green'}
-                #cf_list.append('twitter-circle')
+                scard_ca = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                cf_list.append('twitter-circle')
 
             # Registro de la actividad
             if ("tweets.js" in file_list and "manifest.js" in file_list) or 'heatmap_activity' in cf_avai:
                 if (("user-link-clicks.js" in file_list and "direct-message-headers.js"
                         in file_list and "direct-message-group-headers.js" in file_list and "ad-impressions.js"
                         in file_list) or 'heatmap_activity' in cf_avai):
-                    scard_ra = {'border': '3px solid green'}
+                    scard_ra = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 else:
                     scard_ra = {'border': '3px solid yellow'}
 
@@ -111,13 +113,13 @@ def create_upload_data_callbacks(app):
 
             # Criterios más relevantes
             if 'ad-engagements.js' in file_list or 'person-criteria' in cf_avai:
-                scard_tu = {'border': '3px solid green'}
-                #cf_list.append('person-criteria')
+                scard_tu = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                cf_list.append('person-criteria')
 
             # Anunciantes más interesados
             if "ad-engagements.js" in file_list or 'advertiser-info-1' in cf_avai:
-                scard_ga = {'border': '3px solid green'}
-                #cf_list.append('advertiser-info-1')
+                scard_ga = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
+                cf_list.append('advertiser-info-1')
 
             return None, False, scard_pu, scard_um, scard_lp, scard_as, scard_ca, scard_ra, scard_tu, scard_ga
 
@@ -140,9 +142,9 @@ def create_upload_data_callbacks(app):
             if not file_mgmt.get_download_file():
                 _id = file_mgmt.get_id()
                 # Crea una instancia del bucket
-                # buck_inst = Bucket(file_mgmt.get_file_list(), _id)
+                buck_inst = Bucket(file_mgmt.get_file_list(), _id)
                 # Sube los ficheros almacenados
-                # buck_inst.upload_data()
+                buck_inst.upload_data()
                 # Guarda el nombre de usuario
                 cloud_instance.set_username(file_mgmt.get_username())
                 # Crea la lista de las Cloud Functions
@@ -199,7 +201,18 @@ def create_upload_data_callbacks(app):
 
             return 'd-none', lenguajes, sentiments, menciones, profile, circle, heatmap, down, percri, adinfo
 
-
+    @app.callback(
+        Output('enviar_div', 'children'),
+        [Input('submit', 'n_clicks')]
+    )
+    def actualizar_boton_loading(n_clicks):
+        if n_clicks is not None:
+            return html.Div(className='spinner-border text-primary')
+        else:
+            return [dls.RingChase(children=[
+                dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'},
+                           disabled=True),
+            ], color='#435278', fullscreen=True, debounce=1000)]
 def content_decoded(content):
     decoded = base64.b64decode(content.split(',')[1])
     return io.StringIO(decoded.decode('utf-8')).getvalue()

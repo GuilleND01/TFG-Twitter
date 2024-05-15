@@ -41,8 +41,23 @@ def return_gui_criteria(cri_json):
                         html.Div("Criterios de tus anuncios", className='m-1 h5'),
                     ], style={'background-color': '#6FADFF'}),
                 dbc.ModalBody(children=[
-                    html.P('''Permite seleccionar entre los tipos de criterios posibles y mostrar para cada uno
-                    los cinco valores como máximo que más figuran en los anuncios que se han visualizado.''')
+                    html.P('''Para publicar sus anuncios en la red social, los anunciantes tienen que realizar previamente
+                    un formulario en el que se añaden los distintos criterios que van a identificar a la persona a la que
+                    va dirigida la publicación.'''),
+                    html.Br(),
+                    html.P(children=[
+                            '''En esta gráfica es posible consultar de forma clara los criterios por los cuales te han 
+                        aparecido los anuncios que has visualizado mientras navegabas en la aplicación. Estos criterios se
+                        agrupan por tipos, como se explica ''',
+                        html.A('aquí', href='https://business.twitter.com/en/advertising/targeting.html'),
+                        ''', donde se puede ver los criterios que es posible encontrar en cada uno de los tipos. 
+                        Al seleccionar en el desplegable un nuevo tipo, se mostrarán de forma inmediata los 5 criterios 
+                        más representativos de ese tipo y que más han sido utilizados en los anuncios que se han 
+                        visualizado.''',
+                    ]),
+                    html.Br(),
+                    html.P('''De cada uno de los tipos es posible obtener una lectura en la cual el criterio con 
+                    mayor número de apariciones es el que más te representa en cada una de las categorías presentes.''')
                 ], style={'text-align': 'justify'}),
             ],
             id="modal_cri",

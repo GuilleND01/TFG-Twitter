@@ -23,9 +23,9 @@ class CloudFunctionManager:
         self._id = _id
         for cf in cf_list:
             if cf == 'sentimientos_lenguajes':
-                self.urls[cf] = f'https://us-central1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}&limit=30&traducir=False'
+                self.urls[cf] = f'https://europe-southwest1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}&traducir=True'
             else:
-                self.urls[cf] = f'https://us-central1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}'
+                self.urls[cf] = f'https://europe-southwest1-tfg-twitter.cloudfunctions.net/{cf}?id={_id}'
 
         print(self.urls)
 
