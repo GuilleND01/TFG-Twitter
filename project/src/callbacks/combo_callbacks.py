@@ -76,11 +76,11 @@ def create_combo_clicks(app):
             res = df_json[valor_seleccionado]
 
             df = json_normalize(eval(res['criteria']))
-            fig = px.pie(df, values='Count', names='TargetingValue')
+            fig = px.pie(df, values='Count', names='TargetingValue', custom_data=['TargetingType'])
             fig.update_layout(showlegend=False)
             fig.update_traces(
                 hovertemplate=
-                "El criterio <b>%{label}</b> se ha"
+                "El criterio <b>%{label}</b> (%{customdata[0]}) se ha"
                 "<br>"
                 "empleado en <b>%{value}</b> anuncios"
             )

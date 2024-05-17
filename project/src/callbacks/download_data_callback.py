@@ -4,6 +4,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+from datetime import datetime
 import ssl
 import smtplib
 
@@ -34,11 +35,14 @@ def create_download_callback(app):
     )
     def enlace_clickeado(n_clicks):
         if n_clicks is not None:
+            fecha_actual = datetime.now()
+            formatted_date = fecha_actual.strftime('%Y%m%d')
+
             cloud_inst = CloudFunctionManager.get_instance()
             print(cloud_inst.get_results())
             return {
                 'content': str(cloud_inst.get_results()),
-                'filename': f"whattheyknow-{cloud_inst.get_id()}.json"
+                'filename': f"whattheyknow-{formatted_date}-{cloud_inst.get_id()}.json"
             }
 
         return None
@@ -52,6 +56,9 @@ def create_download_callback(app):
         cloud_inst = CloudFunctionManager.get_instance()
 
         if n_clicks is not None and input_value is not None:
+            fecha_actual = datetime.now()
+            formatted_date = fecha_actual.strftime('%Y%m%d')
+
             # Datos del correo
             email_emisor = 'infowhattheyknow@gmail.com'
             email_contrasena = 'atojjyzkljifaiqj'
@@ -69,7 +76,7 @@ def create_download_callback(app):
             adjunto = MIMEBase('application', 'octet-stream')
             adjunto.set_payload(str(cloud_inst.get_results()).encode('utf-8'))
             encoders.encode_base64(adjunto)
-            adjunto.add_header('Content-Disposition', f'attachment; filename=whattheyknow-{cloud_inst.get_id()}.json')
+            adjunto.add_header('Content-Disposition', f'attachment; filename=whattheyknow-{formatted_date}-{cloud_inst.get_id()}.json')
             em.attach(adjunto)
 
             contexto = ssl.create_default_context()
