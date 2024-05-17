@@ -353,9 +353,11 @@ app.layout = html.Div(children=[
                           dbc.Col(html.Div(id='output_circle', className='mt-3'), className='col-4')]),
         dbc.Row(children=[dbc.Col(html.Div(id='output_aden1', className='mt-3'), className='col-4'),
                           dbc.Col(html.Div(id='output_aden2', className='mt-3'), className='col-8')]),
+        dcc.Location(id='url', refresh=False),
         html.Div(id='whitebox'),
         html.Div(id='whitebox-1'),
         html.Div(id='whitebox-2'),
+        html.Div(id='whitebox-3'),
     ], className="m-3 mt-5")
 ])
 
