@@ -12,6 +12,7 @@ from callbacks.modal_callbacks import create_modal_callback
 from callbacks.offcanvas_callbacks import create_offcanvas_callback
 from callbacks.heatmap_callback import create_heatmap_callback
 from callbacks.combo_callbacks import create_combo_clicks
+from callbacks.languages_callbacks import create_languages_callbacks
 
 # Cambio
 app = Dash(__name__, title='WhatTheyKnow', external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
@@ -373,6 +374,8 @@ create_offcanvas_callback(app)
 create_heatmap_callback(app)
 create_combo_clicks(app)
 create_pic_hover(app)
+create_languages_callbacks(app)
+
 
 if __name__ == '__main__':
     app.run_server(debug=False, host="0.0.0.0")

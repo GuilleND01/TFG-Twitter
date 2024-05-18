@@ -54,7 +54,8 @@ def return_gui_languages(langu_senti_json):
                         el número de tweets en cada idioma. '''),
                         html.P(f"Se han omitido del análisis {langu_senti_json['tweets_antes_limpiar'] - langu_senti_json['tweets_despues_limpiar']} tweets y "
                                f"{langu_senti_json['retweets_antes_limpiar'] - langu_senti_json['retweets_despues_limpiar']} retweets debido a que no contenían texto a analizar."
-                        )
+                        ),
+                        html.Div(id='tabla_idiomas_resumen')
                     ], style={'text-align': 'justify'}),
                 ],
                 id="modal_lang",
