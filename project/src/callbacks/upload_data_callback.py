@@ -221,6 +221,7 @@ def create_upload_data_callbacks(app):
     )
     def on_page_reload(href):
         FileManager.reset_instance()
+        cf_list.clear()
 
 
 def content_decoded(content):
