@@ -3,6 +3,7 @@ import io
 import json
 
 from dash.dependencies import Input, Output, State
+import dash_loading_spinners as dls
 
 from GUIs.mentions_gui import return_gui_mentions
 from GUIs.profile_gui import return_gui_profile
@@ -208,8 +209,10 @@ def create_upload_data_callbacks(app):
         if n_clicks is not None:
             return html.Div(className='spinner-border text-primary')
         else:
-            return dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True)
-
+            return [dls.RingChase(children=[
+                dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'},
+                           disabled=True),
+            ], color='#435278', fullscreen=True, debounce=1000)]
 
     @app.callback(
         Output('whitebox-3', 'children'),
