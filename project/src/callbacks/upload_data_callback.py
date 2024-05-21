@@ -75,8 +75,6 @@ def create_upload_data_callbacks(app):
             else:
                 cf_avai = eval(file_mgmt.get_download_content())
 
-            print(file_list.keys())
-
             # Perfil de usuario
             if (("profile.js" in file_list and "ageinfo.js" in file_list and 'manifest.js' in file_list)
                     or 'profile' in cf_avai):
@@ -222,6 +220,7 @@ def create_upload_data_callbacks(app):
     def on_page_reload(href):
         FileManager.reset_instance()
         cf_list.clear()
+        CloudFunctionManager.get_instance().clear_list()
 
 
 def content_decoded(content):
