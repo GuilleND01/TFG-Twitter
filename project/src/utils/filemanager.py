@@ -1,4 +1,6 @@
 class FileManager:
+    _instance = None  # Instancia de la clase
+
     file_mask = [
         "account.js",
         "ad-impressions.js",
@@ -21,6 +23,18 @@ class FileManager:
         self.username = ''
         self.download_file = False
         self.download_content = ''
+
+    @staticmethod
+    def get_instance():
+        """ Crea una única instancia de la clase """
+        if FileManager._instance is None:
+            FileManager._instance = FileManager()
+
+        return FileManager._instance
+
+    @staticmethod
+    def reset_instance():
+        FileManager._instance = FileManager()
 
     def filter_filename(self, filename):
         return filename in self.file_mask

@@ -19,7 +19,11 @@ class CloudFunctionManager:
 
         return CloudFunctionManager._instance
 
+    def clear_list(self):
+        self.urls.clear()
+
     def compose_list(self, _id, cf_list):
+        print(cf_list)
         self._id = _id
         for cf in cf_list:
             if cf == 'sentimientos_lenguajes':

@@ -20,7 +20,6 @@ from utils.cloudfunctionsmanager import CloudFunctionManager
 from utils.bucket import Bucket
 
 #  Instancias de las clases encargadas de la gestión
-file_mgmt = FileManager()
 cloud_instance = CloudFunctionManager.get_instance()
 
 cf_list = []
@@ -40,6 +39,7 @@ def create_upload_data_callbacks(app):
                   Input('upload-data', 'contents'),
                   State('upload-data', 'filename'))
     def update_output(list_of_contents, list_of_names):
+        file_mgmt = FileManager.get_instance()
         if list_of_contents is not None:
             # Comprobamos los nombres de los ficheros que se han subido
             for content, filename in zip(list_of_contents, list_of_names):
@@ -75,8 +75,6 @@ def create_upload_data_callbacks(app):
             else:
                 cf_avai = eval(file_mgmt.get_download_content())
 
-            print(file_list.keys())
-
             # Perfil de usuario
             if (("profile.js" in file_list and "ageinfo.js" in file_list and 'manifest.js' in file_list)
                     or 'profile' in cf_avai):
@@ -103,8 +101,8 @@ def create_upload_data_callbacks(app):
             # Registro de la actividad
             if ("tweets.js" in file_list and "manifest.js" in file_list) or 'heatmap_activity' in cf_avai:
                 if (("user-link-clicks.js" in file_list and "direct-message-headers.js"
-                        in file_list and "direct-message-group-headers.js" in file_list and "ad-impressions.js"
-                        in file_list) or 'heatmap_activity' in cf_avai):
+                     in file_list and "direct-message-group-headers.js" in file_list and "ad-impressions.js"
+                     in file_list) or 'heatmap_activity' in cf_avai):
                     scard_ra = {'border': '3px solid green', 'background-color': 'rgba(0, 128, 0, 0.2)', 'opacity': '1'}
                 else:
                     scard_ra = {'border': '3px solid yellow'}
@@ -139,6 +137,7 @@ def create_upload_data_callbacks(app):
     def actualizar_output(n_clicks):
         if n_clicks is not None:
             buck_inst = None
+            file_mgmt = FileManager.get_instance()
             if not file_mgmt.get_download_file():
                 _id = file_mgmt.get_id()
                 # Crea una instancia del bucket
@@ -213,6 +212,17 @@ def create_upload_data_callbacks(app):
                 dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'},
                            disabled=True),
             ], color='#435278', fullscreen=True, debounce=1000)]
+
+    @app.callback(
+        Output('whitebox-3', 'children'),
+        [Input('url', 'href')]
+    )
+    def on_page_reload(href):
+        FileManager.reset_instance()
+        cf_list.clear()
+        CloudFunctionManager.get_instance().clear_list()
+
+
 def content_decoded(content):
     decoded = base64.b64decode(content.split(',')[1])
     return io.StringIO(decoded.decode('utf-8')).getvalue()
