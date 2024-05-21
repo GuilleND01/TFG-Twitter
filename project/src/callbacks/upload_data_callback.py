@@ -208,10 +208,8 @@ def create_upload_data_callbacks(app):
         if n_clicks is not None:
             return html.Div(className='spinner-border text-primary')
         else:
-            return [dls.RingChase(children=[
-                dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'},
-                           disabled=True),
-            ], color='#435278', fullscreen=True, debounce=1000)]
+            return dbc.Button('Enviar', id='submit', style={'display': 'block', 'margin': '0 auto'}, disabled=True)
+
 
     @app.callback(
         Output('whitebox-3', 'children'),
