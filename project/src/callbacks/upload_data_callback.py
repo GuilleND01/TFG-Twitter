@@ -49,7 +49,6 @@ def create_upload_data_callbacks(app):
                         break
 
             file_list = file_mgmt.get_file_list()
-
             scard_pu = {'border': '3px solid red'}
             scard_um = {'border': '3px solid red'}
             scard_lp = {'border': '3px solid red'}
