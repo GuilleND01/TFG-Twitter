@@ -13,7 +13,7 @@ class ThreadingFuntions:
 
     def requests(self, tarea, url):
 
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "src/tfg-twitter-3c5ccb548a38.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "tfg-twitter-2-77251b6295e7.json"
 
         target_audience = url.split('?')[0]
         id_token_request = Request()

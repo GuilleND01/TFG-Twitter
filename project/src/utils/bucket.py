@@ -5,10 +5,10 @@ from google.cloud import storage
 class Bucket:
     """ Subida y borrado de datos en el bucket """
     def __init__(self, filelist, _id):
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "src/tfg-twitter-3c5ccb548a38.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "tfg-twitter-2-77251b6295e7.json"
 
         storage_client = storage.Client()
-        self.bucket = storage_client.get_bucket("tfg-twitter")
+        self.bucket = storage_client.get_bucket("tfg-twitter-2")
         self.filelist = filelist
         self._id = _id
         self.blobs = []
